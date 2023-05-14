@@ -4,7 +4,7 @@ export type Result<T, E> = Success<T> | Failure<E>
 export type Success<T> = {
   readonly isSuccess: true
   readonly isFailure: false
-  readonly value: T
+  readonly data: T
 }
 
 /**
@@ -14,18 +14,18 @@ export type Success<T> = {
  * @param {T} value
  * @return {*}  {Success<T>}
  */
-export const newSuccess = <T>(value: T): Success<T> => (
+export const newSuccess = <T>(data: T): Success<T> => (
   {
     isSuccess: true,
     isFailure: false,
-    value
+    data
   }
 )
 
 export type Failure<E> = {
   readonly isSuccess: false
   readonly isFailure: true
-  readonly value: E
+  readonly data: E
 }
 
 /**
@@ -35,10 +35,10 @@ export type Failure<E> = {
  * @param {E} value
  * @return {*}  {Failure<E>}
  */
-export const newFailure = <E>(value: E): Failure<E> => (
+export const newFailure = <E>(data: E): Failure<E> => (
   {
     isSuccess: false,
     isFailure: true,
-    value
+    data
   }
 )
