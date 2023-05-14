@@ -1,7 +1,11 @@
 import Image from 'next/image'
 import styles from './page.module.css'
+import { useGetUserLocation } from '@/services/queries/getUserLocation'
 
-export default function Home() {
+export default async function Home() {
+  const a = await useGetUserLocation()
+  console.log('DATA: ', a)
+
   return (
     <main className={styles.main}>
       <div className={styles.description}>
