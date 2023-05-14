@@ -1,4 +1,4 @@
-import { geolocationApiKey, geolocationApiUrl } from '@/constants/constants'
+import { geolocationApiKey, GEOLOCATION_API_URL } from '@/constants/constants'
 
 /**
  * Returns geolocation API url with params
@@ -8,5 +8,5 @@ import { geolocationApiKey, geolocationApiUrl } from '@/constants/constants'
  */
 export const getGeolocationApiUrl = (fields?: string[]): string => {
   const fieldsParam = fields && fields.length ? fields.join(',') : ''
-  return `${geolocationApiUrl}${geolocationApiKey}&fields=${fieldsParam}`
+  return `${GEOLOCATION_API_URL}${geolocationApiKey}&fields=${fieldsParam}`
 }
