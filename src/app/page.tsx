@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import styles from './page.module.css'
-import { useGetUserLocation } from '@/services/queries/getUserLocation'
+import { useGetUserLocation } from '@/hooks/data/useGetUserLocation'
 
 export default async function Home() {
   const a = await useGetUserLocation()

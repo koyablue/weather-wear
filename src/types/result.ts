@@ -1,7 +1,7 @@
 // Return this type from API call try-catch functions
 export type Result<T, E> = Success<T> | Failure<E>
 
-type Success<T> = {
+export type Success<T> = {
   readonly isSuccess: true
   readonly isFailure: false
   readonly value: T
@@ -22,7 +22,7 @@ export const newSuccess = <T>(value: T): Success<T> => (
   }
 )
 
-type Failure<E> = {
+export type Failure<E> = {
   readonly isSuccess: false
   readonly isFailure: true
   readonly value: E
