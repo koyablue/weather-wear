@@ -1,6 +1,9 @@
 // types
 import { GeolocationApiResponse } from '@/types/geolocation'
 
+// constants
+import { GEOLOCATION_CACHE_LIFETIME } from '@/constants/constants'
+
 // util
 import { getGeolocationApiUrl } from '@/utils/geolocation'
 
@@ -10,7 +13,7 @@ export const getUserLocation = async (fields?: string[]): Promise<Partial<Geoloc
     {
       cache: 'no-store',
       next: {
-        revalidate: 60,
+        revalidate: GEOLOCATION_CACHE_LIFETIME,
       }
     }
   )
