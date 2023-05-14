@@ -2,6 +2,8 @@ import Image from 'next/image'
 import styles from './page.module.css'
 
 export default function Home() {
+  console.log('aaaaaaaaaa')
+  console.log('API KEY: ', process.env.GEOLOCATION_API_KEY)
   return (
     <main className={styles.main}>
       <div className={styles.description}>
