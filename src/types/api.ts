@@ -21,3 +21,7 @@ export const newUseApiReturnType = <T, E>(result: Result<T, E>): UseApiReturnTyp
     error: result.isFailure ? result.data : undefined
   }
 )
+
+export type ApiError = {
+  error: unknown
+}
