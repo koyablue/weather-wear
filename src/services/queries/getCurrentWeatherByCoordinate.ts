@@ -5,7 +5,7 @@ import { CurrentWeatherApiResponse } from '@/types/weatherApi'
 import { getCurrentWeatherApiEndpoint } from '@/utils/weather'
 
 /**
- * Current weather API call
+ * Call current weather API
  *
  * @param {number} lat
  * @param {number} lon
