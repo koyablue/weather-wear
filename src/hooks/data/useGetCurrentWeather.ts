@@ -3,7 +3,7 @@ import { getCurrentWeatherByCoordinate } from '@/services/queries/getCurrentWeat
 // types
 import { Result, newSuccess, newFailure } from '@/types/result'
 import { CurrentWeatherApiResponse } from '@/types/weatherApi'
-import { UseApiReturnType, newUseApiReturnType } from '@/types/api'
+import { UseApiReturnType, newUseApiReturnType, ApiError } from '@/types/api'
 
 /**
  * Custom hook to get current weather data based on the coordinate.
@@ -12,8 +12,8 @@ import { UseApiReturnType, newUseApiReturnType } from '@/types/api'
  * @param {number} lon
  * @return {*}  {Promise<UseApiReturnType<CurrentWeatherApiResponse>>}
  */
-const useGetCurrentWeather = async (lat: number, lon: number): Promise<UseApiReturnType<CurrentWeatherApiResponse>> => {
-  let result: Result<CurrentWeatherApiResponse, { error: unknown }>
+export const useGetCurrentWeather = async (lat: number, lon: number): Promise<UseApiReturnType<CurrentWeatherApiResponse>> => {
+  let result: Result<CurrentWeatherApiResponse, ApiError>
 
   try {
     const res = await getCurrentWeatherByCoordinate(lat, lon)
