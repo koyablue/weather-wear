@@ -2,22 +2,17 @@ import { getUserLocation } from '@/services/queries/getUserLocation'
 
 // types
 import { Result, newSuccess, newFailure } from '@/types/result'
-import { GeolocationApiResponse } from '@/types/geolocation'
-
-type UseApiReturnType<T> = {
-  data: T | undefined
-  isError: boolean
-  error: unknown
-}
+import { GeolocationApiResponse } from '@/types/geolocationApi'
+import { UseApiReturnType, newUseApiReturnType, ApiError } from '@/types/api'
 
 /**
- * Custom hook to get a user's current location
+ * Custom hook to get a user's current location.
  *
  * @param {string[]} [fields]
  * @return {*}  {Promise<UseApiReturnType<Partial<GeolocationApiResponse>>>}
  */
 export const useGetUserLocation = async (fields?: string[]): Promise<UseApiReturnType<Partial<GeolocationApiResponse>>> => {
-  let result: Result<Partial<GeolocationApiResponse>, { error: unknown }>
+  let result: Result<Partial<GeolocationApiResponse>, ApiError>
   try {
     const res = await getUserLocation(fields)
     result = newSuccess(res)
@@ -25,9 +20,5 @@ export const useGetUserLocation = async (fields?: string[]): Promise<UseApiRetur
     result = newFailure({ error })
   }
 
-  return {
-    data: result.isSuccess ? result.data : undefined,
-    isError: result.isFailure,
-    error: result.isFailure ? result.data : undefined
-  }
+  return newUseApiReturnType(result)
 }
