@@ -1,4 +1,4 @@
-import { GEOLOCATION_API_KEY, GEOLOCATION_API_ENDPOINT } from '@/constants/constants'
+import { GEOLOCATION_API_KEY, GEOLOCATION_API_ENDPOINT } from '../constants/api'
 
 /**
  * Returns geolocation API url with params

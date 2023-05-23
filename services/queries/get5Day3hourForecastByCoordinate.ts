@@ -1,9 +1,9 @@
 // types
-import { FiveDThreeHrForecastApiResponse } from '@/types/weatherApi'
+import { FiveDThreeHrForecastApiResponse } from '../../types/weatherApi'
 
-import { FIVE_D_THREE_HR_FORECAST_CACHE_LIFETIME } from '@/constants/constants'
+import { FIVE_D_THREE_HR_FORECAST_CACHE_LIFETIME } from '../../constants/api'
 
-import { get5Day3hourForecastApiEndpoint } from '@/utils/weather'
+import { get5Day3hourForecastApiEndpoint } from '../../utils/weather'
 
 /**
  * Call 5 day / 3 hour forecast API

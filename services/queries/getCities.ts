@@ -1,7 +1,7 @@
-import { getGeocodingApiEndpoint } from '@/utils/geocoding'
+import { getGeocodingApiEndpoint } from '../../utils/geocoding'
 
 // types
-import { GeocodingApiQuery, GeocodingApiResponse } from '@/types/geocoding'
+import { GeocodingApiQuery, GeocodingApiResponse } from '../../types/geocoding'
 
 /**
  * Call geocoding API

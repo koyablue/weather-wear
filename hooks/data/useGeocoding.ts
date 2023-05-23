@@ -1,9 +1,9 @@
-import { getCities } from '@/services/queries/getCities'
+import { getCities } from '../../services/queries/getCities'
 
 // types
-import { Result, newSuccess, newFailure } from '@/types/result'
-import { GeocodingApiResponse, GeocodingApiQuery } from '@/types/geocoding'
-import { UseApiReturnType, newUseApiReturnType, ApiError } from '@/types/api'
+import { Result, newSuccess, newFailure } from '../../types/result'
+import { GeocodingApiResponse, GeocodingApiQuery } from '../../types/geocoding'
+import { UseApiReturnType, newUseApiReturnType, ApiError } from '../../types/api'
 
 /**
  * Custom hook to use geocoding api

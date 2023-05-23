@@ -1,9 +1,9 @@
-import { get5Day3HourForecastByCoordinate } from '@/services/queries/get5Day3hourForecastByCoordinate'
+import { get5Day3HourForecastByCoordinate } from '../../services/queries/get5Day3hourForecastByCoordinate'
 
 // types
-import { Result, newSuccess, newFailure } from '@/types/result'
-import { FiveDThreeHrForecastApiResponse } from '@/types/weatherApi'
-import { UseApiReturnType, newUseApiReturnType, ApiError } from '@/types/api'
+import { Result, newSuccess, newFailure } from '../../types/result'
+import { FiveDThreeHrForecastApiResponse } from '../../types/weatherApi'
+import { UseApiReturnType, newUseApiReturnType, ApiError } from '../../types/api'
 
 /**
  * Custom hook to get 5 hour / 3day forecast based on the coordinate.

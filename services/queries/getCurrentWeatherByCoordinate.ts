@@ -1,8 +1,8 @@
 // types
-import { CurrentWeatherApiResponse } from '@/types/weatherApi'
+import { CurrentWeatherApiResponse } from '../../types/weatherApi'
 
 // utils
-import { getCurrentWeatherApiEndpoint } from '@/utils/weather'
+import { getCurrentWeatherApiEndpoint } from '../../utils/weather'
 
 /**
  * Call current weather API

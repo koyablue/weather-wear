@@ -1,7 +1,7 @@
-import { GEOCODING_API_ENDPOINT, OPEN_WEATHER_API_KEY } from '@/constants/constants'
+import { GEOCODING_API_ENDPOINT, OPEN_WEATHER_API_KEY } from '../constants/api'
 
 // types
-import { GeocodingApiQuery } from '@/types/geocoding'
+import { GeocodingApiQuery } from '../types/geocoding'
 
 /**
  * https://openweathermap.org/api/geocoding-api

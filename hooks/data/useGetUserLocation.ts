@@ -1,9 +1,9 @@
-import { getUserLocation } from '@/services/queries/getUserLocation'
+import { getUserLocation } from '../../services/queries/getUserLocation'
 
 // types
-import { Result, newSuccess, newFailure } from '@/types/result'
-import { GeolocationApiResponse } from '@/types/geolocationApi'
-import { UseApiReturnType, newUseApiReturnType, ApiError } from '@/types/api'
+import { Result, newSuccess, newFailure } from '../../types/result'
+import { GeolocationApiResponse } from '../../types/geolocationApi'
+import { UseApiReturnType, newUseApiReturnType, ApiError } from '../../types/api'
 
 /**
  * Custom hook to get a user's current location.

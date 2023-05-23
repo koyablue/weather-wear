@@ -1,9 +1,9 @@
-import { getCurrentWeatherByCoordinate } from '@/services/queries/getCurrentWeatherByCoordinate'
+import { getCurrentWeatherByCoordinate } from '../../services/queries/getCurrentWeatherByCoordinate'
 
 // types
-import { Result, newSuccess, newFailure } from '@/types/result'
-import { CurrentWeatherApiResponse } from '@/types/weatherApi'
-import { UseApiReturnType, newUseApiReturnType, ApiError } from '@/types/api'
+import { Result, newSuccess, newFailure } from '../../types/result'
+import { CurrentWeatherApiResponse } from '../../types/weatherApi'
+import { UseApiReturnType, newUseApiReturnType, ApiError } from '../../types/api'
 
 /**
  * Custom hook to get current weather data based on the coordinate.

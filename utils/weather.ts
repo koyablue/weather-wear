@@ -1,4 +1,4 @@
-import { WEATHER_API_BASE_ENDPOINT, GEOCODING_API_ENDPOINT, OPEN_WEATHER_API_KEY } from '@/constants/constants'
+import { WEATHER_API_BASE_ENDPOINT, GEOCODING_API_ENDPOINT, OPEN_WEATHER_API_KEY } from '../constants/api'
 
 /**
  * https://openweathermap.org/current

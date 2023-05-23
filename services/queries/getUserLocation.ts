@@ -1,11 +1,11 @@
 // types
-import { GeolocationApiResponse } from '@/types/geolocationApi'
+import { GeolocationApiResponse } from '../../types/geolocationApi'
 
 // constants
-import { GEOLOCATION_CACHE_LIFETIME } from '@/constants/constants'
+import { GEOLOCATION_CACHE_LIFETIME } from '../../constants/api'
 
 // utils
-import { getGeolocationApiEndpoint } from '@/utils/geolocation'
+import { getGeolocationApiEndpoint } from '../../utils/geolocation'
 
 /**
  * Call Geolocation API
