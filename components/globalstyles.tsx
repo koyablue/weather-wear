@@ -2,7 +2,6 @@ import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`
   /* Remove default margin */
-  body,
   h1,
   h2,
   h3,
