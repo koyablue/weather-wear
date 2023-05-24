@@ -2,8 +2,12 @@
 
 import { configureStore } from '@reduxjs/toolkit'
 
+import colorThemeReducer from './slices/colorThemeSlice'
+
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    colorTheme: colorThemeReducer,
+  },
 })
 
 export type RootState = ReturnType<typeof store.getState>

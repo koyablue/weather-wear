@@ -2,6 +2,13 @@ import { colorThemeConfig } from '../constants/colorTheme'
 
 import { ValueOf } from './util'
 
+export type ColorThemeStyle = {
+  colors: {
+    text: string
+    background: string
+  },
+}
+
 export type ColorTheme = ValueOf<typeof colorThemeConfig>
 
 /**
