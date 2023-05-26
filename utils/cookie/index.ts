@@ -1,11 +1,5 @@
 import Cookies, { CookieAttributes } from 'js-cookie'
 
-// constants
-import { COLOR_THEME_COOKIE_NAME } from '../../constants/colorTheme'
-
-// types
-import { ColorTheme } from '../../types/colorTheme'
-
 /**
  * Set cookie
  *
