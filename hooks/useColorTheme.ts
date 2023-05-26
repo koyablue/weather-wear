@@ -1,13 +1,15 @@
+import { useEffect } from 'react'
+
 // redux
 import { useAppDispatch, useAppSelector } from '../stores/hooks'
 import { updateColorTheme, selectColorTheme } from '../stores/slices/colorThemeSlice'
 
 // utils
-
 import { getColorThemeCookie, setColorThemeCookie } from '../utils/cookie/colorTheme'
 
 // constants
 import { colorThemeConfig } from '../constants/colorTheme'
+import { IS_IN_BROWSER } from '../constants/environment'
 
 // styles
 import { darkTheme, lightTheme } from '../styles/themes'
@@ -44,6 +46,7 @@ export const useColorTheme = () => {
    *
    */
   const initColorTheme = () => {
+    if (!IS_IN_BROWSER) return
     // system preference comes first
     // if dark, set dark. else set nothing
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
@@ -73,6 +76,11 @@ export const useColorTheme = () => {
     dispatch(updateColorTheme(currentColorThemeCookie))
   }
 
+  // Initialize color theme
+  useEffect(() => {
+    initColorTheme()
+  }, [IS_IN_BROWSER])
+
   /**
    *
    *
@@ -101,10 +109,15 @@ export const useColorTheme = () => {
     }
   }
 
+  const getCurrentColorThemeStyle = () => {
+    return getColorThemeStyle(getCurrentColorTheme())
+  }
+
   return {
     initColorTheme,
     getCurrentColorTheme,
     setColorTheme,
     getColorThemeStyle,
+    getCurrentColorThemeStyle,
   } as const
 }
