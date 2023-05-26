@@ -3,6 +3,9 @@ import styled from 'styled-components'
 // icons
 import { FiSun, FiMoon } from 'react-icons/fi'
 
+// hooks
+import { useColorTheme } from '../../hooks/useColorTheme'
+
 const SunIcon = styled(FiSun)`
   font-size: 14px;
 `
@@ -11,32 +14,32 @@ const MoonIcon = styled(FiMoon)`
   font-size: 14px;
 `
 
-const SwitchWrapperDiv = styled.div`
-  line-height    : 24px;                /* 1行の高さ          */
-  letter-spacing : 0;                   /* 文字間             */
-  text-align     : center;              /* 文字位置は中央     */
-  font-size      : 8px;                /* 文字サイズ         */
+const SwitchWrapperLabel = styled.label`
+  line-height    : 24px;
+  letter-spacing : 0;
+  text-align     : center;
+  font-size      : 8px;
 
-  position       : relative;            /* 親要素が基点       */
-  // margin         : auto;                /* 中央寄せ           */
-  width          : 56px;               /* ボタンの横幅       */
+  position       : relative;
+  // margin         : auto;
+  width          : 56px;
   /* background     : #fff; */
 
   input[type="checkbox"] {
-    display        : none;            /* チェックボックス非表示 */
+    display        : none;
   }
 
   input[type="checkbox"]:checked +label {
-    border-color   : #78bd78;             /* 選択タブの枠線     */
+    border-color   : #78bd78;
   }
 
   label {
-    display        : flex;               /* ボックス要素に変更 */
+    display        : flex;
     justify-content: space-between;
-    box-sizing     : border-box;          /* 枠線を含んだサイズ */
-    height         : 26px;                /* ボタンの高さ       */
-    border         : 1.5px solid #333333;   /* 未選択タブのの枠線 */
-    border-radius  : 30px;                /* 角丸               */
+    box-sizing     : border-box;
+    height         : 26px;
+    border         : 1.5px solid #333333;
+    border-radius  : 30px;
     padding: 4.5px 4px;
 
 
@@ -53,37 +56,49 @@ const SwitchWrapperDiv = styled.div`
   } */
 
   #swImg {
-    position       : absolute;            /* 親要素からの相対位置*/
-    width          : 20px;                /* 丸の横幅           */
-    height         : 20px;                /* 丸の高さ           */
-    background     : #faf5eb;             /* カーソルタブの背景 */
-    top            : 3px;                 /* 親要素からの位置   */
-    left           : 4px;                 /* 親要素からの位置   */
-    border-radius  : 26px;                /* 角丸               */
-    transition     : .2s;                 /* 滑らか変化         */
+    position       : absolute;
+    width          : 20px;
+    height         : 20px;
+    background     : #faf5eb;
+    top            : 3px;
+    left           : 4px;
+    border-radius  : 26px;
+    transition     : .2s;
     border         : 1.5px solid #333333;
   }
 
   input[type="checkbox"]:checked ~ #swImg {
-    transform      : translateX(28px);    /* 丸も右へ移動       */
-    background     : #78bd78;             /* カーソルタブの背景 */
+    transform      : translateX(28px);
+    background     : #78bd78;
   }
 `
-// TODO: switch all the area clickable(checked=true)
-// TODO: dark mode
 
+/**
+ * Dark mode <-> light mode toggle switch
+ * Update cookie value and global state on change
+ *
+ * @return {*} JSX.Element
+ */
 const DarkModeToggleSwitch = () => {
+  const { getCurrentColorTheme, setColorTheme } = useColorTheme()
+
+  const isDark = getCurrentColorTheme() === 'dark'
+
+  const toggleDarkTheme = () => {
+    isDark ? setColorTheme('light') : setColorTheme('dark')
+  }
+
   return (
-    <SwitchWrapperDiv>
-      <input type="checkbox" id="switch1" />
-      <label htmlFor="switch1">
+    <SwitchWrapperLabel>
+      <input type='checkbox' id='switch1' checked={isDark} onChange={toggleDarkTheme} />
+      <label htmlFor='switch1'>
         {/* <span> */}
           <SunIcon/>
           <MoonIcon/>
         {/* </span> */}
       </label>
-      <div id="swImg"></div>
-    </SwitchWrapperDiv>
+      <div id='swImg'></div>
+    </SwitchWrapperLabel>
   )
 }
 
