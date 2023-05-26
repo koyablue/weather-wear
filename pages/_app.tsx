@@ -1,5 +1,5 @@
 // react
-import type { ReactElement, ReactNode } from 'react';
+import { ReactElement, ReactNode } from 'react';
 
 // next
 import { NextPage } from 'next';
@@ -9,14 +9,13 @@ import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'styled-components'
 import { Provider } from 'react-redux'
 
-// stores
+// redux
 import { store } from '../stores/store'
-import { useAppSelector } from '../stores/hooks'
-import { selectColorTheme } from '../stores/slices/colorThemeSlice'
 
 import GlobalStyle from '../components/globalstyles'
 
-import { colorThemes } from '../constants/colorTheme';
+// hooks
+import { useColorTheme } from '../hooks/useColorTheme';
 
 // Layout configuration doc
 // https://nextjs.org/docs/pages/building-your-application/routing/pages-and-layouts#with-typescript
@@ -38,10 +37,10 @@ type AppPropsWithLayout = AppProps & {
  */
 const withThemeProvider = (Component: NextPageWithLayout) => {
   return (props: any) => {
-    const theme = useAppSelector(selectColorTheme);
+    const { getCurrentColorThemeStyle } = useColorTheme()
 
     return (
-      <ThemeProvider theme={colorThemes[theme]}>
+      <ThemeProvider theme={getCurrentColorThemeStyle()}>
         <GlobalStyle />
         <Component {...props} />
       </ThemeProvider>
