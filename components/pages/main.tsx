@@ -18,15 +18,26 @@ const ContentsMain = styled.main`
   justify-content: center;
 `
 
+const MainContentsContainerDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
 const Main = () => {
+  // TODO: 1. implement UI(just markup for now)
+  // TODO: 2. celcius<->fharenheit
+  // TODO: 3. isVPN
+  // TODO: 4. implement useWeatherWearMeasure
+  // TODO: 5. implement custom hooks to call third party APIs with SWR(maybe use axios?)
+  // TODO: 服装指数style is fine(only tops icon and bar chart) https://tenki.jp/indexes/dress/
   return (
     <ContainerDiv>
       <Header />
       <ContentsMain>
-        <div>
+        <MainContentsContainerDiv>
           <input type='text' name='cityName' />
           TEST
-        </div>
+        </MainContentsContainerDiv>
       </ContentsMain>
     </ContainerDiv>
   )

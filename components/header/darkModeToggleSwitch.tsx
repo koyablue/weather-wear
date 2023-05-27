@@ -14,6 +14,7 @@ const MoonIcon = styled(FiMoon)`
   font-size: 14px;
 `
 
+// Use <label></label> to make all the area clickable
 const SwitchWrapperLabel = styled.label`
   line-height    : 24px;
   letter-spacing : 0;

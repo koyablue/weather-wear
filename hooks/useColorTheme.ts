@@ -47,6 +47,7 @@ export const useColorTheme = () => {
    */
   const initColorTheme = () => {
     if (!IS_IN_BROWSER) return
+
     // system preference comes first
     // if dark, set dark. else set nothing
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
