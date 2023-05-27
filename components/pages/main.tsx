@@ -1,17 +1,39 @@
+import Image from 'next/image'
+
 import styled from 'styled-components'
 
+// styles
+import { breakPoint } from '../../styles/breakPoint'
+
 // components
-import Header from '../header'
+import Header from '../layouts/header'
+import ClothingGuidelineScaleChart from '../common/clothingGuidelineScale/clothingGuidelineScaleChart'
+
+// svg
+import PufferJacketIcon from '../../public/images/svgs/puffer-jacket.svg'
 
 const ContainerDiv = styled.div`
+  /* display: flex;
+  flex-direction: column; */
+  /* justify-content: center; */
   min-height: 100vh;
+  width: 100%;
   max-width: 1400px;
-  margin: auto;
-  padding: 0 80px;
+  padding: 0 16px;
+  margin: 0 auto;
+
+  @media ${breakPoint.mobileS} {
+    padding: 0 16px;
+  }
+
+  @media ${breakPoint.mobileM} {
+    padding: 0 40px;
+  }
 `
 
 const ContentsMain = styled.main`
-  min-height: 100vh;
+  min-height: calc(100vh - (60px + 16px));
+  width: 100%;
   color: #333333;
   display: flex;
   align-items: center;
@@ -21,7 +43,24 @@ const ContentsMain = styled.main`
 const MainContentsContainerDiv = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  /* height: 100%; */
+  width: 100%;
 `
+
+const LocationInput = styled.input`
+  border-radius: 30px;
+  border: 1.5px solid;
+  padding: 0 16px;
+  width: 75%;
+  height: 48px;
+`
+
+// TODO: Breakpoint
+
+// TODO: inputの候補はbingの検索inputみたいな感じ
 
 const Main = () => {
   // TODO: 1. implement UI(just markup for now)
@@ -35,8 +74,14 @@ const Main = () => {
       <Header />
       <ContentsMain>
         <MainContentsContainerDiv>
-          <input type='text' name='cityName' />
-          TEST
+          <LocationInput type='text' name='cityName' placeholder='City name' />
+          <Image
+            src={PufferJacketIcon}
+            alt='Puffer jacket icon'
+            width={150}
+            height={150}
+          />
+          <ClothingGuidelineScaleChart />
         </MainContentsContainerDiv>
       </ContentsMain>
     </ContainerDiv>
