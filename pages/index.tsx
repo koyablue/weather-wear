@@ -9,6 +9,8 @@ import {
 import Cards from '../components/cards'
 
 import Main from '../components/pages/main'
+import { GetServerSideProps } from 'next'
+import { cookies } from 'next/dist/client/components/headers'
 
 export default function Home() {
   return (
@@ -36,3 +38,12 @@ export default function Home() {
     // </Container>
   )
 }
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  // const cookieStore = cookies()
+  // console.log('ALL COOKIES: ', cookieStore.getAll())
+  return {
+    props: {
+    },
+  };
+};
