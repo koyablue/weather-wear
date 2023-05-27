@@ -3,7 +3,8 @@ import { ColorThemeStyle } from '../types/colorTheme'
 export const lightTheme: ColorThemeStyle = {
   colors: {
     text: '#333333',
-    background: '#faf5eb',
+    // background: '#faf5eb',
+    background: '#f3eee9',
   },
 }
 
