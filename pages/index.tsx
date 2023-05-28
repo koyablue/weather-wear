@@ -1,3 +1,5 @@
+import { ReactElement } from 'react'
+
 import Head from 'next/head'
 import {
   Container,
@@ -11,8 +13,20 @@ import Cards from '../components/cards'
 import Main from '../components/pages/main'
 import { GetServerSideProps } from 'next'
 import { cookies } from 'next/dist/client/components/headers'
+import BaseLayout from '../components/layouts/baseLayout'
 
-export default function Home() {
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  // const cookieStore = cookies()
+  // console.log('ALL COOKIES: ', cookieStore.getAll())
+  console.log('SSR index.tsx')
+  return {
+    props: {
+    },
+  }
+}
+
+const Home = () => {
   return (
     <>
       <Main />
@@ -39,11 +53,8 @@ export default function Home() {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  // const cookieStore = cookies()
-  // console.log('ALL COOKIES: ', cookieStore.getAll())
-  return {
-    props: {
-    },
-  };
-};
+Home.getLayout = (page: ReactElement) => (
+  <BaseLayout>{page}</BaseLayout>
+)
+
+export default Home
