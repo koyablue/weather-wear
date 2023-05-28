@@ -6,6 +6,10 @@ import { FiSun, FiMoon } from 'react-icons/fi'
 // hooks
 import { useColorTheme } from '../../../hooks/useColorTheme'
 
+// stores
+import { useAppDispatch, useAppSelector } from '../../../stores/hooks'
+import { selectColorTheme } from '../../../stores/slices/colorThemeSlice'
+
 const SunIcon = styled(FiSun)`
   font-size: 14px;
 `
@@ -81,9 +85,11 @@ const SwitchWrapperLabel = styled.label`
  * @return {*} JSX.Element
  */
 const DarkModeToggleSwitch = () => {
-  const { getCurrentColorTheme, setColorTheme } = useColorTheme()
+  const { setColorTheme } = useColorTheme()
 
-  const isDark = getCurrentColorTheme() === 'dark'
+  const currentColorThemeState = useAppSelector(selectColorTheme)
+
+  const isDark = currentColorThemeState === 'dark'
 
   const toggleDarkTheme = () => {
     isDark ? setColorTheme('light') : setColorTheme('dark')
