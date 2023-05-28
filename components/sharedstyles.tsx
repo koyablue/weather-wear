@@ -18,6 +18,7 @@ const Main = styled.main`
   align-items: center;
 `
 
+//a tag color color: ${({ theme }) => theme.colors.secondary};
 const Title = styled.h1`
   margin: 0;
   line-height: 1.15;
@@ -26,7 +27,6 @@ const Title = styled.h1`
   text-decoration: none;
 
   a {
-    color: ${({ theme }) => theme.colors.secondary};
     text-decoration: none;
     &:hover,
     :focus,
