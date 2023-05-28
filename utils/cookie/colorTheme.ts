@@ -20,9 +20,10 @@ export const setColorThemeCookie = (value: ColorTheme, options?: Options) => {
 /**
  * Get color theme config from cookie
  *
+ * @param {Options} [options]
  * @return {*}  {(ColorTheme | string)}
  */
-export const getColorThemeCookie = (): ColorTheme | string => {
-  const colorThemeCookie = getCookie(COLOR_THEME_COOKIE_NAME)
+export const getColorThemeCookie = (options?: Options): ColorTheme | string => {
+  const colorThemeCookie = getCookie(COLOR_THEME_COOKIE_NAME, options)
   return isColorTheme(colorThemeCookie) ? colorThemeCookie : ''
 }
