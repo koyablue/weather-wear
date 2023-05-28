@@ -1,6 +1,4 @@
-import { useEffect } from 'react'
-
-// redux
+// stores
 import { useAppDispatch, useAppSelector } from '../stores/hooks'
 import { updateColorTheme, selectColorTheme } from '../stores/slices/colorThemeSlice'
 
@@ -77,21 +75,12 @@ export const useColorTheme = () => {
     dispatch(updateColorTheme(currentColorThemeCookie))
   }
 
-  // Initialize color theme
-  useEffect(() => {
-    initColorTheme()
-  }, [IS_IN_BROWSER])
-
   /**
    *
    *
    * @return {*} ColorTheme
    */
-  const getCurrentColorTheme = (): ColorTheme => {
-    if (currentColorThemeCookie !== currentColorThemeState) {
-      initColorTheme()
-      return currentColorThemeState
-    }
+  const getCurrentColorThemeState = (): ColorTheme => {
     return currentColorThemeState
   }
 
@@ -111,12 +100,12 @@ export const useColorTheme = () => {
   }
 
   const getCurrentColorThemeStyle = () => {
-    return getColorThemeStyle(getCurrentColorTheme())
+    return getColorThemeStyle(getCurrentColorThemeState())
   }
 
   return {
     initColorTheme,
-    getCurrentColorTheme,
+    getCurrentColorThemeState,
     setColorTheme,
     getColorThemeStyle,
     getCurrentColorThemeStyle,
