@@ -17,6 +17,6 @@ export type ColorTheme = ValueOf<typeof colorThemeConfig>
  * @param {string} val
  * @return {*}  {val is ColorTheme}
  */
-export const isColorTheme = (val: string): val is ColorTheme => {
+export const isColorTheme = (val: any): val is ColorTheme => {
   return Object.keys(colorThemeConfig).includes(val)
 }
