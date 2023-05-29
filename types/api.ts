@@ -1,5 +1,7 @@
 import { Result } from './result'
 
+// TODO: Delete this file if it's not necessary anymore(because installed SWR)
+
 export type UseApiReturnType<T> = {
   data: T | undefined
   isError: boolean

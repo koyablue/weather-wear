@@ -1,24 +1,26 @@
+import useSWR from 'swr'
 import { getUserLocation } from '../../services/queries/getUserLocation'
-
-// types
-import { Result, newSuccess, newFailure } from '../../types/result'
-import { GeolocationApiResponse } from '../../types/geolocationApi'
-import { UseApiReturnType, newUseApiReturnType, ApiError } from '../../types/api'
 
 /**
  * Custom hook to get a user's current location.
  *
  * @param {string[]} [fields]
- * @return {*}  {Promise<UseApiReturnType<Partial<GeolocationApiResponse>>>}
+ * @return {*} {
+      userLocation: Partial<GeolocationApiResponse>;
+      error: any;
+      isLoading: boolean;
+      isValidating: boolean;
+    }
  */
-export const useGetUserLocation = async (fields?: string[]): Promise<UseApiReturnType<Partial<GeolocationApiResponse>>> => {
-  let result: Result<Partial<GeolocationApiResponse>, ApiError>
-  try {
-    const res = await getUserLocation(fields)
-    result = newSuccess(res)
-  } catch (error) {
-    result = newFailure({ error })
-  }
+export const useGetUserLocation = (fields?: string[]) => {
+  // 10 min to refresh
+  // TODO: make millisec constant
+  const { data, error, isLoading, isValidating } = useSWR(['userLocation/get', fields], () => getUserLocation(fields), { refreshInterval: 600000 })
 
-  return newUseApiReturnType(result)
+  return {
+    userLocation: data,
+    error,
+    isLoading,
+    isValidating
+  }
 }

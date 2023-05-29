@@ -1,26 +1,27 @@
+import useSWR from 'swr'
 import { get5Day3HourForecastByCoordinate } from '../../services/queries/get5Day3hourForecastByCoordinate'
-
-// types
-import { Result, newSuccess, newFailure } from '../../types/result'
-import { FiveDThreeHrForecastApiResponse } from '../../types/weatherApi'
-import { UseApiReturnType, newUseApiReturnType, ApiError } from '../../types/api'
+import { Unit } from '../../types/weatherApi'
 
 /**
  * Custom hook to get 5 hour / 3day forecast based on the coordinate.
  *
  * @param {number} lat
  * @param {number} lon
- * @return {*}  {Promise<UseApiReturnType<FiveDThreeHrForecastApiResponse>>}
- */
-export const useGet5D3HrForecast = async (lat: number, lon: number): Promise<UseApiReturnType<FiveDThreeHrForecastApiResponse>> => {
-  let result: Result<FiveDThreeHrForecastApiResponse, ApiError>
-
-  try {
-    const res = await get5Day3HourForecastByCoordinate(lat, lon)
-    result = newSuccess(res)
-  } catch (error) {
-    result = newFailure({ error })
+ * @param {Unit} [unit]
+ * @return {*} {
+    forecast: FiveDThreeHrForecastApiResponse;
+    error: any;
+    isLoading: boolean;
+    isValidating: boolean;
   }
+ */
+export const useGet5D3HrForecast = (lat: number, lon: number, unit?: Unit) => {
+  const { data, error, isLoading, isValidating } = useSWR(['FiveDThreeHrForecast/get', lat, lon, unit], () => get5Day3HourForecastByCoordinate(lat, lon, unit), { refreshInterval: 1800000 })
 
-  return newUseApiReturnType(result)
+  return {
+    forecast: data,
+    error,
+    isLoading,
+    isValidating,
+  }
 }

@@ -1,6 +1,5 @@
+import { axiosBase } from '../axiosBase'
 import { getGeocodingApiEndpoint } from '../../utils/geocoding'
-
-// types
 import { GeocodingApiQuery, GeocodingApiResponse } from '../../types/geocoding'
 
 /**
@@ -11,6 +10,6 @@ import { GeocodingApiQuery, GeocodingApiResponse } from '../../types/geocoding'
  * @return {*}  {Promise<GeocodingApiResponse>}
  */
 export const getCities = async (q: GeocodingApiQuery, limit?: number): Promise<GeocodingApiResponse> => {
-  const res = await fetch(getGeocodingApiEndpoint(q, limit))
-  return res.json()
+  const res = await axiosBase().get(getGeocodingApiEndpoint(q, limit))
+  return res.data
 }

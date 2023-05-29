@@ -110,3 +110,12 @@ export type Forecast = {
   }
   dt_txt: string
 }
+
+// https://openweathermap.org/current#data
+// unit type for the parameter of OpenWeather API.
+// standard: Kelvin
+// imperial: Fahrenheit
+// metric: Celsius
+
+// default(''): standard
+export type Unit = '' | 'standard' | 'metric' | 'imperial'

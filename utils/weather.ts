@@ -1,4 +1,5 @@
 import { WEATHER_API_BASE_ENDPOINT, GEOCODING_API_ENDPOINT, OPEN_WEATHER_API_KEY } from '../constants/api'
+import { Unit } from '../types/weatherApi'
 
 /**
  * https://openweathermap.org/current
@@ -8,8 +9,8 @@ import { WEATHER_API_BASE_ENDPOINT, GEOCODING_API_ENDPOINT, OPEN_WEATHER_API_KEY
  * @param {number} lat
  * @param {number} lon
  */
-export const getCurrentWeatherApiEndpoint = (lat: number, lon: number) => (
-  `${WEATHER_API_BASE_ENDPOINT}/weather?lat=${lat}&lon=${lon}&appid=${OPEN_WEATHER_API_KEY}`
+export const getCurrentWeatherApiEndpoint = (lat: number, lon: number, unit?: Unit) => (
+  `${WEATHER_API_BASE_ENDPOINT}/weather?lat=${lat}&lon=${lon}&units=${unit || ''}&appid=${OPEN_WEATHER_API_KEY}`
 )
 
 /**
@@ -20,6 +21,6 @@ export const getCurrentWeatherApiEndpoint = (lat: number, lon: number) => (
  * @param {number} lat
  * @param {number} lon
  */
-export const get5Day3hourForecastApiEndpoint = (lat: number, lon: number) => (
-  `${WEATHER_API_BASE_ENDPOINT}/forecast?lat=${lat}&lon=${lon}&appid=${OPEN_WEATHER_API_KEY}`
+export const get5Day3hourForecastApiEndpoint = (lat: number, lon: number, unit?: Unit) => (
+  `${WEATHER_API_BASE_ENDPOINT}/forecast?lat=${lat}&lon=${lon}&units=${unit || ''}&appid=${OPEN_WEATHER_API_KEY}`
 )

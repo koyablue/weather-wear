@@ -1,3 +1,5 @@
+// TODO: Delete this file if it's not necessary anymore(because installed SWR)
+
 // Return this type from API call try-catch functions
 export type Result<T, E> = Success<T> | Failure<E>
 

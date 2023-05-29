@@ -1,26 +1,29 @@
+import useSWR from 'swr'
 import { getCurrentWeatherByCoordinate } from '../../services/queries/getCurrentWeatherByCoordinate'
-
-// types
-import { Result, newSuccess, newFailure } from '../../types/result'
-import { CurrentWeatherApiResponse } from '../../types/weatherApi'
-import { UseApiReturnType, newUseApiReturnType, ApiError } from '../../types/api'
+import { Unit } from '../../types/weatherApi'
 
 /**
  * Custom hook to get current weather data based on the coordinate.
  *
  * @param {number} lat
  * @param {number} lon
- * @return {*}  {Promise<UseApiReturnType<CurrentWeatherApiResponse>>}
- */
-export const useGetCurrentWeather = async (lat: number, lon: number): Promise<UseApiReturnType<CurrentWeatherApiResponse>> => {
-  let result: Result<CurrentWeatherApiResponse, ApiError>
-
-  try {
-    const res = await getCurrentWeatherByCoordinate(lat, lon)
-    result = newSuccess(res)
-  } catch (error) {
-    result = newFailure({ error })
+ * @param {Unit} unit
+ * @return {*} {
+    currentWeather: CurrentWeatherApiResponse;
+    error: any;
+    isLoading: boolean;
+    isValidating: boolean;
   }
+ */
+export const useGetCurrentWeather = (lat: number, lon: number, unit?: Unit) => {
+  // 30 min to refresh
+  // TODO: make millisec constant
+  const { data, error, isLoading, isValidating } = useSWR(['currentWeather/get',lat, lon, unit], () => getCurrentWeatherByCoordinate(lat, lon, unit), { refreshInterval: 1800000 })
 
-  return newUseApiReturnType(result)
+  return {
+    currentWeather: data,
+    error,
+    isLoading,
+    isValidating,
+  }
 }

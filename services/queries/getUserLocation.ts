@@ -1,10 +1,5 @@
-// types
+import { axiosBase } from '../axiosBase'
 import { GeolocationApiResponse } from '../../types/geolocationApi'
-
-// constants
-import { GEOLOCATION_CACHE_LIFETIME } from '../../constants/api'
-
-// utils
 import { getGeolocationApiEndpoint } from '../../utils/geolocation'
 
 /**
@@ -14,6 +9,6 @@ import { getGeolocationApiEndpoint } from '../../utils/geolocation'
  * @return {*}  {Promise<Partial<GeolocationApiResponse>>}
  */
 export const getUserLocation = async (fields?: string[]): Promise<Partial<GeolocationApiResponse>> => {
-  const res = await fetch(getGeolocationApiEndpoint(fields), { next: { revalidate: GEOLOCATION_CACHE_LIFETIME }})
-  return res.json()
+  const res = await axiosBase().get(getGeolocationApiEndpoint(fields))
+  return res.data
 }
