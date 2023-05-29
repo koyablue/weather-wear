@@ -1,6 +1,6 @@
 import { ReactElement } from 'react'
-
 import Head from 'next/head'
+import { SWRConfig, unstable_serialize } from 'swr'
 import {
   Container,
   // Main,
@@ -14,23 +14,46 @@ import Main from '../components/pages/main'
 import { GetServerSideProps } from 'next'
 import { cookies } from 'next/dist/client/components/headers'
 import BaseLayout from '../components/layouts/baseLayout'
+import { getUserLocation } from '../services/queries/getUserLocation'
+import { GeolocationApiResponse } from '../types/geolocationApi'
 
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  // const cookieStore = cookies()
-  // console.log('ALL COOKIES: ', cookieStore.getAll())
   console.log('SSR index.tsx')
+
+  const fields = []
+  let data: Partial<GeolocationApiResponse> | null
+
+  try {
+    const userLocation = await getUserLocation(fields)
+    data = userLocation
+  } catch(error) {
+    data = null
+  }
+
   return {
     props: {
+      fallback: {
+        [unstable_serialize(fields)]: data,
+      },
     },
   }
 }
 
-const Home = () => {
+
+type PageProps = {
+  fallback: {
+    [key: string]: any
+  }
+}
+
+// TODO: global error handling
+
+const Home = ({ fallback }: PageProps) => {
   return (
-    <>
+    <SWRConfig value={{fallback}}>
       <Main />
-    </>
+    </SWRConfig>
     // <Container>
     //   <Head>
     //     <title>Create Next App</title>

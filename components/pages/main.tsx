@@ -9,8 +9,12 @@ import { breakPoint } from '../../styles/breakPoint'
 import Header from '../layouts/header'
 import ClothingGuidelineScaleChart from '../common/clothingGuidelineScale/clothingGuidelineScaleChart'
 
+import { useGetUserLocation } from '../../hooks/data/useGetUserLocation'
+
 // svg
 import PufferJacketIcon from '../../public/images/svgs/puffer-jacket.svg'
+
+import { BiErrorCircle } from 'react-icons/bi'
 
 const ContainerDiv = styled.div`
   /* display: flex;
@@ -58,17 +62,30 @@ const LocationInput = styled.input`
   height: 48px;
 `
 
-// TODO: Breakpoint
+const ErrorIcon = styled(BiErrorCircle)`
+  font-size: 150px;
+`
 
 // TODO: inputの候補はbingの検索inputみたいな感じ
 
 const Main = () => {
+  const { userLocation, error, isLoading, isValidating } = useGetUserLocation([])
+
+  // console.log(userLocation.security.is_vpn)
+
+  // TODO: get location(lat, lon) -> getCurrentWeather(degree) -> convert to the scale -> show icon and chart
+
+  // TODO: Error message
+
   // TODO: 1. implement UI(just markup for now)
   // TODO: 2. celcius<->fharenheit
   // TODO: 3. isVPN
   // TODO: 4. implement useWeatherWearMeasure
-  // TODO: 5. implement custom hooks to call third party APIs with SWR(maybe use axios?)
-  // TODO: 服装指数style is fine(only tops icon and bar chart) https://tenki.jp/indexes/dress/
+
+  // TODO: api won't work in client side because no NEXT_PUBLIC prefix
+  // TODO: but adding the prefix means make the api key public
+  // TODO: to avoid that, Implement API route and call that from client side
+
   return (
     <ContainerDiv>
       <Header />
@@ -82,6 +99,10 @@ const Main = () => {
             height={150}
           />
           <ClothingGuidelineScaleChart />
+
+          {/* TODO: Implement Error component */}
+          {/* <ErrorIcon />
+          Woops! */}
         </MainContentsContainerDiv>
       </ContentsMain>
     </ContainerDiv>
