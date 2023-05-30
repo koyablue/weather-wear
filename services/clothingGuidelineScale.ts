@@ -29,6 +29,8 @@ export const celsiusToClothingGuidelineScale = (celsius: number): ClothingGuidel
 }
 
 // TODO: Implement a function returns icon based on the scale
+// TODO: make paths(and filenames) constants
+
 // 5: tank top
 // 4: t-shirts
 // 3: long sleeve

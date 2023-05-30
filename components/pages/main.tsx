@@ -77,14 +77,17 @@ const Main = () => {
 
   // TODO: Error message
 
-  // TODO: 1. implement UI(just markup for now)
-  // TODO: 2. celcius<->fharenheit
+  // TODO: 1. [WIP]implement UI(just markup for now)
+  // TODO: 2. celsius<->fahrenheit
   // TODO: 3. isVPN
   // TODO: 4. implement useWeatherWearMeasure
 
   // TODO: api won't work in client side because no NEXT_PUBLIC prefix
   // TODO: but adding the prefix means make the api key public
   // TODO: to avoid that, Implement API route and call that from client side
+
+  // TODO: API routes for currentWeather, geolocation, geocoding, forecast
+  // to hide api key
 
   return (
     <ContainerDiv>
