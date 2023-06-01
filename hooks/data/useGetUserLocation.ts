@@ -1,6 +1,5 @@
-import useSWR from 'swr'
-import { getUserLocation } from '../../services/queries/getUserLocation'
-
+import useSWR, { SWRConfiguration } from 'swr'
+import { getUserLocationClient } from '../../services/queries/client/getUserLocationClient'
 /**
  * Custom hook to get a user's current location.
  *
@@ -12,10 +11,14 @@ import { getUserLocation } from '../../services/queries/getUserLocation'
       isValidating: boolean;
     }
  */
-export const useGetUserLocation = (fields?: string[]) => {
+export const useGetUserLocation = (fields?: string[], options?: SWRConfiguration<any, any>) => {
   // 10 min to refresh
   // TODO: make millisec constant
-  const { data, error, isLoading, isValidating } = useSWR(['userLocation/get', fields], () => getUserLocation(fields), { refreshInterval: 600000 })
+  const { data, error, isLoading, isValidating } = useSWR(
+    ['userLocation/get', fields],
+    () => getUserLocationClient(fields),
+    options || { refreshInterval: 600000, revalidateOnFocus: false }
+  )
 
   return {
     userLocation: data,

@@ -71,7 +71,7 @@ const ErrorIcon = styled(BiErrorCircle)`
 const Main = () => {
   const { userLocation, error, isLoading, isValidating } = useGetUserLocation([])
 
-  // console.log(userLocation.security.is_vpn)
+  console.log(userLocation)
 
   // TODO: get location(lat, lon) -> getCurrentWeather(degree) -> convert to the scale -> show icon and chart
 

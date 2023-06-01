@@ -27,7 +27,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   try {
     const userLocation = await getUserLocation(fields)
     data = userLocation
+    console.log('data: ', data)
   } catch(error) {
+    console.log(error)
     data = null
   }
 

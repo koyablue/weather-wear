@@ -1,3 +1,4 @@
+// https://app.abstractapi.com/api/ip-geolocation/documentation
 export const GEOLOCATION_API_ENDPOINT = 'https://ipgeolocation.abstractapi.com/v1/?api_key='
 export const GEOLOCATION_API_KEY = process.env.GEOLOCATION_API_KEY || ''
 
