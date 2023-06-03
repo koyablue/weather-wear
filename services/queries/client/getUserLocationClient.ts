@@ -2,8 +2,7 @@ import { axiosBase } from '../../axiosBase'
 import { GeolocationApiResponse } from '../../../types/geolocationApi'
 
 /**
- * Call Geolocation API
- * Use this only in client side
+ * Call Geolocation API in client side code
  *
  * @param {string[]} [fields]
  * @return {*}  {Promise<Partial<GeolocationApiResponse>>}

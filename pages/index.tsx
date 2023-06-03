@@ -14,7 +14,7 @@ import Main from '../components/pages/main'
 import { GetServerSideProps } from 'next'
 import { cookies } from 'next/dist/client/components/headers'
 import BaseLayout from '../components/layouts/baseLayout'
-import { getUserLocation } from '../services/queries/getUserLocation'
+import { getUserLocationServer } from '../services/queries/server/getUserLocationServer'
 import { GeolocationApiResponse } from '../types/geolocationApi'
 
 
@@ -25,7 +25,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   let data: Partial<GeolocationApiResponse> | null
 
   try {
-    const userLocation = await getUserLocation(fields)
+    const userLocation = await getUserLocationServer(fields)
     data = userLocation
     console.log('data: ', data)
   } catch(error) {
