@@ -1,5 +1,5 @@
 import useSWR from 'swr'
-import { getCurrentWeatherByCoordinate } from '../../services/queries/getCurrentWeatherByCoordinate'
+import { getCurrentWeatherClient } from '../../services/queries/client/getCurrentWeatherClient'
 import { Unit } from '../../types/weatherApi'
 
 /**
@@ -18,7 +18,11 @@ import { Unit } from '../../types/weatherApi'
 export const useGetCurrentWeather = (lat: number, lon: number, unit?: Unit) => {
   // 30 min to refresh
   // TODO: make millisec constant
-  const { data, error, isLoading, isValidating } = useSWR(['currentWeather/get',lat, lon, unit], () => getCurrentWeatherByCoordinate(lat, lon, unit), { refreshInterval: 1800000 })
+  const { data, error, isLoading, isValidating } = useSWR(
+    ['currentWeather/get',lat, lon, unit],
+    () => getCurrentWeatherClient(lat, lon, unit),
+    { refreshInterval: 1800000 }
+  )
 
   return {
     currentWeather: data,
