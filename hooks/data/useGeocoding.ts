@@ -1,5 +1,5 @@
 import useSWR from 'swr'
-import { getCities } from '../../services/queries/getCities'
+import { getCitiesClient } from '../../services/queries/client/getCitiesClient'
 import { GeocodingApiQuery } from '../../types/geocoding'
 
 /**
@@ -15,7 +15,10 @@ import { GeocodingApiQuery } from '../../types/geocoding'
   }
  */
 export const useGeocoding = (q: GeocodingApiQuery, limit?: number) => {
-  const { data, error, isLoading, isValidating } = useSWR(['geocoding/get', q, limit], () => getCities(q, limit))
+  const { data, error, isLoading, isValidating } = useSWR(
+    ['geocoding/get', q, limit],
+    () => getCitiesClient(q, limit),
+  )
 
   return {
     geocodingResult: data,
