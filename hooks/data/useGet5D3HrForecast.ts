@@ -1,5 +1,5 @@
 import useSWR from 'swr'
-import { get5Day3HourForecastByCoordinate } from '../../services/queries/get5Day3hourForecastByCoordinate'
+import { getForeCastClient } from '../../services/queries/client/getForeCastClient'
 import { Unit } from '../../types/weatherApi'
 
 /**
@@ -16,7 +16,12 @@ import { Unit } from '../../types/weatherApi'
   }
  */
 export const useGet5D3HrForecast = (lat: number, lon: number, unit?: Unit) => {
-  const { data, error, isLoading, isValidating } = useSWR(['FiveDThreeHrForecast/get', lat, lon, unit], () => get5Day3HourForecastByCoordinate(lat, lon, unit), { refreshInterval: 1800000 })
+  // TODO: make millisec constant
+  const { data, error, isLoading, isValidating } = useSWR(
+    ['FiveDThreeHrForecast/get', lat, lon, unit],
+    () => getForeCastClient(lat, lon, unit),
+    { refreshInterval: 1800000 }
+  )
 
   return {
     forecast: data,
