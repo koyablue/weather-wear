@@ -18,9 +18,11 @@ export const getCurrentWeatherApiEndpoint = (lat: number, lon: number, unit?: Un
  *
  * https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}
  *
+ * 5 days 3 hours forecasts
+ *
  * @param {number} lat
  * @param {number} lon
  */
-export const get5Day3hourForecastApiEndpoint = (lat: number, lon: number, unit?: Unit) => (
+export const getForecastApiEndpoint = (lat: number, lon: number, unit?: Unit) => (
   `${WEATHER_API_BASE_ENDPOINT}/forecast?lat=${lat}&lon=${lon}&units=${unit || ''}&appid=${OPEN_WEATHER_API_KEY}`
 )
