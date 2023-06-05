@@ -16,27 +16,36 @@ import { cookies } from 'next/dist/client/components/headers'
 import BaseLayout from '../components/layouts/baseLayout'
 import { getUserLocationServer } from '../services/queries/server/getUserLocationServer'
 import { GeolocationApiResponse } from '../types/geolocationApi'
+import { getCurrentWeatherClient } from '../services/queries/client/getCurrentWeatherClient'
+import { getCurrentWeatherServer } from '../services/queries/server/getCurrentWeatherServer'
+import { CurrentWeatherApiResponse } from '../types/weatherApi'
 
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   console.log('SSR index.tsx')
 
   const fields = []
-  let data: Partial<GeolocationApiResponse> | null
+  let userLocation: Partial<GeolocationApiResponse> | null
+  let currentWeather: CurrentWeatherApiResponse | null
 
   try {
-    const userLocation = await getUserLocationServer(fields)
-    data = userLocation
-    console.log('data: ', data)
+    userLocation = await getUserLocationServer(fields)
+    // TODO: get weather(unit=metric) -> Math.round(main.temp)
+    // TODO: if (max - min) >= 5 -> two options or notes()
+
+    // TODO: message is like this: "Big temperature swing today. Dress in adjustable clothing."
+    // TODO: or like this: "Stay prepared for temperature changes. Wear adjustable clothing." <- better?
+    currentWeather = await getCurrentWeatherServer(userLocation.latitude, userLocation.longitude, 'metric')
   } catch(error) {
-    console.log(error)
-    data = null
+    userLocation = null
+    currentWeather = null
   }
 
   return {
     props: {
       fallback: {
-        [unstable_serialize(fields)]: data,
+        [unstable_serialize(['userLocation/get', fields])]: userLocation,
+        [unstable_serialize(['currentWeather/get', userLocation.latitude, userLocation.longitude, 'metric'])]: currentWeather
       },
     },
   }

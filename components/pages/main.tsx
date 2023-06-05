@@ -13,8 +13,14 @@ import { useGetUserLocation } from '../../hooks/data/useGetUserLocation'
 
 // svg
 import PufferJacketIcon from '../../public/images/svgs/puffer-jacket.svg'
+import TankTopIcon from '../../public/images/svgs/tank-top.svg'
+import TShirtIcon from '../public/images/svgs/t-shirt.svg'
+import LongSleeveIcon from '../public/images/svgs/long-sleeve.svg'
+import HoodieIcon from '../public/images/svgs/hoodie.svg'
 
 import { BiErrorCircle } from 'react-icons/bi'
+import { useGetCurrentWeather } from '../../hooks/data/useGetCurrentWeather'
+import { celsiusToClothingGuidelineScale, getIconByClothingGuidelineScale } from '../../services/clothingGuidelineScale'
 
 const ContainerDiv = styled.div`
   /* display: flex;
@@ -69,9 +75,29 @@ const ErrorIcon = styled(BiErrorCircle)`
 // TODO: inputの候補はbingの検索inputみたいな感じ
 
 const Main = () => {
-  const { userLocation, error, isLoading, isValidating } = useGetUserLocation([])
+  const {
+    userLocation,
+    error: userLocationError,
+    isLoading: isUserLocationLoading,
+    isValidating: isUserLocationValidating
+  } = useGetUserLocation([])
 
-  console.log(userLocation)
+  const {
+    currentWeather,
+    error: currentWeatherError,
+    isLoading: isCurrentWeatherLoading,
+    isValidating: isCurrentWeatherValidating
+  } = useGetCurrentWeather(userLocation.latitude, userLocation.longitude, 'metric')
+
+  // TODO: get weather(unit=metric) -> Math.round(main.temp)
+  // TODO: if (max - min) >= 5 -> two options or notes()
+
+  // TODO: message is like this: "Big temperature swing today. Dress in adjustable clothing."
+  // TODO: or like this: "Stay prepared for temperature changes. Wear adjustable clothing." <- better?
+
+  const scale = celsiusToClothingGuidelineScale(currentWeather.main.temp)
+  const clothesIcon = getIconByClothingGuidelineScale(scale)
+  console.log(clothesIcon)
 
   // TODO: get location(lat, lon) -> getCurrentWeather(degree) -> convert to the scale -> show icon and chart
 
@@ -82,13 +108,8 @@ const Main = () => {
   // TODO: 3. isVPN
   // TODO: 4. implement useWeatherWearMeasure
 
-  // TODO: api won't work in client side because no NEXT_PUBLIC prefix
-  // TODO: but adding the prefix means make the api key public
-  // TODO: to avoid that, Implement API route and call that from client side
 
-  // TODO: API routes for currentWeather, geolocation, geocoding, forecast
-  // to hide api key
-
+  // TODO: use SVGR to dynamic color change of svg
   return (
     <ContainerDiv>
       <Header />
@@ -96,12 +117,14 @@ const Main = () => {
         <MainContentsContainerDiv>
           <LocationInput type='text' name='cityName' placeholder='City name' />
           <Image
-            src={PufferJacketIcon}
-            alt='Puffer jacket icon'
+            // src={PufferJacketIcon}
+            src={clothesIcon}
+            // src='images/svgs/long-sleeve.svg'
+            alt='clothes icon'
             width={150}
             height={150}
           />
-          <ClothingGuidelineScaleChart />
+          <ClothingGuidelineScaleChart scale={2} />
 
           {/* TODO: Implement Error component */}
           {/* <ErrorIcon />

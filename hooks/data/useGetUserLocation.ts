@@ -14,6 +14,7 @@ import { getUserLocationClient } from '../../services/queries/client/getUserLoca
 export const useGetUserLocation = (fields?: string[], options?: SWRConfiguration<any, any>) => {
   // 10 min to refresh
   // TODO: make millisec constant
+  // TODO: make 'userLocation/get' constant
   const { data, error, isLoading, isValidating } = useSWR(
     ['userLocation/get', fields],
     () => getUserLocationClient(fields),
