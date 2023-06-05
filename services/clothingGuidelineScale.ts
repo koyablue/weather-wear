@@ -1,4 +1,5 @@
 import { ClothingGuidelineScale } from '../types/clothingGuidelineScale'
+import { ColorTheme } from '../types/colorTheme'
 
 /**
  * Convert celsius degree to clothing guideline scale
@@ -28,11 +29,62 @@ export const celsiusToClothingGuidelineScale = (celsius: number): ClothingGuidel
   }
 }
 
-// TODO: Implement a function returns icon based on the scale
-// TODO: make paths(and filenames) constants
+/**
+ * Returns color code based on the scale and color theme
+ *
+ * @param {ClothingGuidelineScale} scale
+ * @param {ColorTheme} colorTheme
+ * @return {*} string
+ */
+export const getColorByClothingGuidelineScale = (scale: ClothingGuidelineScale, colorTheme: ColorTheme): string => {
+  if (colorTheme === 'dark') {
+    switch (scale) {
+      case 5:
+        return '#a52a2a'
+      case 4:
+        return '#d2691e'
+      case 3:
+        return '#5b7e68'
+      case 2:
+        return '#4d7586'
+      case 1:
+        return '#295773'
+    }
+  }
 
-// 5: tank top
-// 4: t-shirts
-// 3: long sleeve
-// 2: jacket
-// 1: puffer jacket
+  // light theme　as the default
+  switch (scale) {
+    case 5:
+      return '#ffa6a6'
+    case 4:
+      return '#ffd3a5'
+    case 3:
+      return '#a1c9b0'
+    case 2:
+      return '#a8c5d6'
+    case 1:
+      return '#4f6a89'
+  }
+}
+
+/**
+ * Returns svg path based on scale for Next.js Image component
+ * icon source: https://iconscout.com/
+ *
+ * @param {ClothingGuidelineScale} scale
+ * @return {*}
+ */
+export const getIconByClothingGuidelineScale = (scale: ClothingGuidelineScale) => {
+  switch (scale) {
+    case 5:
+      return 'images/svgs/tank-top.svg'
+    case 4:
+      return 'images/svgs/t-shirt.svg'
+    case 3:
+      return 'images/svgs/long-sleeve.svg'
+    case 2:
+      return 'images/svgs/hoodie.svg'
+    case 1:
+      return 'images/svgs/puffer-jacket.svg'
+  }
+}
