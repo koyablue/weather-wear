@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-import InitColorTheme from './includes/InitColorTheme'
+import InitColorTheme from './includes/initColorTheme'
 
 import { useAppSelector } from '../../stores/hooks'
 import { selectColorThemeInit } from '../../stores/slices/colorThemeSlice'
