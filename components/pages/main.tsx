@@ -20,7 +20,8 @@ import HoodieIcon from '../public/images/svgs/hoodie.svg'
 
 import { BiErrorCircle } from 'react-icons/bi'
 import { useGetCurrentWeather } from '../../hooks/data/useGetCurrentWeather'
-import { celsiusToClothingGuidelineScale, getIconByClothingGuidelineScale } from '../../services/clothingGuidelineScale'
+import { celsiusToClothingGuidelineScale, getColorByClothingGuidelineScale, getIconByClothingGuidelineScale } from '../../services/clothingGuidelineScale'
+import { useColorTheme } from '../../hooks/useColorTheme'
 
 const ContainerDiv = styled.div`
   /* display: flex;
@@ -74,6 +75,12 @@ const ErrorIcon = styled(BiErrorCircle)`
 
 // TODO: inputの候補はbingの検索inputみたいな感じ
 
+const StyledIconWrapper = styled.div`
+  svg {
+    fill: ${({ color }) => color}; /* Apply the color dynamically */
+  }
+`;
+
 const Main = () => {
   const {
     userLocation,
@@ -89,6 +96,8 @@ const Main = () => {
     isValidating: isCurrentWeatherValidating
   } = useGetCurrentWeather(userLocation.latitude, userLocation.longitude, 'metric')
 
+  const { getCurrentColorThemeState } = useColorTheme()
+
   // TODO: get weather(unit=metric) -> Math.round(main.temp)
   // TODO: if (max - min) >= 5 -> two options or notes()
 
@@ -96,8 +105,8 @@ const Main = () => {
   // TODO: or like this: "Stay prepared for temperature changes. Wear adjustable clothing." <- better?
 
   const scale = celsiusToClothingGuidelineScale(currentWeather.main.temp)
-  const clothesIcon = getIconByClothingGuidelineScale(scale)
-  console.log(clothesIcon)
+  const ClothesIcon = getIconByClothingGuidelineScale(scale, getCurrentColorThemeState())
+  const color = getColorByClothingGuidelineScale(scale, getCurrentColorThemeState())
 
   // TODO: get location(lat, lon) -> getCurrentWeather(degree) -> convert to the scale -> show icon and chart
 
@@ -116,15 +125,8 @@ const Main = () => {
       <ContentsMain>
         <MainContentsContainerDiv>
           <LocationInput type='text' name='cityName' placeholder='City name' />
-          <Image
-            // src={PufferJacketIcon}
-            src={clothesIcon}
-            // src='images/svgs/long-sleeve.svg'
-            alt='clothes icon'
-            width={150}
-            height={150}
-          />
-          <ClothingGuidelineScaleChart scale={2} />
+          <ClothesIcon fill={color} width={150} height={150} />
+          <ClothingGuidelineScaleChart scale={scale} />
 
           {/* TODO: Implement Error component */}
           {/* <ErrorIcon />
