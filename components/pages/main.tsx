@@ -108,17 +108,15 @@ const Main = () => {
   const ClothesIcon = getIconByClothingGuidelineScale(scale, getCurrentColorThemeState())
   const color = getColorByClothingGuidelineScale(scale, getCurrentColorThemeState())
 
-  // TODO: get location(lat, lon) -> getCurrentWeather(degree) -> convert to the scale -> show icon and chart
-
   // TODO: Error message
 
-  // TODO: 1. [WIP]implement UI(just markup for now)
   // TODO: 2. celsius<->fahrenheit
   // TODO: 3. isVPN
-  // TODO: 4. implement useWeatherWearMeasure
 
+  // TODO: message: 15 °F - 25 °F (15 °C - 25 °C)
+  // TODO: if fahrenheit country(see country code) use fahrenheit
+  // TODO: message: Stay prepared for temperature changes (15 °C - 25 °C). Wear adjustable clothing.
 
-  // TODO: use SVGR to dynamic color change of svg
   return (
     <ContainerDiv>
       <Header />
