@@ -11,13 +11,6 @@ import ClothingGuidelineScaleChart from '../common/clothingGuidelineScale/clothi
 
 import { useGetUserLocation } from '../../hooks/data/useGetUserLocation'
 
-// svg
-import PufferJacketIcon from '../../public/images/svgs/puffer-jacket.svg'
-import TankTopIcon from '../../public/images/svgs/tank-top.svg'
-import TShirtIcon from '../public/images/svgs/t-shirt.svg'
-import LongSleeveIcon from '../public/images/svgs/long-sleeve.svg'
-import HoodieIcon from '../public/images/svgs/hoodie.svg'
-
 import { BiErrorCircle } from 'react-icons/bi'
 import { useGetCurrentWeather } from '../../hooks/data/useGetCurrentWeather'
 import { celsiusToClothingGuidelineScale, getColorByClothingGuidelineScale, getIconByClothingGuidelineScale } from '../../services/clothingGuidelineScale'
@@ -63,7 +56,8 @@ const MainContentsContainerDiv = styled.div`
 
 const LocationInput = styled.input`
   border-radius: 30px;
-  border: 1.5px solid;
+  /* border: 1.5px solid; */
+  border: none;
   padding: 0 16px;
   width: 75%;
   height: 48px;
@@ -105,9 +99,9 @@ const Main = () => {
   // TODO: or like this: "Stay prepared for temperature changes. Wear adjustable clothing." <- better?
 
   const scale = celsiusToClothingGuidelineScale(currentWeather.main.temp)
-  const ClothesIcon = getIconByClothingGuidelineScale(scale, getCurrentColorThemeState())
   const color = getColorByClothingGuidelineScale(scale, getCurrentColorThemeState())
-
+  const ClothesIcon = getIconByClothingGuidelineScale(scale)
+  console.log(color)
   // TODO: Error message
 
   // TODO: 2. celsius<->fahrenheit

@@ -17,7 +17,7 @@ const ChartItemDiv = styled.div`
   /* line-height: 20px; */
   background-color: ${props => props.color || '#ffffff'};
   border-radius: 50%;
-  border: 1.5px solid;
+  /* border: 1.5px solid; */
 `
 
 type Props = {

@@ -82,7 +82,7 @@ export const getColorByClothingGuidelineScale = (scale: ClothingGuidelineScale, 
  * @param {ColorTheme} colorTheme
  * @return {*}  {React.FC<React.SVGProps<SVGElement>>}
  */
-export const getIconByClothingGuidelineScale = (scale: ClothingGuidelineScale, colorTheme: ColorTheme): React.FC<React.SVGProps<SVGElement>> => {
+export const getIconByClothingGuidelineScale = (scale: ClothingGuidelineScale): React.FC<React.SVGProps<SVGElement>> => {
   const createIconComponent = (Element: React.FC<React.SVGProps<SVGElement>>) => {
     return (props: React.SVGProps<SVGElement>) => <Element {...props} />;
   }
