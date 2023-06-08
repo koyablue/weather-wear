@@ -1,13 +1,6 @@
 import { ClothingGuidelineScale } from '../types/clothingGuidelineScale'
 import { ColorTheme } from '../types/colorTheme'
 
-// svgs
-import TankTop from '../public/images/svgs/tank-top.svg'
-import TShirt from '../public/images/svgs/t-shirt.svg'
-import LongSleeve from '../public/images/svgs/long-sleeve.svg'
-import Hoodie from '../public/images/svgs/hoodie.svg'
-import PufferJacket from '../public/images/svgs/puffer-jacket.svg'
-
 /**
  * Convert celsius degree to clothing guideline scale
  *
@@ -71,32 +64,5 @@ export const getColorByClothingGuidelineScale = (scale: ClothingGuidelineScale, 
       return '#a8c5d6'
     case 1:
       return '#4f6a89'
-  }
-}
-
-/**
- * Returns svg path based on scale for Next.js Image component
- * icon source: https://iconscout.com/
- *
- * @param {ClothingGuidelineScale} scale
- * @param {ColorTheme} colorTheme
- * @return {*}  {React.FC<React.SVGProps<SVGElement>>}
- */
-export const getIconByClothingGuidelineScale = (scale: ClothingGuidelineScale): React.FC<React.SVGProps<SVGElement>> => {
-  const createIconComponent = (Element: React.FC<React.SVGProps<SVGElement>>) => {
-    return (props: React.SVGProps<SVGElement>) => <Element {...props} />;
-  }
-
-  switch (scale) {
-    case 5:
-      return createIconComponent(TankTop)
-    case 4:
-      return createIconComponent(TShirt)
-    case 3:
-      return createIconComponent(LongSleeve)
-    case 2:
-      return createIconComponent(Hoodie)
-    case 1:
-      return createIconComponent(PufferJacket)
   }
 }
