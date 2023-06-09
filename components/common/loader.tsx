@@ -12,15 +12,17 @@ import { useColorTheme } from '../../hooks/useColorTheme'
 const Loader = (props: LoaderSizeMarginProps) => {
   const { getCurrentColorThemeState, getColorThemeStyle } = useColorTheme()
 
-  let color: string
-  switch (getCurrentColorThemeState()) {
-    case 'light':
-      color = getColorThemeStyle('dark').colors.background
-      break
-    case 'dark':
-      color = getColorThemeStyle('light').colors.background
-    default:
-      color = '#ffffff'
+  let color = props.color || ''
+  if (!color) {
+    switch (getCurrentColorThemeState()) {
+      case 'light':
+        color = getColorThemeStyle('dark').colors.background
+        break
+      case 'dark':
+        color = getColorThemeStyle('light').colors.background
+      default:
+        color = '#ffffff'
+    }
   }
 
   return (
