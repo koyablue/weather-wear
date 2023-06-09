@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-import { useToggle } from '../../../hooks/useToggle';
+import { FiSearch } from 'react-icons/fi'
+
+import { useToggle } from '../../../hooks/useToggle'
 
 const Container = styled.div`
   position: relative;
@@ -18,6 +20,25 @@ const Input = styled.input<{ showDropdown: boolean }>`
   :focus {
     outline: none;
   }
+`
+
+const SearchIconContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  border-radius: 30%;
+  :active {
+    background-color: #f1f2f3;
+  }
+`
+
+const SearchButton = styled.button`
+  background-color: transparent;
+  border: none;
+  color: #868686;
+  cursor: pointer;
 `
 
 const Dropdown = styled.ul`
@@ -59,21 +80,25 @@ const SearchDropdown: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value)
-    setShowDropdown(true)
-  };
+  }
 
   const handleOptionClick = (option: string) => {
     setSearchTerm(option)
     setShowDropdown(false)
-  };
+  }
+
+  const handleSearch = () => {
+    // Perform search process here
+    setShowDropdown(true)
+    console.log('Search term:', searchTerm)
+  }
 
   const filteredOptions = options.filter(option =>
     option.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
-  // TODO: API call
-
-  // TODO: Make Option based on API call result
+  // TODO: API call when search icon clicked -> show drop down
+  // TODO: dropdown select -> API call to get weather
 
   return (
     <Container>
@@ -84,6 +109,11 @@ const SearchDropdown: React.FC = () => {
         onChange={handleInputChange}
         showDropdown={showDropdown}
       />
+      <SearchIconContainer onClick={handleSearch}>
+        <SearchButton>
+          <FiSearch />
+        </SearchButton>
+      </SearchIconContainer>
       {showDropdown && (
         <Dropdown>
           {filteredOptions.map(option => (
@@ -98,3 +128,4 @@ const SearchDropdown: React.FC = () => {
 }
 
 export default SearchDropdown
+

@@ -35,6 +35,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
     // TODO: message is like this: "Big temperature swing today. Dress in adjustable clothing."
     // TODO: or like this: "Stay prepared for temperature changes. Wear adjustable clothing." <- better?
+
+      // TODO: if location is undefined getting lat, lon will be an error. Fix it.
     currentWeather = await getCurrentWeatherServer(userLocation.latitude, userLocation.longitude, 'metric')
   } catch(error) {
     userLocation = null
