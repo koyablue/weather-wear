@@ -1,25 +1,26 @@
 import styled from 'styled-components'
 
 // styles
-import { breakPoint } from '../../styles/breakPoint'
+import { breakPoint } from '../../../styles/breakPoint'
 
 // components
-import Header from '../layouts/header'
-import ClothingGuidelineScaleChart from '../common/clothingGuidelineScale/clothingGuidelineScaleChart'
-import ClothesIcon from '../common/ClothesIcon'
-import Loader from '../common/loader'
+import Header from '../../layouts/header'
+import ClothingGuidelineScaleChart from '../../common/clothingGuidelineScale/clothingGuidelineScaleChart'
+import ClothesIcon from '../../common/clothesIcon'
+import Loader from '../../common/loader'
 
 // services
-import { celsiusToClothingGuidelineScale, getColorByClothingGuidelineScale } from '../../services/clothingGuidelineScale'
+import { celsiusToClothingGuidelineScale, getColorByClothingGuidelineScale } from '../../../services/clothingGuidelineScale'
 
 // icon
 import { BiErrorCircle } from 'react-icons/bi'
 
 // hooks
-import { useColorTheme } from '../../hooks/useColorTheme'
-import { useValidateBooleanArray } from '../../hooks/useValidateBooleanArray'
-import { useGetCurrentWeather } from '../../hooks/data/useGetCurrentWeather'
-import { useGetUserLocation } from '../../hooks/data/useGetUserLocation'
+import { useColorTheme } from '../../../hooks/useColorTheme'
+import { useValidateBooleanArray } from '../../../hooks/useValidateBooleanArray'
+import { useGetCurrentWeather } from '../../../hooks/data/useGetCurrentWeather'
+import { useGetUserLocation } from '../../../hooks/data/useGetUserLocation'
+import SearchDropdown from './SearchInput'
 
 
 const ContainerDiv = styled.div`
@@ -70,6 +71,11 @@ const LocationInput = styled.input`
   height: 48px;
 `
 
+
+
+
+
+
 const ErrorIcon = styled(BiErrorCircle)`
   font-size: 150px;
 `
@@ -101,9 +107,12 @@ const Main = () => {
 
   const { hasTrueValue } = useValidateBooleanArray()
 
-  const isLoading = hasTrueValue([isUserLocationLoading, isCurrentWeatherLoading])
-
-  // TODO: implement useAllValuesTrue
+  const isLoading = hasTrueValue([
+    isUserLocationLoading,
+    isUserLocationValidating,
+    isCurrentWeatherLoading,
+    isCurrentWeatherValidating,
+  ])
 
   // TODO: get weather(unit=metric) -> Math.round(main.temp)
   // TODO: if (max - min) >= 5 -> two options or notes()
@@ -114,9 +123,6 @@ const Main = () => {
   const scale = celsiusToClothingGuidelineScale(currentWeather.main.temp)
   const color = getColorByClothingGuidelineScale(scale, currentColorTheme)
 
-  console.log(color)
-  //TODO: color of loading -> color
-
   // TODO: Error message
 
   // TODO: 2. celsius<->fahrenheit
@@ -125,23 +131,22 @@ const Main = () => {
   // TODO: message: 15 °F - 25 °F (15 °C - 25 °C)
   // TODO: if fahrenheit country(see country code) use fahrenheit
   // TODO: message: Stay prepared for temperature changes (15 °C - 25 °C). Wear adjustable clothing.
-  console.log(ClothesIcon)
+
   return (
     <ContainerDiv>
       <Header />
       <ContentsMain>
         <MainContentsContainerDiv>
-          <LocationInput type='text' name='cityName' placeholder='City name' />
-          {/* <ClothesIcon fill={color} width={150} height={150} /> */}
+          {/* <LocationInput type='text' name='cityName' placeholder='City name' /> */}
+          <SearchDropdown />
           {
             isLoading
-              ? <Loader color={color || '#333333'} />
+              ? <Loader color={color} />
               : <>
                   <ClothesIcon scale={scale} svgProps={{fill:color, height:150, width:150}} />
                   <ClothingGuidelineScaleChart scale={scale} />
                 </>
           }
-          {/* <Loader color='#333333' /> */}
           {/* TODO: Implement Error component */}
           {/* <ErrorIcon />
           Woops! */}
