@@ -35,6 +35,52 @@ export const celsiusToClothingGuidelineScale = (celsius?: number): ClothingGuide
 }
 
 /**
+ * TODO: not necessary. might delete
+ *
+ * @param {ClothingGuidelineScale} scale
+ * @return {*} string
+ */
+export const getLabelByClothingGuidelineScale = (scale: ClothingGuidelineScale) => {
+  switch (scale) {
+    case 5:
+      return 'Very hot'
+    case 4:
+      return 'Hot'
+    case 3:
+      return 'Warm'
+    case 2:
+      return 'Cool'
+    case 1:
+      return 'Cold'
+    default:
+      return ''
+  }
+}
+
+/**
+ *
+ *
+ * @param {ClothingGuidelineScale} scale
+ * @return {*} string
+ */
+export const getClothingAdviceByClothingGuidelineScale = (scale: ClothingGuidelineScale) => {
+  switch (scale) {
+    case 5:
+      return 'Wear lightweight and breathable clothes.'
+    case 4:
+      return 'Choose light and airy clothing.'
+    case 3:
+      return 'Opt for light layers.'
+    case 2:
+      return 'Layer up with a light sweater or jacket.'
+    case 1:
+      return 'Dress warmly in layers.'
+    default:
+      return ''
+  }
+}
+
+/**
  * Returns color code based on the scale and color theme
  *
  * @param {ClothingGuidelineScale} scale

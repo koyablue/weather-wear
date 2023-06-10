@@ -10,7 +10,7 @@ import ClothesIcon from '../../common/clothesIcon'
 import SyncLoader from '../../common/loaders/syncLoader'
 
 // services
-import { celsiusToClothingGuidelineScale, getColorByClothingGuidelineScale } from '../../../services/clothingGuidelineScale'
+import { celsiusToClothingGuidelineScale, getClothingAdviceByClothingGuidelineScale, getColorByClothingGuidelineScale, getLabelByClothingGuidelineScale } from '../../../services/clothingGuidelineScale'
 
 // icon
 import { BiErrorCircle } from 'react-icons/bi'
@@ -24,9 +24,6 @@ import SearchDropdown from './searchInput'
 
 
 const ContainerDiv = styled.div`
-  /* display: flex;
-  flex-direction: column; */
-  /* justify-content: center; */
   min-height: 100vh;
   width: 100%;
   max-width: 1400px;
@@ -43,46 +40,39 @@ const ContainerDiv = styled.div`
 `
 
 const ContentsMain = styled.main`
-  min-height: calc(100vh - (60px + 16px));
+  /* min-height: calc(100vh - (60px + 16px)); */
   width: 100%;
-  color: #333333;
-  /* display: flex; */
-  /* align-items: center; */
-  /* justify-content: center; */
+  /* color: #333333; */
 `
 
 const MainContentsContainerDiv = styled.div`
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   align-items: center;
   gap: 40px;
-  /* height: 100%; */
   width: 100%;
-  margin-top: 240px;
+  margin-top: 200px;
 `
 
-const LocationInput = styled.input`
-  border-radius: 30px;
-  /* border: 1.5px solid; */
-  border: none;
-  padding: 0 16px;
-  width: 75%;
-  height: 48px;
+const SubTextAreaDiv = styled.div`
+  text-align: center;
+  width: 100%;
 `
 
-const ErrorIcon = styled(BiErrorCircle)`
+const SubTextP = styled.p`
+`
+
+const ErrorIcon = styled(BiErrorCircle)<{color: string}>`
   font-size: 150px;
-`
-
-// TODO: inputの候補はbingの検索inputみたいな感じ
-
-const StyledIconWrapper = styled.div`
-  svg {
-    fill: ${({ color }) => color}; /* Apply the color dynamically */
-  }
+  color: ${(props) => props.color};
 `;
 
+/**
+ * Contents of the main page
+ * Get user location, then get current weather by the location
+ *
+ * @return {*} JSX.Element
+ */
 const Main = () => {
   const {
     userLocation,
@@ -103,9 +93,9 @@ const Main = () => {
     { revalidateOnFocus: false }
   )
 
-  const { getCurrentColorThemeState } = useColorTheme()
+  const { getCurrentColorThemeState, getCurrentColorThemeStyle } = useColorTheme()
 
-  const { hasTrueValue } = useValidateBooleanArray()
+  const { castAllValuesBoolean, hasTrueValue } = useValidateBooleanArray()
 
   const isLoading = hasTrueValue([
     isUserLocationLoading,
@@ -114,9 +104,8 @@ const Main = () => {
     isCurrentWeatherValidating,
   ])
 
-  const isError = hasTrueValue([
-    
-  ])
+  const isError = hasTrueValue(castAllValuesBoolean([userLocationError, currentWeatherError]))
+  // const isError = true
 
   // TODO: get weather(unit=metric) -> Math.round(main.temp)
   // TODO: if (max - min) >= 5 -> two options or notes()
@@ -126,6 +115,8 @@ const Main = () => {
   const currentColorTheme = getCurrentColorThemeState()
   const scale = celsiusToClothingGuidelineScale(currentWeather?.main?.temp)
   const color = getColorByClothingGuidelineScale(scale, currentColorTheme)
+  const label = getLabelByClothingGuidelineScale(scale)
+  const advise = getClothingAdviceByClothingGuidelineScale(scale)
 
   // TODO: Error message
 
@@ -141,19 +132,29 @@ const Main = () => {
       <Header />
       <ContentsMain>
         <MainContentsContainerDiv>
-          {/* <LocationInput type='text' name='cityName' placeholder='City name' /> */}
           <SearchDropdown />
+          {isLoading && <SyncLoader color={color} />}
           {
-            isLoading
-              ? <SyncLoader color={color} />
-              : <>
-                  <ClothesIcon scale={scale} svgProps={{fill:color, height:150, width:150}} />
-                  <ClothingGuidelineScaleChart scale={scale} />
-                </>
+            !isLoading && !isError && (
+              <>
+                <ClothesIcon scale={scale} svgProps={{ fill: color, height: 150, width: 150 }} />
+                <ClothingGuidelineScaleChart scale={scale} />
+                <SubTextAreaDiv>
+                  <SubTextP>{advise}</SubTextP>
+                </SubTextAreaDiv>
+              </>
+            )
           }
-          {/* TODO: Implement Error component */}
-          {/* <ErrorIcon />
-          Woops! */}
+          {
+            isError &&
+            <>
+              <ErrorIcon color={getCurrentColorThemeStyle().colors.text} />
+              <SubTextAreaDiv>
+                <SubTextP>Sorry, we couldn't retrieve the weather data right now.</SubTextP>
+                <SubTextP>Please try again later.</SubTextP>
+              </SubTextAreaDiv>
+            </>
+          }
         </MainContentsContainerDiv>
       </ContentsMain>
     </ContainerDiv>
