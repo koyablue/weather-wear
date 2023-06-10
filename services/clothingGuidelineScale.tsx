@@ -16,21 +16,19 @@ import { ColorTheme } from '../types/colorTheme'
  * @return {*}  {ClothingGuidelineScale}
  */
 export const celsiusToClothingGuidelineScale = (celsius?: number): ClothingGuidelineScale => {
-  if (celsius === undefined) {
-    return 0
-  }
-
   switch (true) {
     case (celsius >= 25):
       return 5
-    case (celsius >= 20 && celsius <= 24):
+    case (celsius < 25 && celsius >= 20):
       return 4
-    case (celsius >= 15 && celsius <= 19):
+    case (celsius < 20 && celsius >= 15):
       return 3
-    case (celsius >= 10 && celsius <= 14):
+    case (celsius < 15 && celsius >= 10):
       return 2
-    case (celsius <= 9):
+    case (celsius < 10):
       return 1
+    default:
+      return 0
   }
 }
 
