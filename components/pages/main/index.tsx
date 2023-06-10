@@ -5,12 +5,13 @@ import { breakPoint } from '../../../styles/breakPoint'
 
 // components
 import Header from '../../layouts/header'
+import SearchInput from './searchInput'
 import ClothingGuidelineScaleChart from '../../common/clothingGuidelineScale/clothingGuidelineScaleChart'
 import ClothesIcon from '../../common/clothesIcon'
 import SyncLoader from '../../common/loaders/syncLoader'
 
 // services
-import { celsiusToClothingGuidelineScale, getClothingAdviceByClothingGuidelineScale, getColorByClothingGuidelineScale, getLabelByClothingGuidelineScale } from '../../../services/clothingGuidelineScale'
+import { celsiusToClothingGuidelineScale, getClothingAdviceByClothingGuidelineScale, getColorByClothingGuidelineScale } from '../../../services/clothingGuidelineScale'
 
 // icon
 import { BiErrorCircle } from 'react-icons/bi'
@@ -20,7 +21,6 @@ import { useColorTheme } from '../../../hooks/useColorTheme'
 import { useValidateBooleanArray } from '../../../hooks/useValidateBooleanArray'
 import { useGetCurrentWeather } from '../../../hooks/data/useGetCurrentWeather'
 import { useGetUserLocation } from '../../../hooks/data/useGetUserLocation'
-import SearchDropdown from './searchInput'
 
 
 const ContainerDiv = styled.div`
@@ -115,10 +115,7 @@ const Main = () => {
   const currentColorTheme = getCurrentColorThemeState()
   const scale = celsiusToClothingGuidelineScale(currentWeather?.main?.temp)
   const color = getColorByClothingGuidelineScale(scale, currentColorTheme)
-  const label = getLabelByClothingGuidelineScale(scale)
   const advise = getClothingAdviceByClothingGuidelineScale(scale)
-
-  // TODO: Error message
 
   // TODO: 2. celsius<->fahrenheit
   // TODO: 3. isVPN
@@ -132,7 +129,7 @@ const Main = () => {
       <Header />
       <ContentsMain>
         <MainContentsContainerDiv>
-          <SearchDropdown />
+          <SearchInput />
           {isLoading && <SyncLoader color={color} />}
           {
             !isLoading && !isError && (
