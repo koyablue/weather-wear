@@ -12,7 +12,8 @@ import { GeocodingApiQuery } from '../../types/geocoding'
  */
 export const useGeocoding = (q: GeocodingApiQuery, limit?: number, options?: SWRConfiguration<any, any>) => {
   const { data, error, isLoading, isValidating } = useSWR(
-    ['geocoding/get', q, limit],
+    // only fetch data if cityName is not empty
+    q.cityName ? ['geocoding/get', q, limit] : null,
     () => getCitiesClient(q, limit),
     options,
   )

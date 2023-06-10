@@ -7,7 +7,7 @@ import { breakPoint } from '../../../styles/breakPoint'
 import Header from '../../layouts/header'
 import ClothingGuidelineScaleChart from '../../common/clothingGuidelineScale/clothingGuidelineScaleChart'
 import ClothesIcon from '../../common/clothesIcon'
-import Loader from '../../common/loader'
+import SyncLoader from '../../common/loaders/syncLoader'
 
 // services
 import { celsiusToClothingGuidelineScale, getColorByClothingGuidelineScale } from '../../../services/clothingGuidelineScale'
@@ -20,7 +20,7 @@ import { useColorTheme } from '../../../hooks/useColorTheme'
 import { useValidateBooleanArray } from '../../../hooks/useValidateBooleanArray'
 import { useGetCurrentWeather } from '../../../hooks/data/useGetCurrentWeather'
 import { useGetUserLocation } from '../../../hooks/data/useGetUserLocation'
-import SearchDropdown from './SearchInput'
+import SearchDropdown from './searchInput'
 
 
 const ContainerDiv = styled.div`
@@ -71,11 +71,6 @@ const LocationInput = styled.input`
   height: 48px;
 `
 
-
-
-
-
-
 const ErrorIcon = styled(BiErrorCircle)`
   font-size: 150px;
 `
@@ -101,7 +96,12 @@ const Main = () => {
     error: currentWeatherError,
     isLoading: isCurrentWeatherLoading,
     isValidating: isCurrentWeatherValidating
-  } = useGetCurrentWeather(userLocation.latitude, userLocation.longitude, 'metric')
+  } = useGetCurrentWeather(
+    userLocation?.latitude,
+    userLocation?.longitude,
+    'metric',
+    { revalidateOnFocus: false }
+  )
 
   const { getCurrentColorThemeState } = useColorTheme()
 
@@ -114,13 +114,17 @@ const Main = () => {
     isCurrentWeatherValidating,
   ])
 
+  const isError = hasTrueValue([
+    
+  ])
+
   // TODO: get weather(unit=metric) -> Math.round(main.temp)
   // TODO: if (max - min) >= 5 -> two options or notes()
 
   // TODO: message is like this: "Big temperature swing today. Dress in adjustable clothing."
   // TODO: or like this: "Stay prepared for temperature changes. Wear adjustable clothing." <- better?
   const currentColorTheme = getCurrentColorThemeState()
-  const scale = celsiusToClothingGuidelineScale(currentWeather.main.temp)
+  const scale = celsiusToClothingGuidelineScale(currentWeather?.main?.temp)
   const color = getColorByClothingGuidelineScale(scale, currentColorTheme)
 
   // TODO: Error message
@@ -141,7 +145,7 @@ const Main = () => {
           <SearchDropdown />
           {
             isLoading
-              ? <Loader color={color} />
+              ? <SyncLoader color={color} />
               : <>
                   <ClothesIcon scale={scale} svgProps={{fill:color, height:150, width:150}} />
                   <ClothingGuidelineScaleChart scale={scale} />

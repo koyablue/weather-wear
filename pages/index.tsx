@@ -47,7 +47,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     props: {
       fallback: {
         [unstable_serialize(['userLocation/get', fields])]: userLocation,
-        [unstable_serialize(['currentWeather/get', userLocation.latitude, userLocation.longitude, 'metric'])]: currentWeather
+        [unstable_serialize(['currentWeather/get', userLocation?.latitude, userLocation?.longitude, 'metric'])]: currentWeather
       },
     },
   }

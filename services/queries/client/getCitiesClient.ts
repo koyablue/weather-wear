@@ -11,5 +11,6 @@ import { GeocodingApiQuery, GeocodingApiResponse } from '../../../types/geocodin
 export const getCitiesClient = async (q: GeocodingApiQuery, limit?: number): Promise<GeocodingApiResponse> => {
   const res = await axiosBase().get(
     `/api/locations/cities?cityName=${q.cityName}&stateCode=${q.stateCode || ''}&countryCode=${q.countryCode || ''}&limit=${limit}`)
+
   return res.data
 }
