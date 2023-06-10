@@ -1,22 +1,17 @@
 export const useValidateBooleanArray = () => {
-  /**
-   * Check if all items in an array are true
-   * usage:
-   * const isLoading = areAllValuesTrue([isDataLoading, isUserDataLoading])
-   * const isError = areAllValuesTrue([isUserDataError, isOtherDataError])
-   *
-   * @param {boolean[]} list
-   * @return {*}  {boolean}
-   */
-  // const areAllValuesTrue = (list: boolean[]): boolean => {
-  //   if (!list.length) return false
+  const castAllValuesBoolean = (list: any[]): boolean[] => (
+    list.map(v => Boolean(v))
+  )
 
-  //   for (let i = 0; i < list.length; i++) {
-  //     if (!list[i]) return false
-  //   }
+  const areAllValuesTrue = (list: boolean[]): boolean => {
+    if (!list.length) return false
 
-  //   return true
-  // }
+    for (let i = 0; i < list.length; i++) {
+      if (!list[i]) return false
+    }
+
+    return true
+  }
 
   const hasTrueValue = (list: boolean[]): boolean => {
     if (!list.length) return false
@@ -29,6 +24,8 @@ export const useValidateBooleanArray = () => {
   }
 
   return {
+    castAllValuesBoolean,
+    areAllValuesTrue,
     hasTrueValue
   } as const
 }
