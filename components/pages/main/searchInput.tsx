@@ -1,15 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
-
 import { FiSearch } from 'react-icons/fi'
+
+import BeatLoader from '../../common/loaders/beatLoader'
 
 import { useToggle } from '../../../hooks/useToggle'
 import { useGeocoding } from '../../../hooks/data/useGeocoding'
 import { useValidateBooleanArray } from '../../../hooks/useValidateBooleanArray'
-import BeatLoader from '../../common/loaders/beatLoader'
-import { GeocodingApiResponseItem } from '../../../types/geocoding'
 
-const Container = styled.div`
+const ContainerDiv = styled.div`
   position: relative;
 `
 
@@ -26,7 +25,7 @@ const Input = styled.input<{ showDropdown: boolean }>`
   }
 `
 
-const SearchIconContainer = styled.div`
+const SearchIconContainerDiv = styled.div`
   position: absolute;
   top: 50%;
   right: 10px;
@@ -45,7 +44,7 @@ const SearchButton = styled.button`
   cursor: pointer;
 `
 
-const Dropdown = styled.ul`
+const DropdownUl = styled.ul`
   position: absolute;
   top: 30px;
   width: 300px;
@@ -59,7 +58,7 @@ const Dropdown = styled.ul`
   border-radius: 0 0 10px 10px;
 `
 
-const Option = styled.li`
+const OptionLi = styled.li`
   padding: 10px;
   color: #868686;
   cursor: pointer;
@@ -69,7 +68,13 @@ const Option = styled.li`
   }
 `
 
-const SearchDropdown = () => {
+/**
+ * Search input
+ * Get a list of cities by the input value
+ *
+ * @return {*} JSX.Element
+ */
+const SearchInput = () => {
   const [cityName, setCityName] = useState('')
   const [cityNameToSearch, setCityNameToSearch] = useState('')
   const [cities, setCities] = useState<string[]>([])
@@ -89,7 +94,6 @@ const SearchDropdown = () => {
     { cityName: cityNameToSearch },
     5,
     {
-      revalidateOnMount: false,
       revalidateOnFocus: false,
     }
   )
@@ -106,7 +110,8 @@ const SearchDropdown = () => {
     setShowDropdown(false)
   }
 
-  const handleSearch = () => {
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     setCityNameToSearch(cityName)
     setShowDropdown(true)
   }
@@ -143,31 +148,33 @@ const SearchDropdown = () => {
   }, [geocodingResult])
 
   return (
-    <Container ref={dropdownRef}>
-      <Input
-        type="text"
-        placeholder="Search"
-        value={cityName}
-        onChange={handleInputChange}
-        showDropdown={showDropdown}
-      />
-      <SearchIconContainer onClick={handleSearch}>
-        <SearchButton>
-          {isLoading ? <BeatLoader size={5} /> : <FiSearch />}
-        </SearchButton>
-      </SearchIconContainer>
+    <ContainerDiv ref={dropdownRef}>
+      <form onSubmit={handleSearch}>
+        <Input
+          type="text"
+          placeholder="Search"
+          value={cityName}
+          onChange={handleInputChange}
+          showDropdown={showDropdown}
+        />
+        <SearchIconContainerDiv>
+          <SearchButton type='submit'>
+            {isLoading ? <BeatLoader size={5} /> : <FiSearch />}
+          </SearchButton>
+        </SearchIconContainerDiv>
+      </form>
       {showDropdown && cities &&(
-        <Dropdown>
+        <DropdownUl>
           {cities.map(city => (
-            <Option key={city} onClick={() => handleOptionClick(city)}>
+            <OptionLi key={city} onClick={() => handleOptionClick(city)}>
               {city}
-            </Option>
+            </OptionLi>
           ))}
-        </Dropdown>
+        </DropdownUl>
       )}
-    </Container>
+    </ContainerDiv>
   )
 }
 
-export default SearchDropdown
+export default SearchInput
 
