@@ -1,3 +1,4 @@
+import { colorThemes } from '../constants/colorTheme'
 import { ClothingGuidelineScale } from '../types/clothingGuidelineScale'
 import { ColorTheme } from '../types/colorTheme'
 
@@ -14,7 +15,11 @@ import { ColorTheme } from '../types/colorTheme'
  * @param {number} celsius
  * @return {*}  {ClothingGuidelineScale}
  */
-export const celsiusToClothingGuidelineScale = (celsius: number): ClothingGuidelineScale => {
+export const celsiusToClothingGuidelineScale = (celsius?: number): ClothingGuidelineScale => {
+  if (celsius === undefined) {
+    return 0
+  }
+
   switch (true) {
     case (celsius >= 25):
       return 5
@@ -49,6 +54,8 @@ export const getColorByClothingGuidelineScale = (scale: ClothingGuidelineScale, 
         return '#4d7586'
       case 1:
         return '#295773'
+      default:
+        colorThemes[colorTheme].colors.text
     }
   }
 
@@ -64,5 +71,7 @@ export const getColorByClothingGuidelineScale = (scale: ClothingGuidelineScale, 
       return '#a8c5d6'
     case 1:
       return '#4f6a89'
+    default:
+      colorThemes[colorTheme].colors.text
   }
 }
