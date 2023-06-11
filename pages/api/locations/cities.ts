@@ -4,23 +4,32 @@ import { getGeocodingApiEndpoint } from '../../../utils/geocoding'
 
 const handler: NextApiHandler = async (
   req: NextApiRequest,
-  res: NextApiResponse<GeocodingApiResponse>
+  res: NextApiResponse<GeocodingApiResponse | { message: string }>
 ) => {
   if (req.method !== 'GET') {
-    // TODO: error response
+    return res.status(405).json({ message: 'Method Not Allowed' })
   }
 
-  // TODO: validation
+  try {
+    // TODO: validation
 
-  const cityName = req.query.cityName as string
-  const stateCode = req.query.stateCode as string
-  const countryCode = req.query.countryCode as string
-  const limit = Number(req.query.limit) || undefined
+    const cityName = req.query.cityName as string
+    const stateCode = req.query.stateCode as string
+    const countryCode = req.query.countryCode as string
+    const limit = Number(req.query.limit) || undefined
 
-  const cities = await fetch(getGeocodingApiEndpoint({cityName, stateCode, countryCode}, limit))
-    .then(res => res.json())
+    const response = await fetch(getGeocodingApiEndpoint({cityName, stateCode, countryCode}, limit))
+    const responseJson = await response.json()
 
-  return res.status(200).json(cities)
+    if (!response.ok) {
+      throw new Error('Geocoding API request failed')
+    }
+
+    return res.status(200).json(responseJson)
+  } catch(error) {
+    console.error('Error in API route [/api/locations/cities]:', error)
+    return res.status(500).json({ message: 'Error in API route [/api/locations/cities].' })
+  }
 }
 
 export default handler
