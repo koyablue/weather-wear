@@ -11,10 +11,12 @@ import { useAppDispatch, useAppSelector } from '../../../stores/hooks'
 import { selectColorTheme } from '../../../stores/slices/colorThemeSlice'
 
 const SunIcon = styled(FiSun)`
+  color: #333333;
   font-size: 14px;
 `
 
 const MoonIcon = styled(FiMoon)`
+  color: #faf5eb;
   font-size: 14px;
 `
 
@@ -30,12 +32,17 @@ const SwitchWrapperLabel = styled.label`
   width          : 56px;
   /* background     : #fff; */
 
+  :hover {
+    cursor: pointer;
+  }
+
   input[type="checkbox"] {
     display        : none;
   }
 
   input[type="checkbox"]:checked +label {
-    border-color   : #78bd78;
+    /* border-color   : #78bd78; */
+    background-color: #faf5eb;
   }
 
   label {
@@ -43,9 +50,13 @@ const SwitchWrapperLabel = styled.label`
     justify-content: space-between;
     box-sizing     : border-box;
     height         : 26px;
-    border         : 1.5px solid #333333;
+    /* border         : 1.5px solid #333333; */
+    background-color: #333333;
     border-radius  : 30px;
-    padding: 4.5px 4px;
+    padding: 6px 6px;
+    :hover {
+      cursor: pointer;
+    }
 
 
     /* span:after{
@@ -74,7 +85,7 @@ const SwitchWrapperLabel = styled.label`
 
   input[type="checkbox"]:checked ~ #swImg {
     transform      : translateX(28px);
-    background     : #78bd78;
+    background     : #333333;
   }
 `
 

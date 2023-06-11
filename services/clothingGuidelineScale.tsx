@@ -1,12 +1,6 @@
+import { colorThemes } from '../constants/colorTheme'
 import { ClothingGuidelineScale } from '../types/clothingGuidelineScale'
 import { ColorTheme } from '../types/colorTheme'
-
-// svgs
-import TankTop from '../public/images/svgs/tank-top.svg'
-import TShirt from '../public/images/svgs/t-shirt.svg'
-import LongSleeve from '../public/images/svgs/long-sleeve.svg'
-import Hoodie from '../public/images/svgs/hoodie.svg'
-import PufferJacket from '../public/images/svgs/puffer-jacket.svg'
 
 /**
  * Convert celsius degree to clothing guideline scale
@@ -21,18 +15,66 @@ import PufferJacket from '../public/images/svgs/puffer-jacket.svg'
  * @param {number} celsius
  * @return {*}  {ClothingGuidelineScale}
  */
-export const celsiusToClothingGuidelineScale = (celsius: number): ClothingGuidelineScale => {
+export const celsiusToClothingGuidelineScale = (celsius?: number): ClothingGuidelineScale => {
   switch (true) {
     case (celsius >= 25):
       return 5
-    case (celsius >= 20 && celsius <= 24):
+    case (celsius < 25 && celsius >= 20):
       return 4
-    case (celsius >= 15 && celsius <= 19):
+    case (celsius < 20 && celsius >= 15):
       return 3
-    case (celsius >= 10 && celsius <= 14):
+    case (celsius < 15 && celsius >= 10):
       return 2
-    case (celsius <= 9):
+    case (celsius < 10):
       return 1
+    default:
+      return 0
+  }
+}
+
+/**
+ * TODO: not necessary. might delete
+ *
+ * @param {ClothingGuidelineScale} scale
+ * @return {*} string
+ */
+export const getLabelByClothingGuidelineScale = (scale: ClothingGuidelineScale) => {
+  switch (scale) {
+    case 5:
+      return 'Very hot'
+    case 4:
+      return 'Hot'
+    case 3:
+      return 'Warm'
+    case 2:
+      return 'Cool'
+    case 1:
+      return 'Cold'
+    default:
+      return ''
+  }
+}
+
+/**
+ *
+ *
+ * @param {ClothingGuidelineScale} scale
+ * @return {*} string
+ */
+export const getClothingAdviceByClothingGuidelineScale = (scale: ClothingGuidelineScale) => {
+  switch (scale) {
+    case 5:
+      return 'Wear lightweight and breathable clothes.'
+    case 4:
+      return 'Choose light and airy clothing.'
+    case 3:
+      return 'Opt for light layers.'
+    case 2:
+      return 'Layer up with a light sweater or jacket.'
+    case 1:
+      return 'Dress warmly in layers.'
+    default:
+      return ''
   }
 }
 
@@ -56,6 +98,8 @@ export const getColorByClothingGuidelineScale = (scale: ClothingGuidelineScale, 
         return '#4d7586'
       case 1:
         return '#295773'
+      default:
+        colorThemes[colorTheme].colors.text
     }
   }
 
@@ -71,32 +115,7 @@ export const getColorByClothingGuidelineScale = (scale: ClothingGuidelineScale, 
       return '#a8c5d6'
     case 1:
       return '#4f6a89'
-  }
-}
-
-/**
- * Returns svg path based on scale for Next.js Image component
- * icon source: https://iconscout.com/
- *
- * @param {ClothingGuidelineScale} scale
- * @param {ColorTheme} colorTheme
- * @return {*}  {React.FC<React.SVGProps<SVGElement>>}
- */
-export const getIconByClothingGuidelineScale = (scale: ClothingGuidelineScale, colorTheme: ColorTheme): React.FC<React.SVGProps<SVGElement>> => {
-  const createIconComponent = (Element: React.FC<React.SVGProps<SVGElement>>) => {
-    return (props: React.SVGProps<SVGElement>) => <Element {...props} />;
-  }
-
-  switch (scale) {
-    case 5:
-      return createIconComponent(TankTop)
-    case 4:
-      return createIconComponent(TShirt)
-    case 3:
-      return createIconComponent(LongSleeve)
-    case 2:
-      return createIconComponent(Hoodie)
-    case 1:
-      return createIconComponent(PufferJacket)
+    default:
+      colorThemes[colorTheme].colors.text
   }
 }

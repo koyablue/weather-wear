@@ -9,7 +9,8 @@ import { GeocodingApiQuery, GeocodingApiResponse } from '../../../types/geocodin
  * @return {*}  {Promise<GeocodingApiResponse>}
  */
 export const getCitiesClient = async (q: GeocodingApiQuery, limit?: number): Promise<GeocodingApiResponse> => {
-  const qStr = `${q.cityName},${q.stateCode || ''},${q.countryCode || ''}`
-  const res = await axiosBase().get(`/api/locations/cities?q=${qStr}&limit=${limit}`)
+  const res = await axiosBase().get(
+    `/api/locations/cities?cityName=${q.cityName}&stateCode=${q.stateCode || ''}&countryCode=${q.countryCode || ''}&limit=${limit}`)
+
   return res.data
 }

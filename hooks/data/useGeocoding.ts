@@ -1,4 +1,4 @@
-import useSWR from 'swr'
+import useSWR, { SWRConfiguration } from 'swr'
 import { getCitiesClient } from '../../services/queries/client/getCitiesClient'
 import { GeocodingApiQuery } from '../../types/geocoding'
 
@@ -7,17 +7,15 @@ import { GeocodingApiQuery } from '../../types/geocoding'
  *
  * @param {GeocodingApiQuery} q
  * @param {number} [limit]
- * @return {*} {
-    geocodingResult: GeocodingApiResponse;
-    error: any;
-    isLoading: boolean;
-    isValidating: boolean;
-  }
+ * @param {SWRConfiguration<any, any>} [options]
+ * @return {*}
  */
-export const useGeocoding = (q: GeocodingApiQuery, limit?: number) => {
+export const useGeocoding = (q: GeocodingApiQuery, limit?: number, options?: SWRConfiguration<any, any>) => {
   const { data, error, isLoading, isValidating } = useSWR(
-    ['geocoding/get', q, limit],
+    // only fetch data if cityName is not empty
+    q.cityName ? ['geocoding/get', q, limit] : null,
     () => getCitiesClient(q, limit),
+    options,
   )
 
   return {

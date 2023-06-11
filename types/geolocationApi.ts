@@ -1,3 +1,4 @@
+// Type of Abstract API response
 export type GeolocationApiResponse = {
   ip_address: string
   city: string
