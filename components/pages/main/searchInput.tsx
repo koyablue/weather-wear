@@ -1,12 +1,18 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useEffect, Dispatch, SetStateAction } from 'react'
 import styled from 'styled-components'
 import { FiSearch } from 'react-icons/fi'
 
 import BeatLoader from '../../common/loaders/beatLoader'
 
+// hooks
 import { useToggle } from '../../../hooks/useToggle'
+import { useOutsideClick } from '../../../hooks/useOutsideClick'
 import { useGeocoding } from '../../../hooks/data/useGeocoding'
 import { useValidateBooleanArray } from '../../../hooks/useValidateBooleanArray'
+
+// types
+import { Coordinate } from '.'
+import { GeocodingApiResponseItem } from '../../../types/geocoding'
 
 const ContainerDiv = styled.div`
   position: relative;
@@ -68,26 +74,40 @@ const OptionLi = styled.li`
   }
 `
 
+type Props = {
+  defaultCityData: {
+    name: string
+    lat: number
+    lon: number
+  }
+  // state update function to trigger refetch data in Main component
+  setCoordinate: Dispatch<SetStateAction<Coordinate>>
+  // state update function to set a flag to tell if the content of Main component is based on user's location or searched value
+  setDisplayBySearched: Dispatch<SetStateAction<boolean>>
+}
+
 /**
  * Search input
  * Get a list of cities by the input value
  *
  * @return {*} JSX.Element
  */
-const SearchInput = () => {
-  const [cityName, setCityName] = useState('')
+const SearchInput = ({ defaultCityData, setCoordinate, setDisplayBySearched }: Props) => {
+  // state for input
+  const [cityName, setCityName] = useState(defaultCityData.name)
+  // state for API call
   const [cityNameToSearch, setCityNameToSearch] = useState('')
-  const [cities, setCities] = useState<string[]>([])
+  // state for dropdown options
+  const [cities, setCities] = useState<GeocodingApiResponseItem[]>([])
 
-  const { toggleState: showDropdown, setToggleState: setShowDropdown } = useToggle(false)
+  // ref to control open/close dropdown when the outside of the dropdown is clicked
+  const dropdownRef = useOutsideClick<HTMLDivElement>(() => { setShowDropdown(false) })
 
-  const dropdownRef = useRef<HTMLDivElement>(null)
-
-  const { hasTrueValue } = useValidateBooleanArray()
+  const { hasTrueValue, castAllValuesBoolean } = useValidateBooleanArray()
 
   const {
     geocodingResult,
-    error,
+    error: geocodingError,
     isLoading: isGeocodingLoading,
     isValidating: isGeocodingValidating,
   } = useGeocoding(
@@ -95,55 +115,59 @@ const SearchInput = () => {
     5,
     {
       revalidateOnFocus: false,
+      onErrorRetry(err, key, config, revalidate, revalidateOpts) {
+        if (revalidateOpts.retryCount >= 5) return
+      },
     }
   )
 
+  const { toggleState: showDropdown, setToggleState: setShowDropdown } = useToggle(Boolean(geocodingResult))
+
   const isLoading = hasTrueValue([isGeocodingLoading, isGeocodingValidating])
+  const isError = hasTrueValue(castAllValuesBoolean([geocodingError]))
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (showDropdown) setShowDropdown(false)
     setCityName(e.target.value)
   }
 
-  const handleOptionClick = (option: string) => {
-    setCityName(option)
-    setShowDropdown(false)
-  }
-
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setCityNameToSearch(cityName)
+
+    if (!cityName) {
+      // TODO: if search value is empty, show current location's
+      // setCityNameToSearch(defaultCityData.name)
+      setCoordinate({ lat: defaultCityData.lat, lon: defaultCityData.lon })
+      setDisplayBySearched(false)
+      return
+    }
+
+    const trimmedCityName = cityName.replace(/\s/g, "")
+    setCityNameToSearch(trimmedCityName)
     setShowDropdown(true)
   }
 
-  /**
-   * Close dropdown when the outside of the dropdown area is clicked
-   *
-   * @param {MouseEvent} e
-   */
-  const handleOutsideClick = (e: MouseEvent) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-      setShowDropdown(false)
-    }
+  const handleOptionClick = (city: GeocodingApiResponseItem) => {
+    setCityName(city.name)
+    setShowDropdown(false)
+    // update state to refetch currentWeather data in Main component
+    setCoordinate({ lat: city.lat, lon: city.lon })
+    // set a flag to tell if the content of Main component is based on user's location or searched value
+    setDisplayBySearched(true)
   }
 
-  // TODO: API call when search icon clicked -> show drop down
-  // TODO: dropdown select -> API call to get weather
+  const formatOptionKey = (city: GeocodingApiResponseItem) => (
+    `${city.name}${city.country}${city.state || ''}${city.lat}${city.lon}`
+  )
 
-  // onClick -> search -> result -> show dropdown
-  // show dropdown if (result && !isLoading)
-
-  useEffect(() => {
-    document.addEventListener('click', handleOutsideClick)
-
-    return () => {
-      document.removeEventListener('click', handleOutsideClick);
-    }
-  }, [])
+  const formatOptionLabel = (city: GeocodingApiResponseItem) => (
+    `${city.name}, ${city.country} ${city.state || ''}`
+  )
 
   useEffect(() => {
     if (geocodingResult) {
-      setCities(geocodingResult.map(city => `${city.name}, ${city.country} ${city.state || ''}`))
+      setCities(geocodingResult)
+      setShowDropdown(true)
     }
   }, [geocodingResult])
 
@@ -166,8 +190,8 @@ const SearchInput = () => {
       {showDropdown && cities &&(
         <DropdownUl>
           {cities.map(city => (
-            <OptionLi key={city} onClick={() => handleOptionClick(city)}>
-              {city}
+            <OptionLi key={formatOptionKey(city)} onClick={() => handleOptionClick(city)}>
+              {formatOptionLabel(city)}
             </OptionLi>
           ))}
         </DropdownUl>

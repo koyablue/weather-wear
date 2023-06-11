@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 // styles
@@ -22,6 +23,7 @@ import { useValidateBooleanArray } from '../../../hooks/useValidateBooleanArray'
 import { useGetCurrentWeather } from '../../../hooks/data/useGetCurrentWeather'
 import { useGetUserLocation } from '../../../hooks/data/useGetUserLocation'
 
+import { GeocodingApiResponseItem } from '../../../types/geocoding'
 
 const ContainerDiv = styled.div`
   min-height: 100vh;
@@ -67,6 +69,11 @@ const ErrorIcon = styled(BiErrorCircle)<{color: string}>`
   color: ${(props) => props.color};
 `;
 
+export type Coordinate = {
+  lat: number
+  lon: number
+}
+
 /**
  * Contents of the main page
  * Get user location, then get current weather by the location
@@ -74,6 +81,9 @@ const ErrorIcon = styled(BiErrorCircle)<{color: string}>`
  * @return {*} JSX.Element
  */
 const Main = () => {
+  const [coordinate, setCoordinate] = useState<Coordinate>({ lat: 0, lon: 0 })
+  const [displayBySearched, setDisplayBySearched] = useState<boolean>(false)
+
   const {
     userLocation,
     error: userLocationError,
@@ -85,10 +95,10 @@ const Main = () => {
     currentWeather,
     error: currentWeatherError,
     isLoading: isCurrentWeatherLoading,
-    isValidating: isCurrentWeatherValidating
+    isValidating: isCurrentWeatherValidating,
   } = useGetCurrentWeather(
-    userLocation?.latitude,
-    userLocation?.longitude,
+    coordinate.lat,
+    coordinate.lon,
     'metric',
     { revalidateOnFocus: false }
   )
@@ -105,7 +115,6 @@ const Main = () => {
   ])
 
   const isError = hasTrueValue(castAllValuesBoolean([userLocationError, currentWeatherError]))
-  // const isError = true
 
   // TODO: get weather(unit=metric) -> Math.round(main.temp)
   // TODO: if (max - min) >= 5 -> two options or notes()
@@ -124,12 +133,32 @@ const Main = () => {
   // TODO: if fahrenheit country(see country code) use fahrenheit
   // TODO: message: Stay prepared for temperature changes (15 °C - 25 °C). Wear adjustable clothing.
 
+  useEffect(() => {
+    if (userLocation && !displayBySearched) {
+      // setTargetLocation(userLocation)
+      setCoordinate({
+        lat: userLocation?.latitude || 0,
+        lon: userLocation?. longitude || 0,
+      })
+    }
+  }, [userLocation])
+
+  // TODO: do not revalidate if searched city set to targetLocation
+
   return (
     <ContainerDiv>
       <Header />
       <ContentsMain>
         <MainContentsContainerDiv>
-          <SearchInput />
+          <SearchInput
+            defaultCityData={{
+              name: userLocation?.city || '',
+              lat: userLocation?.latitude || 0,
+              lon: userLocation?.longitude || 0,
+            }}
+            setCoordinate={setCoordinate}
+            setDisplayBySearched={setDisplayBySearched}
+          />
           {isLoading && <SyncLoader color={color} />}
           {
             !isLoading && !isError && (
