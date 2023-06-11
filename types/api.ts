@@ -27,3 +27,9 @@ export const newUseApiReturnType = <T, E>(result: Result<T, E>): UseApiReturnTyp
 export type ApiError = {
   error: unknown
 }
+
+export type ErrorMessage = {
+  message: string
+}
+
+export type ApiResponse<T> = T | ErrorMessage
