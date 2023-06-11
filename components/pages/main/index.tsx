@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
+// icon
+import { BiErrorCircle } from 'react-icons/bi'
 
 // styles
 import { breakPoint } from '../../../styles/breakPoint'
@@ -14,16 +16,11 @@ import SyncLoader from '../../common/loaders/syncLoader'
 // services
 import { celsiusToClothingGuidelineScale, getClothingAdviceByClothingGuidelineScale, getColorByClothingGuidelineScale } from '../../../services/clothingGuidelineScale'
 
-// icon
-import { BiErrorCircle } from 'react-icons/bi'
-
 // hooks
 import { useColorTheme } from '../../../hooks/useColorTheme'
 import { useValidateBooleanArray } from '../../../hooks/useValidateBooleanArray'
 import { useGetCurrentWeather } from '../../../hooks/data/useGetCurrentWeather'
 import { useGetUserLocation } from '../../../hooks/data/useGetUserLocation'
-
-import { GeocodingApiResponseItem } from '../../../types/geocoding'
 
 const ContainerDiv = styled.div`
   min-height: 100vh;
@@ -127,7 +124,6 @@ const Main = () => {
   const advise = getClothingAdviceByClothingGuidelineScale(scale)
 
   // TODO: 2. celsius<->fahrenheit
-  // TODO: 3. isVPN
 
   // TODO: message: 15 °F - 25 °F (15 °C - 25 °C)
   // TODO: if fahrenheit country(see country code) use fahrenheit
@@ -135,15 +131,12 @@ const Main = () => {
 
   useEffect(() => {
     if (userLocation && !displayBySearched) {
-      // setTargetLocation(userLocation)
       setCoordinate({
         lat: userLocation?.latitude || 0,
         lon: userLocation?. longitude || 0,
       })
     }
   }, [userLocation])
-
-  // TODO: do not revalidate if searched city set to targetLocation
 
   return (
     <ContainerDiv>
