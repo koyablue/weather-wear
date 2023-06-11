@@ -135,8 +135,6 @@ const SearchInput = ({ defaultCityData, setCoordinate, setDisplayBySearched }: P
     e.preventDefault()
 
     if (!cityName) {
-      // TODO: if search value is empty, show current location's
-      // setCityNameToSearch(defaultCityData.name)
       setCoordinate({ lat: defaultCityData.lat, lon: defaultCityData.lon })
       setDisplayBySearched(false)
       return
@@ -170,6 +168,10 @@ const SearchInput = ({ defaultCityData, setCoordinate, setDisplayBySearched }: P
       setShowDropdown(true)
     }
   }, [geocodingResult])
+
+  useEffect(() => {
+    setCityName(defaultCityData.name)
+  }, [defaultCityData])
 
   return (
     <ContainerDiv ref={dropdownRef}>
