@@ -20,7 +20,8 @@ import { celsiusToClothingGuidelineScale, getClothingAdviceByClothingGuidelineSc
 import { useColorTheme } from '../../../hooks/useColorTheme'
 import { useValidateBooleanArray } from '../../../hooks/useValidateBooleanArray'
 import { useGetCurrentWeather } from '../../../hooks/data/useGetCurrentWeather'
-import { useGetUserLocation } from '../../../hooks/data/useGetUserLocation'
+import { useGeolocation } from '../../../hooks/useGeolocation'
+import { useReverseGeocoding } from '../../../hooks/data/useReverseGeocoding'
 
 const ContainerDiv = styled.div`
   min-height: 100vh;
@@ -81,13 +82,26 @@ const Main = () => {
   const [coordinate, setCoordinate] = useState<Coordinate>({ lat: 0, lon: 0 })
   const [displayBySearched, setDisplayBySearched] = useState<boolean>(false)
 
+  // get coordinate of current location
+  const {
+    location,
+    isLoading: isGeolocationLoading,
+    error: geolocationError,
+    permissionStatus,
+  } = useGeolocation()
+
+  // get city name by coordinate
   const {
     userLocation,
-    error: userLocationError,
-    isLoading: isUserLocationLoading,
-    isValidating: isUserLocationValidating
-  } = useGetUserLocation([])
+    error: reverseGeocodingError,
+    isLoading: isReverseGeocodingLoading,
+    isValidating: isReverseGeocodingValidating,
+  } = useReverseGeocoding(
+    coordinate.lat,
+    coordinate.lon,
+  )
 
+  // get current weather data by coordinate
   const {
     currentWeather,
     error: currentWeatherError,
@@ -105,13 +119,12 @@ const Main = () => {
   const { castAllValuesBoolean, hasTrueValue } = useValidateBooleanArray()
 
   const isLoading = hasTrueValue([
-    isUserLocationLoading,
-    isUserLocationValidating,
+    isGeolocationLoading,
     isCurrentWeatherLoading,
     isCurrentWeatherValidating,
   ])
 
-  const isError = hasTrueValue(castAllValuesBoolean([userLocationError, currentWeatherError]))
+  const isError = hasTrueValue(castAllValuesBoolean([geolocationError, currentWeatherError]))
 
   // TODO: get weather(unit=metric) -> Math.round(main.temp)
   // TODO: if (max - min) >= 5 -> two options or notes()
@@ -130,13 +143,15 @@ const Main = () => {
   // TODO: message: Stay prepared for temperature changes (15 °C - 25 °C). Wear adjustable clothing.
 
   useEffect(() => {
-    if (userLocation && !displayBySearched) {
+    if (location && !displayBySearched) {
       setCoordinate({
-        lat: userLocation?.latitude || 0,
-        lon: userLocation?. longitude || 0,
+        lat: location.latitude || 0,
+        lon: location.longitude || 0,
       })
     }
-  }, [userLocation])
+  }, [location])
+
+  // TODO: try again view
 
   return (
     <ContainerDiv>
@@ -145,9 +160,9 @@ const Main = () => {
         <MainContentsContainerDiv>
           <SearchInput
             defaultCityData={{
-              name: userLocation?.city || '',
-              lat: userLocation?.latitude || 0,
-              lon: userLocation?.longitude || 0,
+              name: userLocation?.features ? userLocation?.features[0]?.properties?.city : '',
+              lat: coordinate.lat || 0,
+              lon: coordinate.lon || 0,
             }}
             setCoordinate={setCoordinate}
             setDisplayBySearched={setDisplayBySearched}
