@@ -89,15 +89,15 @@ export const getColorByClothingGuidelineScale = (scale: ClothingGuidelineScale, 
   if (colorTheme === 'dark') {
     switch (scale) {
       case 5:
-        return '#a52a2a'
+        return '#ff8982'
       case 4:
-        return '#d2691e'
+        return '#ff8962'
       case 3:
-        return '#5b7e68'
+        return '#00ac7c'
       case 2:
-        return '#4d7586'
+        return '#36b2c3'
       case 1:
-        return '#295773'
+        return '#9e9dff'
       default:
         colorThemes[colorTheme].colors.text
     }
@@ -106,15 +106,15 @@ export const getColorByClothingGuidelineScale = (scale: ClothingGuidelineScale, 
   // light theme　as the default
   switch (scale) {
     case 5:
-      return '#ffa6a6'
+      return '#ff8982'
     case 4:
-      return '#ffd3a5'
+      return '#ff8962'
     case 3:
-      return '#a1c9b0'
+      return '#7fd1ae'
     case 2:
-      return '#a8c5d6'
+      return '#a1dedb'
     case 1:
-      return '#4f6a89'
+      return '#9e9dff'
     default:
       colorThemes[colorTheme].colors.text
   }
