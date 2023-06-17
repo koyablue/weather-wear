@@ -22,7 +22,9 @@ const Input = styled.input<{ showDropdown: boolean }>`
   width: 300px;
   height: 30px;
   padding: 10px;
-  font-size: 16px;
+  font-family: 'Nunito';
+  letter-spacing: 1.5px;
+  font-size: 14px;
   border: none;
   color: #868686;
   border-radius: ${props => (props.showDropdown ? '10px 10px 0 0' : '30px')};

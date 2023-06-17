@@ -15,8 +15,6 @@ const ContainerHeader = styled.header`
   align-items: center;
   justify-content: space-between;
 
-  // to check the boundary
-  /* border-bottom: 1px solid; */
   @media ${breakPoint.mobileS} {
     height: 60px;
     padding: 16px 0;
@@ -28,9 +26,15 @@ const ContainerHeader = styled.header`
   }
 `
 
-const GitHubIcon = styled(BsGithub)`
+const GitHubIcon = styled(BsGithub)<{color?: string}>`
   width: 40px;
   height: 32px;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  color: ${(props) => props.color || ''};
+  :hover {
+    opacity: 0.6;
+  }
 `
 
 const Header = () => {
