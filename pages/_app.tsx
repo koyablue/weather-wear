@@ -1,8 +1,9 @@
 // react
-import { ReactElement, ReactNode } from 'react';
+import React, { ReactElement, ReactNode } from 'react'
 
 // next
-import { NextPage } from 'next';
+import { NextPage } from 'next'
+import { Nunito } from 'next/font/google'
 import type { AppProps } from 'next/app'
 
 // libraries
@@ -15,9 +16,9 @@ import { store } from '../stores/store'
 // components
 import GlobalStyle from '../components/globalstyles'
 
-import { useColorTheme } from '../hooks/useColorTheme';
+import { useColorTheme } from '../hooks/useColorTheme'
 
-import { ColorTheme } from '../types/colorTheme';
+import { ColorTheme } from '../types/colorTheme'
 
 // Layout configuration doc
 // https://nextjs.org/docs/pages/building-your-application/routing/pages-and-layouts#with-typescript
@@ -51,14 +52,18 @@ const withThemeProvider = (Component: NextPageWithLayout) => {
   };
 }
 
+const nunito = Nunito({ subsets: ['latin'] })
+
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page)
 
-  const ComponentWithThemeProvider = withThemeProvider(Component);
+  const ComponentWithThemeProvider = withThemeProvider(Component)
 
   return (
     <Provider store={store}>
-      {getLayout(<ComponentWithThemeProvider {...pageProps} />)}
+      <div className={nunito.className}>
+        {getLayout(<ComponentWithThemeProvider {...pageProps} />)}
+      </div>
     </Provider>
   )
 }
