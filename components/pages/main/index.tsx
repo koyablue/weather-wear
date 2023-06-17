@@ -83,9 +83,11 @@ const Main = () => {
   const [displayBySearched, setDisplayBySearched] = useState<boolean>(false)
 
   // get coordinate of current location
+  // TODO: fix custom hook
+  // TODO: if location is empty -> loading status.
   const {
     location,
-    isLoading: isGeolocationLoading,
+    // isLoading: isGeolocationLoading,
     error: geolocationError,
     permissionStatus,
   } = useGeolocation()
@@ -99,6 +101,7 @@ const Main = () => {
   } = useReverseGeocoding(
     coordinate.lat,
     coordinate.lon,
+    { revalidateOnFocus: false, }
   )
 
   // get current weather data by coordinate
@@ -119,12 +122,19 @@ const Main = () => {
   const { castAllValuesBoolean, hasTrueValue } = useValidateBooleanArray()
 
   const isLoading = hasTrueValue([
-    isGeolocationLoading,
+    // isGeolocationLoading,
+    location === null,
+    isReverseGeocodingLoading,
+    isReverseGeocodingValidating,
     isCurrentWeatherLoading,
     isCurrentWeatherValidating,
   ])
 
-  const isError = hasTrueValue(castAllValuesBoolean([geolocationError, currentWeatherError]))
+  const isError = hasTrueValue(castAllValuesBoolean([
+    geolocationError,
+    currentWeatherError,
+    reverseGeocodingError,
+  ]))
 
   // TODO: get weather(unit=metric) -> Math.round(main.temp)
   // TODO: if (max - min) >= 5 -> two options or notes()

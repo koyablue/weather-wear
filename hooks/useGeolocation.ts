@@ -5,14 +5,13 @@ import { useEffect, useState } from 'react'
  *
  * @param {number} [intervalMillisec=600000]
  * @return {*} {
-    isLoading: boolean;
-    error: string;
-    location: GeolocationCoordinates;
-    permissionStatus: PermissionState;
-  }
+ *   isLoading: boolean;
+ *   error: string;
+ *   location: GeolocationCoordinates;
+ *   permissionStatus: PermissionState;
+ * }
  */
 export const useGeolocation = (intervalMillisec = 600000) => {
-  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [error, setError] = useState<string>('')
   const [location, setLocation] = useState<GeolocationCoordinates | null>(null)
   const [permissionStatus, setPermissionStatus] = useState<PermissionState>('prompt')
@@ -25,7 +24,6 @@ export const useGeolocation = (intervalMillisec = 600000) => {
      * Get current location and set the result to the state
      * Set loading state
      * Set error state
-     *
      */
     const startWatchingPosition = async () => {
       try {
@@ -44,7 +42,6 @@ export const useGeolocation = (intervalMillisec = 600000) => {
                 },
                 { enableHighAccuracy: true }
               )
-              setIsLoading(false)
               break
             case 'prompt':
               navigator.geolocation.getCurrentPosition(
@@ -58,18 +55,15 @@ export const useGeolocation = (intervalMillisec = 600000) => {
               )
               break
             default:
-              setIsLoading(false)
-
+              break
           }
         } else {
           setError('Geolocation permissions are not supported')
-          setIsLoading(false)
         }
       } catch (error) {
         setError(error.message)
-        setIsLoading(false)
       }
-    }
+    };
 
     const stopWatchingPosition = () => {
       if (watchId !== null) {
@@ -90,5 +84,5 @@ export const useGeolocation = (intervalMillisec = 600000) => {
     }
   }, [])
 
-  return { isLoading, error, location, permissionStatus }
+  return { error, location, permissionStatus }
 }
