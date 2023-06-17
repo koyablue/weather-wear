@@ -22,7 +22,9 @@ const Input = styled.input<{ showDropdown: boolean }>`
   width: 300px;
   height: 30px;
   padding: 10px;
-  font-size: 16px;
+  font-family: 'Nunito';
+  letter-spacing: 1.5px;
+  font-size: 14px;
   border: none;
   color: #868686;
   border-radius: ${props => (props.showDropdown ? '10px 10px 0 0' : '30px')};
@@ -135,8 +137,6 @@ const SearchInput = ({ defaultCityData, setCoordinate, setDisplayBySearched }: P
     e.preventDefault()
 
     if (!cityName) {
-      // TODO: if search value is empty, show current location's
-      // setCityNameToSearch(defaultCityData.name)
       setCoordinate({ lat: defaultCityData.lat, lon: defaultCityData.lon })
       setDisplayBySearched(false)
       return
@@ -170,6 +170,10 @@ const SearchInput = ({ defaultCityData, setCoordinate, setDisplayBySearched }: P
       setShowDropdown(true)
     }
   }, [geocodingResult])
+
+  useEffect(() => {
+    setCityName(defaultCityData.name)
+  }, [defaultCityData])
 
   return (
     <ContainerDiv ref={dropdownRef}>
