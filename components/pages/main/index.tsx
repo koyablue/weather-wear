@@ -29,6 +29,7 @@ const ContainerDiv = styled.div`
   max-width: 1400px;
   padding: 0 16px;
   margin: 0 auto;
+  letter-spacing: 1.5px;
 
   @media ${breakPoint.mobileS} {
     padding: 0 16px;
@@ -40,9 +41,20 @@ const ContainerDiv = styled.div`
 `
 
 const ContentsMain = styled.main`
-  /* min-height: calc(100vh - (60px + 16px)); */
   width: 100%;
-  /* color: #333333; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media ${breakPoint.mobileS} {
+    height: calc(100vh - 60px);
+    padding: 16px 0;
+  }
+
+  @media ${breakPoint.mobileM} {
+    height: calc(100vh - 80px);
+    padding: 40px 0;
+  }
 `
 
 const MainContentsContainerDiv = styled.div`
@@ -51,7 +63,6 @@ const MainContentsContainerDiv = styled.div`
   align-items: center;
   gap: 40px;
   width: 100%;
-  margin-top: 200px;
 `
 
 const SubTextAreaDiv = styled.div`
@@ -60,6 +71,7 @@ const SubTextAreaDiv = styled.div`
 `
 
 const SubTextP = styled.p`
+  font-weight: 500;
 `
 
 const ErrorIcon = styled(BiErrorCircle)<{color: string}>`
@@ -83,11 +95,8 @@ const Main = () => {
   const [displayBySearched, setDisplayBySearched] = useState<boolean>(false)
 
   // get coordinate of current location
-  // TODO: fix custom hook
-  // TODO: if location is empty -> loading status.
   const {
     location,
-    // isLoading: isGeolocationLoading,
     error: geolocationError,
     permissionStatus,
   } = useGeolocation()
@@ -122,7 +131,6 @@ const Main = () => {
   const { castAllValuesBoolean, hasTrueValue } = useValidateBooleanArray()
 
   const isLoading = hasTrueValue([
-    // isGeolocationLoading,
     location === null,
     isReverseGeocodingLoading,
     isReverseGeocodingValidating,
