@@ -29,6 +29,7 @@ export const useGeolocation = (intervalMillisec = 600000) => {
       try {
         if ('permissions' in navigator) {
           const status = await navigator.permissions.query({ name: 'geolocation' })
+          console.log('status:',status)
           setPermissionStatus(status.state)
 
           switch (status.state) {
