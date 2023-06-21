@@ -73,6 +73,7 @@ const SubTextAreaDiv = styled.div`
 const SubTextP = styled.p`
   font-weight: 500;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 `
 
 const ErrorIcon = styled(BiErrorCircle)<{color: string}>`
@@ -168,6 +169,8 @@ const Main = () => {
         lon: location.longitude || 0,
       })
     }
+
+    // TODO: if no location then show data based on random location
   }, [location])
 
   // TODO: try again view
@@ -186,7 +189,7 @@ const Main = () => {
             setCoordinate={setCoordinate}
             setDisplayBySearched={setDisplayBySearched}
           />
-          {isLoading && <SyncLoader color={color} />}
+          {isLoading && !isError && <SyncLoader color={color} />}
           {
             !isLoading && !isError && (
               <>
@@ -203,7 +206,7 @@ const Main = () => {
             <>
               <ErrorIcon color={getCurrentColorThemeStyle().colors.text} />
               <SubTextAreaDiv>
-                <SubTextP>Sorry, we couldn't retrieve the weather data right now.</SubTextP>
+                <SubTextP>Sorry, the app couldn't fetch the data at the moment.</SubTextP>
                 <SubTextP>Please try again later.</SubTextP>
               </SubTextAreaDiv>
             </>
