@@ -72,6 +72,7 @@ const SubTextAreaDiv = styled.div`
 
 const SubTextP = styled.p`
   font-weight: 500;
+  letter-spacing: 0.5px;
 `
 
 const ErrorIcon = styled(BiErrorCircle)<{color: string}>`
