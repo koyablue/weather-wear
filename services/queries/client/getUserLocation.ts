@@ -1,5 +1,6 @@
 import { axiosBase } from '../../axiosBase'
 import { getGeolocationApiEndpoint } from '../../../utils/geolocation'
+import { GeolocationApiResponse } from '../../../types/geolocation'
 
 /**
  * Call geolocation API in client side code

@@ -1,5 +1,5 @@
 // IP Geolocation
-type GeolocationApiResponse = Partial<{
+export type GeolocationApiResponse = Partial<{
   ip: string,
   hostname: string
   continent_code: string
