@@ -1,4 +1,4 @@
-# :partly_sunny: Weather Wear
+# :sunny: :zap: Weather Wear :partly_sunny: :snowflake: :umbrella:
 ## About
 Weather Wear is a web application that suggests what kind of clothing is appropriate based on the temperature in your current location.  
 If you open Weather Wear before going out, you can determine at a glance what you should wear.
@@ -30,17 +30,24 @@ This saves you a little time in checking the temperature and thinking about what
 
 ## Features
 ### Main page( / )
-[TODO: screen shot(GIF) here]
-- The app displays clothing guideline based on the temperature of the current location of the user
 
-[TODO: screen shot(GIF) here]
-- The user can search any cities, and the app displays the clothing guideline based on the current temperature of the city.
+#### The app displays clothing guideline based on the temperature of the current location of the user
 
-[TODO: screen shot(GIF) here]
-- Loading view
+<img width="490" alt="main page screenshot" src="https://github.com/koyablue/weather-wear/assets/43242050/f9a3c094-da83-47ca-a625-7f29722ff8a0">
 
-[TODO: screen shot(GIF) here]
-- Error view
+#### The user can search any cities, and the app displays the clothing guideline based on the current temperature of the city.
+
+[![Image from Gyazo](https://i.gyazo.com/071404d0c12aad7b5b7b8fa72daaf3a0.gif)](https://gyazo.com/071404d0c12aad7b5b7b8fa72daaf3a0)
+[![Image from Gyazo](https://i.gyazo.com/1a385dbca2e0070047c1251f16bc6cac.gif)](https://gyazo.com/1a385dbca2e0070047c1251f16bc6cac)
+
+
+#### Dark mode is available
+
+[![Image from Gyazo](https://i.gyazo.com/5ef83a671fc069929086313a3cfbbca8.gif)](https://gyazo.com/5ef83a671fc069929086313a3cfbbca8)
+
+#### Dark mode persists even if the page is reloaded.
+
+[![Image from Gyazo](https://i.gyazo.com/b85af6d8c6b291ecd4435b1189bf69cd.gif)](https://gyazo.com/b85af6d8c6b291ecd4435b1189bf69cd)
 
 ## Architecture
 
