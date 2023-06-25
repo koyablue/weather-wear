@@ -1,4 +1,4 @@
-import useSWR, { SWRConfiguration, mutate } from 'swr'
+import useSWR, { SWRConfiguration } from 'swr'
 import { getCurrentWeatherClient } from '../../services/queries/client/getCurrentWeatherClient'
 import { Unit } from '../../types/weatherApi'
 
