@@ -26,7 +26,7 @@ const Input = styled.input<{ showDropdown: boolean }>`
   width: 300px;
   height: 30px;
   padding: 10px;
-  font-family: 'Nunito';
+  /* font-family: 'Nunito'; */
   letter-spacing: 1.5px;
   font-size: 14px;
   border: none;
