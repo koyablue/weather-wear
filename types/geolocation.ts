@@ -1,6 +1,6 @@
 // IP Geolocation
 export type GeolocationApiResponse = Partial<{
-  ip: string,
+  ip: string
   hostname: string
   continent_code: string
   continent_name: string
@@ -21,20 +21,20 @@ export type GeolocationApiResponse = Partial<{
   country_flag: string
   geoname_id: string
   isp: string
-  connection_type: string,
+  connection_type: string
   organization: string
   asn: string
   currency: {
-      code: string
-      name: string
-      symbol: string
+    code: string
+    name: string
+    symbol: string
   },
   time_zone: {
-      name: string
-      offset: number
-      current_time: string
-      current_time_unix: number
-      is_dst: boolean
-      dst_savings: number
+    name: string
+    offset: number
+    current_time: string
+    current_time_unix: number
+    is_dst: boolean
+    dst_savings: number
   }
 }>

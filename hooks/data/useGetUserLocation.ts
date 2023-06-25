@@ -8,7 +8,7 @@ import { getUserLocation } from '../../services/queries/client/getUserLocation'
  * @param {SWRConfiguration<any, any>} [options]
  * @return {*}
  */
-export const useGeolocation = (apiKey: string, options?: SWRConfiguration<any, any>) => {
+export const useGetUserLocation = (apiKey: string, options?: SWRConfiguration<any, any>) => {
   const { data, error, isLoading, isValidating } = useSWR(
     ['geolocation/get', apiKey],
     () => getUserLocation(apiKey),

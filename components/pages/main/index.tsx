@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
+
 // icon
 import { BiErrorCircle } from 'react-icons/bi'
 
@@ -20,8 +21,7 @@ import { celsiusToClothingGuidelineScale, getClothingAdviceByClothingGuidelineSc
 import { useColorTheme } from '../../../hooks/useColorTheme'
 import { useValidateBooleanArray } from '../../../hooks/useValidateBooleanArray'
 import { useGetCurrentWeather } from '../../../hooks/data/useGetCurrentWeather'
-import { useGeolocation } from '../../../hooks/useGeolocation'
-import { useReverseGeocoding } from '../../../hooks/data/useReverseGeocoding'
+import { useGetUserLocation } from '../../../hooks/data/useGetUserLocation'
 
 const ContainerDiv = styled.div`
   min-height: 100vh;
@@ -86,34 +86,27 @@ export type Coordinate = {
   lon: number
 }
 
+type Props = {
+  geolocationApiKey: string
+}
+
 /**
  * Contents of the main page
  * Get user location, then get current weather by the location
  *
  * @return {*} JSX.Element
  */
-const Main = () => {
+const Main = ({ geolocationApiKey }: Props) => {
   const [coordinate, setCoordinate] = useState<Coordinate>({ lat: 0, lon: 0 })
   const [displayBySearched, setDisplayBySearched] = useState<boolean>(false)
 
-  // get coordinate of current location
-  const {
-    location,
-    error: geolocationError,
-    permissionStatus,
-  } = useGeolocation()
-
-  // get city name by coordinate
+  // get current location of a user
   const {
     userLocation,
-    error: reverseGeocodingError,
-    isLoading: isReverseGeocodingLoading,
-    isValidating: isReverseGeocodingValidating,
-  } = useReverseGeocoding(
-    coordinate.lat,
-    coordinate.lon,
-    { revalidateOnFocus: false, }
-  )
+    error: userLocationError,
+    isLoading: isUserLocationLoading,
+    isValidating: isUserLocationValidating,
+  } = useGetUserLocation(geolocationApiKey)
 
   // get current weather data by coordinate
   const {
@@ -133,17 +126,15 @@ const Main = () => {
   const { castAllValuesBoolean, hasTrueValue } = useValidateBooleanArray()
 
   const isLoading = hasTrueValue([
-    location === null,
-    isReverseGeocodingLoading,
-    isReverseGeocodingValidating,
+    isUserLocationLoading,
+    isUserLocationValidating,
     isCurrentWeatherLoading,
     isCurrentWeatherValidating,
   ])
 
   const isError = hasTrueValue(castAllValuesBoolean([
-    geolocationError,
+    userLocationError,
     currentWeatherError,
-    reverseGeocodingError,
   ]))
 
   // TODO: get weather(unit=metric) -> Math.round(main.temp)
@@ -163,15 +154,10 @@ const Main = () => {
   // TODO: message: Stay prepared for temperature changes (15 °C - 25 °C). Wear adjustable clothing.
 
   useEffect(() => {
-    if (location && !displayBySearched) {
-      setCoordinate({
-        lat: location.latitude || 0,
-        lon: location.longitude || 0,
-      })
+    if (userLocation && !displayBySearched) {
+      setCoordinate({...userLocation})
     }
-
-    // TODO: if no location then show data based on random location
-  }, [location])
+  }, [userLocation])
 
   // TODO: try again view
 
@@ -182,7 +168,7 @@ const Main = () => {
         <MainContentsContainerDiv>
           <SearchInput
             defaultCityData={{
-              name: userLocation?.features ? userLocation?.features[0]?.properties?.city : '',
+              name: userLocation?.cityName || '',
               lat: coordinate.lat || 0,
               lon: coordinate.lon || 0,
             }}
