@@ -1,4 +1,4 @@
-# :sunny: :zap: Weather Wear :partly_sunny: :snowflake: :umbrella:
+# :partly_sunny: Weather Wear :umbrella:
 ## About
 Weather Wear is a web application that suggests what kind of clothing is appropriate based on the temperature in your current location.  
 If you open Weather Wear before going out, you can determine at a glance what you should wear.
@@ -216,3 +216,10 @@ TODO: data fetch logics, redux
     ├── geolocation.ts
     └── weather.ts
 ```
+
+## Upcoming Features
+### Clothing guideline forecast
+- This is like clothing guideline version of weather forecast. This feature suggests a five-day clothing guideline based on the temperature.
+
+### Clothing guidelines for morning, afternoon, and evening
+- The feature to suggest clothing guidelines for morning, afternoon, and evening. Even if it's hot when you go out but it may be cold at night. So this feature will improve the user experience of Weather Wear.
