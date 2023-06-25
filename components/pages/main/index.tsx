@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
+
 // icon
 import { BiErrorCircle } from 'react-icons/bi'
 
@@ -20,8 +21,11 @@ import { celsiusToClothingGuidelineScale, getClothingAdviceByClothingGuidelineSc
 import { useColorTheme } from '../../../hooks/useColorTheme'
 import { useValidateBooleanArray } from '../../../hooks/useValidateBooleanArray'
 import { useGetCurrentWeather } from '../../../hooks/data/useGetCurrentWeather'
-import { useGeolocation } from '../../../hooks/useGeolocation'
-import { useReverseGeocoding } from '../../../hooks/data/useReverseGeocoding'
+import { useGetUserLocation } from '../../../hooks/data/useGetUserLocation'
+
+// redux
+import { useAppDispatch, useAppSelector } from '../../../stores/hooks'
+import { selectCityData, updateCityData } from '../../../stores/slices/cityNameSearchInputSlice'
 
 const ContainerDiv = styled.div`
   min-height: 100vh;
@@ -73,6 +77,7 @@ const SubTextAreaDiv = styled.div`
 const SubTextP = styled.p`
   font-weight: 500;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 `
 
 const ErrorIcon = styled(BiErrorCircle)<{color: string}>`
@@ -85,44 +90,39 @@ export type Coordinate = {
   lon: number
 }
 
+type Props = {
+  geolocationApiKey: string
+}
+
 /**
  * Contents of the main page
  * Get user location, then get current weather by the location
  *
  * @return {*} JSX.Element
  */
-const Main = () => {
-  const [coordinate, setCoordinate] = useState<Coordinate>({ lat: 0, lon: 0 })
-  const [displayBySearched, setDisplayBySearched] = useState<boolean>(false)
+const Main = ({ geolocationApiKey }: Props) => {
+  const dispatch = useAppDispatch()
+  const cityData = useAppSelector(selectCityData)
 
-  // get coordinate of current location
-  const {
-    location,
-    error: geolocationError,
-    permissionStatus,
-  } = useGeolocation()
+  const [userLocationCityName, setUserLocationCityName] = useState('')
 
-  // get city name by coordinate
+  // get current location of a user
   const {
     userLocation,
-    error: reverseGeocodingError,
-    isLoading: isReverseGeocodingLoading,
-    isValidating: isReverseGeocodingValidating,
-  } = useReverseGeocoding(
-    coordinate.lat,
-    coordinate.lon,
-    { revalidateOnFocus: false, }
-  )
+    error: userLocationError,
+    isLoading: isUserLocationLoading,
+    isValidating: isUserLocationValidating,
+  } = useGetUserLocation(geolocationApiKey, { revalidateOnFocus: false })
 
-  // get current weather data by coordinate
+  // get current weather data based on the coordinate
   const {
     currentWeather,
     error: currentWeatherError,
     isLoading: isCurrentWeatherLoading,
     isValidating: isCurrentWeatherValidating,
   } = useGetCurrentWeather(
-    coordinate.lat,
-    coordinate.lon,
+    cityData.lat,
+    cityData.lon,
     'metric',
     { revalidateOnFocus: false }
   )
@@ -132,20 +132,17 @@ const Main = () => {
   const { castAllValuesBoolean, hasTrueValue } = useValidateBooleanArray()
 
   const isLoading = hasTrueValue([
-    location === null,
-    isReverseGeocodingLoading,
-    isReverseGeocodingValidating,
+    isUserLocationLoading,
+    isUserLocationValidating,
     isCurrentWeatherLoading,
     isCurrentWeatherValidating,
   ])
 
   const isError = hasTrueValue(castAllValuesBoolean([
-    geolocationError,
+    userLocationError,
     currentWeatherError,
-    reverseGeocodingError,
   ]))
 
-  // TODO: get weather(unit=metric) -> Math.round(main.temp)
   // TODO: if (max - min) >= 5 -> two options or notes()
 
   // TODO: message is like this: "Big temperature swing today. Dress in adjustable clothing."
@@ -162,13 +159,11 @@ const Main = () => {
   // TODO: message: Stay prepared for temperature changes (15 °C - 25 °C). Wear adjustable clothing.
 
   useEffect(() => {
-    if (location && !displayBySearched) {
-      setCoordinate({
-        lat: location.latitude || 0,
-        lon: location.longitude || 0,
-      })
+    if (userLocation) {
+      setUserLocationCityName(userLocation.cityName)
+      dispatch(updateCityData({name: userLocation.cityName, lat: userLocation.lat, lon: userLocation.lon}))
     }
-  }, [location])
+  }, [userLocation])
 
   // TODO: try again view
 
@@ -178,15 +173,11 @@ const Main = () => {
       <ContentsMain>
         <MainContentsContainerDiv>
           <SearchInput
-            defaultCityData={{
-              name: userLocation?.features ? userLocation?.features[0]?.properties?.city : '',
-              lat: coordinate.lat || 0,
-              lon: coordinate.lon || 0,
-            }}
-            setCoordinate={setCoordinate}
-            setDisplayBySearched={setDisplayBySearched}
+            defaultCityName={cityData.name || userLocationCityName}
+            lat={cityData.lat || 0}
+            lon={cityData.lon || 0}
           />
-          {isLoading && <SyncLoader color={color} />}
+          {isLoading && !isError && <SyncLoader color={color} />}
           {
             !isLoading && !isError && (
               <>
@@ -203,7 +194,7 @@ const Main = () => {
             <>
               <ErrorIcon color={getCurrentColorThemeStyle().colors.text} />
               <SubTextAreaDiv>
-                <SubTextP>Sorry, we couldn't retrieve the weather data right now.</SubTextP>
+                <SubTextP>Sorry, the app couldn't fetch the data at the moment.</SubTextP>
                 <SubTextP>Please try again later.</SubTextP>
               </SubTextAreaDiv>
             </>

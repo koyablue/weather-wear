@@ -1,5 +1,5 @@
 // https://app.abstractapi.com/api/ip-geolocation/documentation
-export const GEOLOCATION_API_ENDPOINT = 'https://ipgeolocation.abstractapi.com/v1/?api_key='
+export const GEOLOCATION_API_ENDPOINT = 'https://api.ipgeolocation.io/ipgeo?apiKey='
 export const GEOLOCATION_API_KEY = process.env.GEOLOCATION_API_KEY || ''
 
 export const WEATHER_API_BASE_ENDPOINT = 'https://api.openweathermap.org/data/2.5'
