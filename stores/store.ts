@@ -3,10 +3,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 import colorThemeReducer from './slices/colorThemeSlice'
+import cityNameSearchInputReducer from './slices/cityNameSearchInputSlice'
 
 export const store = configureStore({
   reducer: {
     colorTheme: colorThemeReducer,
+    cityNameSearchInput: cityNameSearchInputReducer,
   },
 })
 

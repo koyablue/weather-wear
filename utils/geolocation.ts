@@ -1,12 +1,13 @@
-import { GEOLOCATION_API_KEY, GEOLOCATION_API_ENDPOINT } from '../constants/api'
+import { GEOLOCATION_API_ENDPOINT } from '../constants/api'
 
 /**
- * Returns geolocation API url with params
+ * Returns geolocation API url
+ *
+ * https://app.ipgeolocation.io/
  *
  * @param {string[]} [fields]
  * @return {*}  {string}
  */
-export const getGeolocationApiEndpoint = (fields?: string[]): string => {
-  const fieldsParam = fields && fields.length ? fields.join(',') : ''
-  return `${GEOLOCATION_API_ENDPOINT}${GEOLOCATION_API_KEY}&fields=${fieldsParam}`
+export const getGeolocationApiEndpoint = (apiKey: string): string => {
+  return `${GEOLOCATION_API_ENDPOINT}${apiKey}`
 }
