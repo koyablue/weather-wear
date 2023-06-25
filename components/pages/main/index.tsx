@@ -23,6 +23,10 @@ import { useValidateBooleanArray } from '../../../hooks/useValidateBooleanArray'
 import { useGetCurrentWeather } from '../../../hooks/data/useGetCurrentWeather'
 import { useGetUserLocation } from '../../../hooks/data/useGetUserLocation'
 
+// redux
+import { useAppDispatch, useAppSelector } from '../../../stores/hooks'
+import { selectCityData, updateCityData } from '../../../stores/slices/cityNameSearchInputSlice'
+
 const ContainerDiv = styled.div`
   min-height: 100vh;
   width: 100%;
@@ -97,8 +101,10 @@ type Props = {
  * @return {*} JSX.Element
  */
 const Main = ({ geolocationApiKey }: Props) => {
-  const [coordinate, setCoordinate] = useState<Coordinate>({ lat: 0, lon: 0 })
-  const [displayBySearched, setDisplayBySearched] = useState<boolean>(false)
+  const dispatch = useAppDispatch()
+  const cityData = useAppSelector(selectCityData)
+
+  const [userLocationCityName, setUserLocationCityName] = useState('')
 
   // get current location of a user
   const {
@@ -106,17 +112,17 @@ const Main = ({ geolocationApiKey }: Props) => {
     error: userLocationError,
     isLoading: isUserLocationLoading,
     isValidating: isUserLocationValidating,
-  } = useGetUserLocation(geolocationApiKey)
+  } = useGetUserLocation(geolocationApiKey, { revalidateOnFocus: false })
 
-  // get current weather data by coordinate
+  // get current weather data based on the coordinate
   const {
     currentWeather,
     error: currentWeatherError,
     isLoading: isCurrentWeatherLoading,
     isValidating: isCurrentWeatherValidating,
   } = useGetCurrentWeather(
-    coordinate.lat,
-    coordinate.lon,
+    cityData.lat,
+    cityData.lon,
     'metric',
     { revalidateOnFocus: false }
   )
@@ -137,7 +143,6 @@ const Main = ({ geolocationApiKey }: Props) => {
     currentWeatherError,
   ]))
 
-  // TODO: get weather(unit=metric) -> Math.round(main.temp)
   // TODO: if (max - min) >= 5 -> two options or notes()
 
   // TODO: message is like this: "Big temperature swing today. Dress in adjustable clothing."
@@ -154,8 +159,9 @@ const Main = ({ geolocationApiKey }: Props) => {
   // TODO: message: Stay prepared for temperature changes (15 °C - 25 °C). Wear adjustable clothing.
 
   useEffect(() => {
-    if (userLocation && !displayBySearched) {
-      setCoordinate({...userLocation})
+    if (userLocation) {
+      setUserLocationCityName(userLocation.cityName)
+      dispatch(updateCityData({name: userLocation.cityName, lat: userLocation.lat, lon: userLocation.lon}))
     }
   }, [userLocation])
 
@@ -167,13 +173,9 @@ const Main = ({ geolocationApiKey }: Props) => {
       <ContentsMain>
         <MainContentsContainerDiv>
           <SearchInput
-            defaultCityData={{
-              name: userLocation?.cityName || '',
-              lat: coordinate.lat || 0,
-              lon: coordinate.lon || 0,
-            }}
-            setCoordinate={setCoordinate}
-            setDisplayBySearched={setDisplayBySearched}
+            defaultCityName={cityData.name || userLocationCityName}
+            lat={cityData.lat || 0}
+            lon={cityData.lon || 0}
           />
           {isLoading && !isError && <SyncLoader color={color} />}
           {

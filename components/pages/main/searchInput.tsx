@@ -14,6 +14,10 @@ import { useValidateBooleanArray } from '../../../hooks/useValidateBooleanArray'
 import { Coordinate } from '.'
 import { GeocodingApiResponseItem } from '../../../types/geocoding'
 
+// redux
+import { useAppDispatch } from '../../../stores/hooks'
+import { updateCityData } from '../../../stores/slices/cityNameSearchInputSlice'
+
 const ContainerDiv = styled.div`
   position: relative;
 `
@@ -75,17 +79,10 @@ const OptionLi = styled.li`
     background-color: #f5f5f5;
   }
 `
-
 type Props = {
-  defaultCityData: {
-    name: string
-    lat: number
-    lon: number
-  }
-  // state update function to trigger refetch data in Main component
-  setCoordinate: Dispatch<SetStateAction<Coordinate>>
-  // state update function to set a flag to tell if the content of Main component is based on user's location or searched value
-  setDisplayBySearched: Dispatch<SetStateAction<boolean>>
+  defaultCityName: string
+  lat: number
+  lon: number
 }
 
 /**
@@ -94,10 +91,13 @@ type Props = {
  *
  * @return {*} JSX.Element
  */
-const SearchInput = ({ defaultCityData, setCoordinate, setDisplayBySearched }: Props) => {
-  // state for input
-  const [cityName, setCityName] = useState(defaultCityData.name)
-  // state for API call
+// const SearchInput = ({ defaultCityData, setCoordinate, setDisplayBySearched }: Props) => {
+  const SearchInput = ({ defaultCityName, lat, lon }: Props) => {
+  const dispatch = useAppDispatch()
+
+  // state for input value
+  const [cityName, setCityName] = useState(defaultCityName)
+  // state for geocoding API call(to get values for drop down options)
   const [cityNameToSearch, setCityNameToSearch] = useState('')
   // state for dropdown options
   const [cities, setCities] = useState<GeocodingApiResponseItem[]>([])
@@ -136,9 +136,8 @@ const SearchInput = ({ defaultCityData, setCoordinate, setDisplayBySearched }: P
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
+    // if the input value is empty
     if (!cityName) {
-      setCoordinate({ lat: defaultCityData.lat, lon: defaultCityData.lon })
-      setDisplayBySearched(false)
       return
     }
 
@@ -150,10 +149,7 @@ const SearchInput = ({ defaultCityData, setCoordinate, setDisplayBySearched }: P
   const handleOptionClick = (city: GeocodingApiResponseItem) => {
     setCityName(city.name)
     setShowDropdown(false)
-    // update state to refetch currentWeather data in Main component
-    setCoordinate({ lat: city.lat, lon: city.lon })
-    // set a flag to tell if the content of Main component is based on user's location or searched value
-    setDisplayBySearched(true)
+    dispatch(updateCityData({name: city.name, lat: city.lat, lon: city.lon}))
   }
 
   const formatOptionKey = (city: GeocodingApiResponseItem) => (
@@ -172,8 +168,8 @@ const SearchInput = ({ defaultCityData, setCoordinate, setDisplayBySearched }: P
   }, [geocodingResult])
 
   useEffect(() => {
-    setCityName(defaultCityData.name)
-  }, [defaultCityData])
+    setCityName(defaultCityName || cityNameToSearch)
+  }, [defaultCityName])
 
   return (
     <ContainerDiv ref={dropdownRef}>
