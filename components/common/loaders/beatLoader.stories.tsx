@@ -4,7 +4,7 @@ import { LoaderSizeMarginProps } from 'react-spinners/helpers/props';
 import type { Meta, StoryObj } from '@storybook/react'
 
 export default {
-  title: 'Example/BeatLoader',
+  title: 'Loaders/BeatLoader',
   component: BeatLoader,
   argTypes: {
     color: { control: 'color' },
@@ -19,6 +19,6 @@ export const Default: Story = {
   args: {
     size: 10,
     margin: 2,
-    color: '#ffffff',
+    color: '#333333',
   },
 }
