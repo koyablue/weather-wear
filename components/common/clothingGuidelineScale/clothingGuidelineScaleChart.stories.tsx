@@ -1,10 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import ClothingGuidelineScaleChart from './clothingGuidelineScaleChart'
 
-import { ClothingGuidelineScale } from '../../../types/clothingGuidelineScale'
-
-import { getColorByClothingGuidelineScale } from '../../../services/clothingGuidelineScale'
-
 export default {
   title: 'ClothingGuideline/ClothingGuidelineScaleChart',
   component: ClothingGuidelineScaleChart,
@@ -16,15 +12,20 @@ export default {
       }
     },
     itemCount: { control: 'number' },
+    colorTheme: {
+      control: { type: 'radio' },
+      options: ['light', 'dark'],
+    }
   },
 } as Meta<typeof ClothingGuidelineScaleChart>
 
 type Story = StoryObj<typeof ClothingGuidelineScaleChart>
 
-export const LightTheme: Story = {
+export const Default: Story = {
   args: {
     scale: 3,
     itemCount: 5,
+    colorTheme: 'light',
   },
 }
 

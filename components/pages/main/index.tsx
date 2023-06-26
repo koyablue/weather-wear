@@ -182,7 +182,7 @@ const Main = ({ geolocationApiKey }: Props) => {
             !isLoading && !isError && (
               <>
                 <ClothesIcon scale={scale} svgProps={{ fill: color, height: 150, width: 150 }} />
-                <ClothingGuidelineScaleChart scale={scale} />
+                <ClothingGuidelineScaleChart scale={scale} colorTheme={currentColorTheme} />
                 <SubTextAreaDiv>
                   <SubTextP>{advise}</SubTextP>
                 </SubTextAreaDiv>
