@@ -1,86 +1,148 @@
-# Example app with styled-components
+# :partly_sunny: Weather Wear :umbrella:
+## :zap: About
+Weather Wear is a web application that suggests what kind of clothing is appropriate based on the temperature in your current location.  
+If you open Weather Wear before going out, you can determine at a glance what you should wear.
 
-This example features how you use a different styling solution than [styled-jsx](https://github.com/vercel/styled-jsx) that also supports universal styles. That means we can serve the required styles for the first render within the HTML and then load the rest in the client. In this case we are using [styled-components](https://github.com/styled-components/styled-components).
+## :hammer: Built with :wrench:
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
+![Styled Components](https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white)
+<img src="https://img.shields.io/badge/-swr-000?style=flat-square&logo=next.js&link=http://zi-gae.github.io/" height="25" />
+<img src="https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white" height="25" />
 
-This example uses the Rust-based [SWC](https://nextjs.org/docs/advanced-features/compiler#styled-components) in Next.js for better performance than Babel.
+- Language
+  - TypeScript
+- Framework
+  - Next.js
+- Styling
+  - Styled Components
+- Data fetching
+  - SWR
+- State management
+  - Redux Toolkit
 
-Currently, only the `ssr` and `displayName` transforms have been implemented. These two transforms are the main requirement for using `styled-components` in Next.js.
+## :thought_balloon: Why I created this app
+My room is in the basement. So there is always a big difference between room temperature and outside temperature.  
+When I change my clothes before going out, I always need to open the weather application, check the current temperature, and imagine what to wear based on the temperature.  
+I wanted to make the process a little easier, so I created this application.
+The difference between this application and other common weather applications is that it directly suggests a guideline for what to wear, rather than the temperature or weather conditions.  
+This saves you a little time in checking the temperature and thinking about what to wear based on that.
 
-## Deploy your own
+## :bulb: Features
+### Main page( / )
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example) or preview live with [StackBlitz](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-styled-components)
+#### The app displays clothing guideline based on the temperature of the current location of the user
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-styled-components&project-name=with-styled-components&repository-name=with-styled-components)
+<img width="490" alt="main page screenshot" src="https://github.com/koyablue/weather-wear/assets/43242050/f9a3c094-da83-47ca-a625-7f29722ff8a0">
 
-## How to use
+#### The user can search any cities, and the app displays the clothing guideline based on the current temperature of the city.
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
+[![Image from Gyazo](https://i.gyazo.com/071404d0c12aad7b5b7b8fa72daaf3a0.gif)](https://gyazo.com/071404d0c12aad7b5b7b8fa72daaf3a0)
+[![Image from Gyazo](https://i.gyazo.com/1a385dbca2e0070047c1251f16bc6cac.gif)](https://gyazo.com/1a385dbca2e0070047c1251f16bc6cac)
 
-```bash
-npx create-next-app --example with-styled-components with-styled-components-app
-```
 
-```bash
-yarn create next-app --example with-styled-components with-styled-components-app
-```
+#### Dark mode is available
 
-```bash
-pnpm create next-app --example with-styled-components with-styled-components-app
-```
+[![Image from Gyazo](https://i.gyazo.com/5ef83a671fc069929086313a3cfbbca8.gif)](https://gyazo.com/5ef83a671fc069929086313a3cfbbca8)
 
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+#### Dark mode persists even if the page is reloaded.
 
-### Try it on CodeSandbox
+[![Image from Gyazo](https://i.gyazo.com/b85af6d8c6b291ecd4435b1189bf69cd.gif)](https://gyazo.com/b85af6d8c6b291ecd4435b1189bf69cd)
 
-[Open this example on CodeSandbox](https://codesandbox.io/s/github/vercel/next.js/tree/canary/examples/with-styled-components)
+## :tokyo_tower: Architecture
 
-### Notes
+### Components
 
-When wrapping a [Link](https://nextjs.org/docs/api-reference/next/link) from `next/link` within a styled-component, the [as](https://styled-components.com/docs/api#as-polymorphic-prop) prop provided by `styled` will collide with the Link's `as` prop and cause styled-components to throw an `Invalid tag` error. To avoid this, you can either use the recommended [forwardedAs](https://styled-components.com/docs/api#forwardedas-prop) prop from styled-components or use a different named prop to pass to a `styled` Link.
+This is an example of a component in this app.
+- Get API key from environment values in the server side, then pass it to the component. In this way the API key can be hidden from the client side.
+- Declare styles in the same file as the component. It's easy to manage and maintain the component file if the style is in the same file.
+- To fetch data, use custom hook that wraps data fetching library. The component never use the data fetching library directly so that make it easy to replace the library with other ones.
 
-<details>
-<summary>Click to expand workaround example</summary>
-<br />
+```typescript
 
-**components/StyledLink.js**
+type PageProps = {
+  apiKey: string
+}
 
-```javascript
-import Link from 'next/link'
-import styled from 'styled-components'
+export const getServerSideProps: GetServerSideProps<PageProps> = async () => {
+  const apiKey = API_KEY
 
-const StyledLink = ({ as, children, className, href }) => (
-  <Link href={href} as={as} passHref>
-    <a className={className}>{children}</a>
-  </Link>
-)
+  return {
+    props: {
+      apiKey,
+    },
+  }
+}
 
-export default styled(StyledLink)`
-  color: #0075e0;
-  text-decoration: none;
-  transition: all 0.2s ease-in-out;
+const StyledDiv = styled.div``
 
-  &:hover {
-    color: #40a9ff;
+type Props = PageProps & {...}
+
+const Component = (props: Props) => {
+  const { data, error, isLoading, isValidating } = useData(props.apiKey)
+
+  const dispatch = useAppDispatch()
+
+  // Use redux toolkit for global state
+  const globalState = useAppSelector(selectGlobalState)
+
+  // Use useState for local states
+  const [localState, setLocalState] = useState<string>('')
+
+  const exampleLogic = () => {
+    /* Do something */
+    dispatch(exampleAction(arg))
   }
 
-  &:focus {
-    color: #40a9ff;
-    outline: none;
-    border: 0;
-  }
-`
+  return (
+    <StyledDiv>
+      {...}
+    </StyledDiv>
+  )
+}
+
 ```
 
-**pages/index.js**
+### Folder structure
+```
+.
+├── components
+│   ├── common
+│   │   └── ...
+│   ├── layouts
+│   │   └── ...
+│   └── pages
+│       └── ...
+├── constants
+│   └── ...
+├── hooks
+│   ├── data
+│   │   └── ...
+│   └── ...
+├── pages
+│   ├── _app.tsx
+│   ├── _document.tsx
+│   ├── api
+│   │   └── ...
+│   └── ...
+├── public
+├── services
+│   └── ...
 
-```javascript
-import StyledLink from '../components/StyledLink'
-
-export default () => (
-  <StyledLink href="/post/[pid]" forwardedAs="/post/abc">
-    First post
-  </StyledLink>
-)
+├── stores
+│   └── ...
+├── styled.d.ts
+├── styles
+│   └── ...
+├── types
+│   └── ...
+└── utils
+    └── ...
 ```
 
-</details>
+## :chart_with_upwards_trend: Upcoming Features
+### Clothing guideline forecast
+- This is like clothing guideline version of weather forecast. This feature suggests a five-day clothing guideline based on the temperature.
+
+### Clothing guidelines for morning, afternoon, and evening
+- The feature to suggest clothing guidelines for morning, afternoon, and evening. Even if it's hot when you go out but it may be cold at night. So this feature will improve the user experience of Weather Wear.
