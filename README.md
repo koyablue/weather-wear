@@ -9,6 +9,7 @@ If you open Weather Wear before going out, you can determine at a glance what yo
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
 ![Styled Components](https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white)
+![Storybook](https://img.shields.io/badge/-Storybook-FF4785?style=for-the-badge&logo=storybook&logoColor=white)
 <img src="https://img.shields.io/badge/-swr-000?style=flat-square&logo=next.js&link=http://zi-gae.github.io/" height="25" />
 <img src="https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white" height="25" />
 
@@ -22,6 +23,8 @@ If you open Weather Wear before going out, you can determine at a glance what yo
   - SWR
 - State management
   - Redux Toolkit
+- Other tools
+  - Storybook 
 
 ## :thought_balloon: Why I created this app
 My room is in the basement. So there is always a big difference between room temperature and outside temperature.  
