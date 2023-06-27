@@ -2,21 +2,21 @@ import React, { useState, useEffect, Dispatch, SetStateAction } from 'react'
 import styled from 'styled-components'
 import { FiSearch } from 'react-icons/fi'
 
-import BeatLoader from '../../common/loaders/beatLoader'
+import BeatLoader from './loaders/beatLoader'
 
 // hooks
-import { useToggle } from '../../../hooks/useToggle'
-import { useOutsideClick } from '../../../hooks/useOutsideClick'
-import { useGeocoding } from '../../../hooks/data/useGeocoding'
-import { useValidateBooleanArray } from '../../../hooks/useValidateBooleanArray'
+import { useToggle } from '../../hooks/useToggle'
+import { useOutsideClick } from '../../hooks/useOutsideClick'
+import { useGeocoding } from '../../hooks/data/useGeocoding'
+import { useValidateBooleanArray } from '../../hooks/useValidateBooleanArray'
 
 // types
-import { Coordinate } from '.'
-import { GeocodingApiResponseItem } from '../../../types/geocoding'
+import { Coordinate } from '../pages/main'
+import { GeocodingApiResponseItem } from '../../types/geocoding'
 
 // redux
-import { useAppDispatch } from '../../../stores/hooks'
-import { updateCityData } from '../../../stores/slices/cityNameSearchInputSlice'
+import { useAppDispatch } from '../../stores/hooks'
+import { updateCityData } from '../../stores/slices/cityNameSearchInputSlice'
 
 const ContainerDiv = styled.div`
   position: relative;
@@ -81,8 +81,6 @@ const OptionLi = styled.li`
 `
 type Props = {
   defaultCityName: string
-  lat: number
-  lon: number
 }
 
 /**
@@ -91,8 +89,7 @@ type Props = {
  *
  * @return {*} JSX.Element
  */
-// const SearchInput = ({ defaultCityData, setCoordinate, setDisplayBySearched }: Props) => {
-  const SearchInput = ({ defaultCityName, lat, lon }: Props) => {
+const SearchInput = ({ defaultCityName }: Props) => {
   const dispatch = useAppDispatch()
 
   // state for input value
@@ -170,6 +167,9 @@ type Props = {
   useEffect(() => {
     setCityName(defaultCityName || cityNameToSearch)
   }, [defaultCityName])
+
+  // TODO: Separate data fetching and view
+  // container: handleSearch, cityName, handleInputChange, showDropdown, isLoading, cities,
 
   return (
     <ContainerDiv ref={dropdownRef}>
