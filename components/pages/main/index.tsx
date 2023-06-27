@@ -139,7 +139,7 @@ const Main = ({ geolocationApiKey }: Props) => {
 
   // get current weather data based on the coordinate
   const {
-    currentWeather,
+    currentTemperature,
     error: currentWeatherError,
     isLoading: isCurrentWeatherLoading,
     isValidating: isCurrentWeatherValidating,
@@ -171,7 +171,7 @@ const Main = ({ geolocationApiKey }: Props) => {
   // TODO: message is like this: "Big temperature swing today. Dress in adjustable clothing."
   // TODO: or like this: "Stay prepared for temperature changes. Wear adjustable clothing." <- better?
   const currentColorTheme = getCurrentColorThemeState()
-  const scale = celsiusToClothingGuidelineScale(currentWeather?.main?.temp)
+  const scale = celsiusToClothingGuidelineScale(currentTemperature?.temp)
   const color = getColorByClothingGuidelineScale(scale, currentColorTheme)
   const advise = getClothingAdviceByClothingGuidelineScale(scale)
 
