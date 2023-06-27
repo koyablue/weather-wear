@@ -1,7 +1,12 @@
 import styled from 'styled-components'
-import { ClothingGuidelineScale } from '../../../types/clothingGuidelineScale'
+
 import { getColorByClothingGuidelineScale } from '../../../services/clothingGuidelineScale'
 import { useColorTheme } from '../../../hooks/useColorTheme'
+
+// types
+import { ClothingGuidelineScale } from '../../../types/clothingGuidelineScale'
+import { ColorTheme } from '../../../types/colorTheme'
+
 
 const ChartWrapperDiv = styled.div`
   display: flex;
@@ -23,12 +28,13 @@ const ChartItemDiv = styled.div`
 type Props = {
   scale: ClothingGuidelineScale
   itemCount?: number
+  colorTheme?: ColorTheme
 }
 
-const ClothingGuidelineScaleChart = ({ scale, itemCount = 5 }: Props) => {
-  const { getCurrentColorThemeState } = useColorTheme()
+const ClothingGuidelineScaleChart = ({ scale, itemCount = 5, colorTheme = 'light' }: Props) => {
+  // const { getCurrentColorThemeState } = useColorTheme()
 
-  const color = getColorByClothingGuidelineScale(scale, getCurrentColorThemeState())
+  const color = getColorByClothingGuidelineScale(scale, colorTheme)
 
   const items: JSX.Element[] = []
   for (let i = 0; i < itemCount; i++) {

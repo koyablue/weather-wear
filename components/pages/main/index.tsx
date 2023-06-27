@@ -9,7 +9,7 @@ import { breakPoint } from '../../../styles/breakPoint'
 
 // components
 import Header from '../../layouts/header'
-import SearchInput from './searchInput'
+import SearchInput from '../../common/searchInput'
 import ClothingGuidelineScaleChart from '../../common/clothingGuidelineScale/clothingGuidelineScaleChart'
 import ClothesIcon from '../../common/clothesIcon'
 import SyncLoader from '../../common/loaders/syncLoader'
@@ -65,8 +65,31 @@ const MainContentsContainerDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 40px;
   width: 100%;
+
+  // TODO: Is min-height necessary?
+  @media ${breakPoint.mobileS} {
+    min-height: calc(100vh - 60px);
+  }
+
+  @media ${breakPoint.mobileM} {
+    min-height: calc(100vh - 80px);
+    padding: 40px 0;
+  }
+`
+
+// TODO: need to fix. this is just first aid
+const MainContentsWrapperDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  width: 100%;
+  height: 300px;
+  width: 300px;
 `
 
 const SubTextAreaDiv = styled.div`
@@ -174,31 +197,31 @@ const Main = ({ geolocationApiKey }: Props) => {
         <MainContentsContainerDiv>
           <SearchInput
             defaultCityName={cityData.name || userLocationCityName}
-            lat={cityData.lat || 0}
-            lon={cityData.lon || 0}
           />
-          {isLoading && !isError && <SyncLoader color={color} />}
-          {
-            !isLoading && !isError && (
+          <MainContentsWrapperDiv>
+            {isLoading && !isError && <SyncLoader color={color} />}
+            {
+              !isLoading && !isError && (
+                <>
+                  <ClothesIcon scale={scale} svgProps={{ fill: color, height: 150, width: 150 }} />
+                  <ClothingGuidelineScaleChart scale={scale} colorTheme={currentColorTheme} />
+                  <SubTextAreaDiv>
+                    <SubTextP>{advise}</SubTextP>
+                  </SubTextAreaDiv>
+                </>
+              )
+            }
+            {
+              isError &&
               <>
-                <ClothesIcon scale={scale} svgProps={{ fill: color, height: 150, width: 150 }} />
-                <ClothingGuidelineScaleChart scale={scale} />
+                <ErrorIcon color={getCurrentColorThemeStyle().colors.text} />
                 <SubTextAreaDiv>
-                  <SubTextP>{advise}</SubTextP>
+                  <SubTextP>Sorry, the app couldn't fetch the data at the moment.</SubTextP>
+                  <SubTextP>Please try again later.</SubTextP>
                 </SubTextAreaDiv>
               </>
-            )
-          }
-          {
-            isError &&
-            <>
-              <ErrorIcon color={getCurrentColorThemeStyle().colors.text} />
-              <SubTextAreaDiv>
-                <SubTextP>Sorry, the app couldn't fetch the data at the moment.</SubTextP>
-                <SubTextP>Please try again later.</SubTextP>
-              </SubTextAreaDiv>
-            </>
-          }
+            }
+         </MainContentsWrapperDiv>
         </MainContentsContainerDiv>
       </ContentsMain>
     </ContainerDiv>
