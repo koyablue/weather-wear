@@ -1,12 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-// svgs
-// import TankTop  from '../../public/images/svgs/tank-top.svg';
-// import TShirt from '../../public/images/svgs/t-shirt.svg';
-// import LongSleeve from '../../public/images/svgs/long-sleeve.svg';
-// import Hoodie from '../../public/images/svgs/hoodie.svg';
-// import PufferJacket from '../../public/images/svgs/puffer-jacket.svg';
-
 import ClothesIcon from './clothesIcon'
 
 
@@ -42,5 +35,3 @@ export const Default: Story = {
     }
   }
 }
-
-
