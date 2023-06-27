@@ -168,6 +168,9 @@ const SearchInput = ({ defaultCityName }: Props) => {
     setCityName(defaultCityName || cityNameToSearch)
   }, [defaultCityName])
 
+  // TODO: Separate data fetching and view
+  // container: handleSearch, cityName, handleInputChange, showDropdown, isLoading, cities,
+
   return (
     <ContainerDiv ref={dropdownRef}>
       <form onSubmit={handleSearch}>
