@@ -199,7 +199,7 @@ const Main = ({ geolocationApiKey }: Props) => {
             defaultCityName={cityData.name || userLocationCityName}
           />
           <MainContentsWrapperDiv>
-            {isLoading && !isError && <SyncLoader color={color} />}
+            {isLoading && !isError && <SyncLoader color={color} data-testid='loading' />}
             {
               !isLoading && !isError && (
                 <>
