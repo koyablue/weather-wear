@@ -23,7 +23,7 @@ const useGetUserLocationMockData = {
   isValidating: false,
 }
 
-jest.mock('../hooks/data/useGetUserLocation.ts', () => ({
+jest.mock('../../hooks/data/useGetUserLocation.ts', () => ({
   useGetUserLocation: () => {
     return useGetUserLocationMockData
   },
@@ -36,7 +36,7 @@ const useGetCurrentWeatherMockData = {
   isValidating: false,
 }
 
-jest.mock('../hooks/data/useGetCurrentWeather.ts', () => ({
+jest.mock('../../hooks/data/useGetCurrentWeather.ts', () => ({
   useGetCurrentWeather: () => {
     return useGetCurrentWeatherMockData
   },
