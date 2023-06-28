@@ -1,30 +1,20 @@
 import React, { ReactElement, ReactNode } from 'react'
-import { render, screen , RenderOptions} from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 
-import { rest } from 'msw'
-import { setupServer } from 'msw/node'
+import { render, screen , RenderOptions} from '@testing-library/react'
+import '@testing-library/jest-dom'
+
 import Main from '../components/pages/main'
+
 import { celsiusToClothingGuidelineScale, getClothingAdviceByClothingGuidelineScale } from '../services/clothingGuidelineScale'
+
 import { Provider } from 'react-redux'
 import { store } from '../stores/store'
 
-import '@testing-library/jest-dom'
-import { getByTestId, waitForElementToBeRemoved } from '@storybook/testing-library'
+jest.mock('../public/images/svgs/tank-top.svg', () => () => <svg data-testid="tank-top-svg" />)
 
-jest.mock('../public/images/svgs/tank-top.svg', () => () => <svg data-testid="tank-top-svg" />);
-// jest.mock('../public/images/svgs/t-shirt.svg', () => () => <svg data-testid="t-shirt-svg" />);
-// jest.mock('../public/images/svgs/long-sleeve.svg', () => () => <svg data-testid="long-sleeve-svg" />);
-// jest.mock('../public/images/svgs/hoodie.svg', () => () => <svg data-testid="hoodie-svg" />);
-// jest.mock('../public/images/svgs/puffer-jacket.svg', () => () => <svg data-testid="puffer-jacket-svg" />);
-
-// const server = setupServer(
-//   rest.get()
-// )
-
-// beforeAll(() => server.listen())
-// afterAll(() => server.close())
-// afterEach(() => server.resetHandlers())
+// svg mocks are always overwritten by Jest somehow.
+// If this mock exists, the test always get t-shirt svg.
+// jest.mock('../public/images/svgs/t-shirt.svg', () => () => <svg data-testid="t-shirt-svg" />)
 
 const useGetUserLocationMockData = {
   userLocation: {},
@@ -32,12 +22,6 @@ const useGetUserLocationMockData = {
   isLoading: false,
   isValidating: false,
 }
-
-// export type UserLocation = {
-//   cityName: string
-//   lat: number
-//   lon: number
-// }
 
 jest.mock('../hooks/data/useGetUserLocation.ts', () => ({
   useGetUserLocation: () => {
@@ -75,23 +59,29 @@ const customRender = (
 
 describe('Rendering', () => {
   describe('Main page', () => {
-    // beforeEach(async() => {
-    //   useGetUserLocationMockData.userLocation = {
-    //     cityName: 'Tokyo',
-    //     lat: 35.652832,
-    //     lon: 139.839478,
-    //   }
+    it('Loading component should be in the document when the data is loading', () => {
+      useGetUserLocationMockData.isLoading = false
+      useGetUserLocationMockData.isValidating = false
+      useGetCurrentWeatherMockData.isLoading = true
+      useGetCurrentWeatherMockData.isValidating = false
 
-    //   useGetCurrentWeatherMockData.currentTemperature = {
-    //     temp: 25
-    //   }
-    //   customRender(<Main geolocationApiKey='abc' />)
+      customRender(<Main geolocationApiKey='abc' />)
 
-    //   // await waitForElementToBeRemoved(() => screen.getByTestId('loading'))
-    // })
+      expect(screen.getByTestId('loading')).toBeInTheDocument()
+    })
 
-    // TODO: fix description later
-    it ('main page test', () => {
+    it('Loading component should not be in the document when the data is loaded', () => {
+      useGetUserLocationMockData.isLoading = false
+      useGetUserLocationMockData.isValidating = false
+      useGetCurrentWeatherMockData.isLoading = false
+      useGetCurrentWeatherMockData.isValidating = false
+
+      customRender(<Main geolocationApiKey='abc' />)
+
+      expect(screen.queryByTestId('loading')).not.toBeInTheDocument()
+    })
+
+    it ('The clothes icon and scale chart are in the document', () => {
       useGetUserLocationMockData.userLocation = {
         cityName: 'Tokyo',
         lat: 35.652832,
@@ -105,18 +95,11 @@ describe('Rendering', () => {
       const scale = celsiusToClothingGuidelineScale(25)
       const message = getClothingAdviceByClothingGuidelineScale(scale)
 
-
-      //  render(
-      //   <Provider store={store}>
-      //     <Main geolocationApiKey='abc' />
-      //   </Provider>
-      // )
       customRender(<Main geolocationApiKey='abc' />)
-      expect(screen.getByText(message)).toBeInTheDocument()
 
+      expect(screen.getByText(message)).toBeInTheDocument()
       expect(screen.getByTestId('tank-top-svg')).toBeInTheDocument();
-      // expect(screen.getByTestId('clothing-guideline-scale-chart')).toBeInTheDocument();
-      // expect(screen.getByText(/Stay prepared for temperature changes/)).toBeInTheDocument();
+      expect(screen.getByTestId('clothing-guideline-scale-chart')).toBeInTheDocument()
     })
   })
 })

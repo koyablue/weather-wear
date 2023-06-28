@@ -49,12 +49,12 @@ export const useColorTheme = () => {
     // system preference comes first
     // if dark, set dark. else set nothing
     // TODO: Remove. maybe not necessary
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-      if (event.matches) {
-        setColorTheme(colorThemeConfig.dark)
-        return
-      }
-    })
+    // window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+    //   if (event.matches) {
+    //     setColorTheme(colorThemeConfig.dark)
+    //     return
+    //   }
+    // })
 
     // if cookie isn't set, set light mode
     if (!currentColorThemeCookie) {
