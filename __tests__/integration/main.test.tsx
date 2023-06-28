@@ -3,12 +3,12 @@ import React, { ReactElement, ReactNode } from 'react'
 import { render, screen , RenderOptions} from '@testing-library/react'
 import '@testing-library/jest-dom'
 
-import Main from '../components/pages/main'
+import Main from '../../components/pages/main'
 
-import { celsiusToClothingGuidelineScale, getClothingAdviceByClothingGuidelineScale } from '../services/clothingGuidelineScale'
+import { celsiusToClothingGuidelineScale, getClothingAdviceByClothingGuidelineScale } from '../../services/clothingGuidelineScale'
 
 import { Provider } from 'react-redux'
-import { store } from '../stores/store'
+import { store } from '../../stores/store'
 
 jest.mock('../public/images/svgs/tank-top.svg', () => () => <svg data-testid="tank-top-svg" />)
 
