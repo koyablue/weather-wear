@@ -28,7 +28,8 @@ import { useAppDispatch, useAppSelector } from '../../../stores/hooks'
 import { selectCityData, updateCityData } from '../../../stores/slices/cityNameSearchInputSlice'
 
 const ContainerDiv = styled.div`
-  min-height: 100vh;
+  min-height: 100vh; // fallback
+  min-height: calc(var(--vh, 1vh) * 100);
   width: 100%;
   max-width: 1400px;
   padding: 0 16px;
@@ -180,6 +181,24 @@ const Main = ({ geolocationApiKey }: Props) => {
   // TODO: message: 15 °F - 25 °F (15 °C - 25 °C)
   // TODO: if fahrenheit country(see country code) use fahrenheit
   // TODO: message: Stay prepared for temperature changes (15 °C - 25 °C). Wear adjustable clothing.
+
+  useEffect(() => {
+    const setFillHeight = () => {
+      const vh = window.innerHeight * 0.01
+      document.documentElement.style.setProperty('--vh', `${vh}px`)
+    }
+
+    // Add event listener for window resize
+    window.addEventListener('resize', setFillHeight)
+
+    // Call the function initially to set the initial height
+    setFillHeight()
+
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', setFillHeight)
+    }
+  }, [])
 
   useEffect(() => {
     if (userLocation) {
