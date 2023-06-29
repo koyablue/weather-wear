@@ -108,7 +108,7 @@ const DarkModeToggleSwitch = () => {
 
   return (
     <SwitchWrapperLabel>
-      <input type='checkbox' id='switch1' checked={isDark} onChange={toggleDarkTheme} />
+      <input type='checkbox' id='switch1' data-testid='darkMode-checkbox' checked={isDark} onChange={toggleDarkTheme} />
       <label htmlFor='switch1'>
         {/* <span> */}
           <SunIcon/>

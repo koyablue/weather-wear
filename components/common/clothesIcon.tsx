@@ -24,7 +24,7 @@ const ClothesIcon = ({ scale, svgProps }: Props) => {
 
   switch (scale) {
     case 5:
-      icon = <TankTop {...svgProps} />
+      icon = <TankTop {...svgProps} data-testid='tank-top-svg' />
       break
     case 4:
       icon = <TShirt {...svgProps} />

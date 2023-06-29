@@ -47,7 +47,7 @@ const ClothingGuidelineScaleChart = ({ scale, itemCount = 5, colorTheme = 'light
   }
 
   return (
-    <ChartWrapperDiv>
+    <ChartWrapperDiv data-testid='clothing-guideline-scale-chart'>
       {items.map(item => item)}
     </ChartWrapperDiv>
   )
