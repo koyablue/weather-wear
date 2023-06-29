@@ -39,7 +39,9 @@ describe('useColorTheme', () => {
 
     const { result } = renderHook(() => useColorTheme())
 
-    result.current.initColorTheme()
+    act(() => {
+      result.current.initColorTheme()
+    })
 
     expect(setColorThemeCookie).toHaveBeenCalledWith(colorThemeConfig.light)
     expect(mockDispatch).toHaveBeenCalled();
@@ -51,8 +53,9 @@ describe('useColorTheme', () => {
     mockSelector.mockReturnValue(colorThemeConfig.light)
 
     const { result } = renderHook(() => useColorTheme())
-
-    result.current.initColorTheme()
+    act(() => {
+      result.current.initColorTheme()
+    })
 
     expect(setColorThemeCookie).toHaveBeenCalledWith(colorThemeConfig.dark)
     expect(updateColorTheme).toHaveBeenCalledWith(colorThemeConfig.dark)
