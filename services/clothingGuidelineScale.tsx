@@ -136,6 +136,6 @@ export const getColorByClothingGuidelineScale = (scale: ClothingGuidelineScale, 
     case 1:
       return colors.veryCold
     default:
-      colorThemes[colorTheme].colors.text
+      return colorThemes[colorTheme].colors.text
   }
 }
