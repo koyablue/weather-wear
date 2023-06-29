@@ -21,7 +21,7 @@ const ContainerDiv = styled.div`
   position: relative;
 `
 
-const Input = styled.input<{ showDropdown: boolean }>`
+const Input = styled.input<{ isOnlyTopCornersRounded: boolean }>`
   width: 300px;
   height: 30px;
   padding: 10px;
@@ -30,7 +30,7 @@ const Input = styled.input<{ showDropdown: boolean }>`
   font-size: 14px;
   border: none;
   color: #868686;
-  border-radius: ${props => (props.showDropdown ? '10px 10px 0 0' : '30px')};
+  border-radius: ${props => (props.isOnlyTopCornersRounded ? '10px 10px 0 0' : '30px')};
   :focus {
     outline: none;
   }
@@ -92,17 +92,18 @@ const SearchInput = ({ defaultCityName }: Props) => {
   const dispatch = useAppDispatch()
 
   // state for input value
-  const [cityName, setCityName] = useState(defaultCityName)
+  const [cityNameInputVal, setCityNameInputVal] = useState(defaultCityName)
   // state for geocoding API call(to get values for drop down options)
   const [cityNameToSearch, setCityNameToSearch] = useState('')
-  // state for dropdown options
-  const [cities, setCities] = useState<GeocodingApiResponseItem[]>([])
+
+  const { toggleState: showDropdown, setToggleState: setShowDropdown } = useToggle()
 
   // ref to control open/close dropdown when the outside of the dropdown is clicked
   const dropdownRef = useOutsideClick<HTMLDivElement>(() => { setShowDropdown(false) })
 
   const { hasTrueValue, castAllValuesBoolean } = useValidateBooleanArray()
 
+  // Get cities by input value
   const {
     geocodingResult,
     error: geocodingError,
@@ -119,74 +120,88 @@ const SearchInput = ({ defaultCityName }: Props) => {
     }
   )
 
-  const { toggleState: showDropdown, setToggleState: setShowDropdown } = useToggle(Boolean(geocodingResult))
-
   const isLoading = hasTrueValue([isGeocodingLoading, isGeocodingValidating])
 
   const isError = hasTrueValue(castAllValuesBoolean([geocodingError]))
 
+  /**
+   * Manage input value
+   * Close dropdown if it is open
+   *
+   * @param {React.ChangeEvent<HTMLInputElement>} e
+   */
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (showDropdown) setShowDropdown(false)
-    setCityName(e.target.value)
+    if (showDropdown) {
+      setShowDropdown(false)
+    }
+    setCityNameInputVal(e.target.value)
   }
 
+  /**
+   * Triggers search
+   *
+   * @param {React.FormEvent<HTMLFormElement>} e
+   */
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     // if the input value is empty
-    if (!cityName) {
-      return
-    }
+    if (!cityNameInputVal) return
 
-    const trimmedCityName = cityName.replace(/\s/g, "")
+    const trimmedCityName = cityNameInputVal.replace(/\s/g, "")
     setCityNameToSearch(trimmedCityName) // triggers data fetching
 
-    setShowDropdown(true)
+    if (geocodingResult?.length) setShowDropdown(true)
   }
 
+  /**
+   * Select one of the city in the dropdown
+   *
+   * @param {GeocodingApiResponseItem} city
+   */
   const handleOptionClick = (city: GeocodingApiResponseItem) => {
-    setCityName(city.name)
+    setCityNameInputVal(city.name)
     setShowDropdown(false)
     dispatch(updateCityData({name: city.name, lat: city.lat, lon: city.lon}))
   }
 
+  /**
+   * Returns string for key prop of dropdown item
+   *
+   * @param {GeocodingApiResponseItem} city
+   */
   const formatOptionKey = (city: GeocodingApiResponseItem) => (
     `${city.name}${city.country}${city.state || ''}${city.lat}${city.lon}`
   )
 
+  /**
+   * Returns string for display name of dropdown item
+   *
+   * @param {GeocodingApiResponseItem} city
+   */
   const formatOptionLabel = (city: GeocodingApiResponseItem) => (
     `${city.name}, ${city.country} ${city.state || ''}`
   )
 
   useEffect(() => {
-    if (isLoading) {
-      setShowDropdown(false)
-    }
-  }, [isLoading])
-
-  useEffect(() => {
-    if (geocodingResult) {
-      setCities(geocodingResult)
+    if (geocodingResult &&  geocodingResult.length !== 0 && !isLoading) {
       setShowDropdown(true)
     }
-  }, [geocodingResult])
+  }, [geocodingResult, isLoading])
 
   useEffect(() => {
-    setCityName(defaultCityName || cityNameToSearch)
+    setCityNameInputVal(defaultCityName || cityNameToSearch)
   }, [defaultCityName])
-
-  // TODO: Separate data fetching and view
-  // container: handleSearch, cityName, handleInputChange, showDropdown, isLoading, cities,
 
   return (
     <ContainerDiv ref={dropdownRef}>
       <form onSubmit={handleSearch}>
         <Input
-          type="text"
-          placeholder="Search"
-          value={cityName}
+          type='text'
+          placeholder='City name'
+          value={cityNameInputVal}
           onChange={handleInputChange}
-          showDropdown={showDropdown}
+          isOnlyTopCornersRounded={showDropdown && geocodingResult?.length && !isLoading}
         />
         <SearchIconContainerDiv>
           <SearchButton type='submit'>
@@ -194,9 +209,9 @@ const SearchInput = ({ defaultCityName }: Props) => {
           </SearchButton>
         </SearchIconContainerDiv>
       </form>
-      {showDropdown && cities &&(
+      {showDropdown && geocodingResult?.length && !isLoading &&(
         <DropdownUl data-testid='search-input-city-dropdown'>
-          {cities.map((city, idx) => (
+          {geocodingResult.map((city, idx) => (
             <OptionLi
               key={formatOptionKey(city)}
               onClick={() => handleOptionClick(city)}
