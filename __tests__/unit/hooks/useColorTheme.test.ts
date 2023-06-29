@@ -39,11 +39,7 @@ describe('useColorTheme', () => {
 
     const { result } = renderHook(() => useColorTheme())
 
-    // comment out act() to prevent "act(...) is not supported in production builds of React" error in Vercel
-    // The test passes without act() so I think it's ok for now
-    // act(() => {
-      result.current.initColorTheme()
-    // })
+    result.current.initColorTheme()
 
     expect(setColorThemeCookie).toHaveBeenCalledWith(colorThemeConfig.light)
     expect(mockDispatch).toHaveBeenCalled();
@@ -55,11 +51,8 @@ describe('useColorTheme', () => {
     mockSelector.mockReturnValue(colorThemeConfig.light)
 
     const { result } = renderHook(() => useColorTheme())
-    // comment out act() to prevent "act(...) is not supported in production builds of React" error in Vercel
-    // The test passes without act() so I think it's ok for now
-    // act(() => {
-      result.current.initColorTheme()
-    // })
+
+    result.current.initColorTheme()
 
     expect(setColorThemeCookie).toHaveBeenCalledWith(colorThemeConfig.dark)
     expect(updateColorTheme).toHaveBeenCalledWith(colorThemeConfig.dark)
