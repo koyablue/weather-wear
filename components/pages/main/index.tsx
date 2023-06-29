@@ -139,7 +139,7 @@ const Main = ({ geolocationApiKey }: Props) => {
 
   // get current weather data based on the coordinate
   const {
-    currentWeather,
+    currentTemperature,
     error: currentWeatherError,
     isLoading: isCurrentWeatherLoading,
     isValidating: isCurrentWeatherValidating,
@@ -171,7 +171,7 @@ const Main = ({ geolocationApiKey }: Props) => {
   // TODO: message is like this: "Big temperature swing today. Dress in adjustable clothing."
   // TODO: or like this: "Stay prepared for temperature changes. Wear adjustable clothing." <- better?
   const currentColorTheme = getCurrentColorThemeState()
-  const scale = celsiusToClothingGuidelineScale(currentWeather?.main?.temp)
+  const scale = celsiusToClothingGuidelineScale(currentTemperature?.temp)
   const color = getColorByClothingGuidelineScale(scale, currentColorTheme)
   const advise = getClothingAdviceByClothingGuidelineScale(scale)
 
@@ -199,12 +199,12 @@ const Main = ({ geolocationApiKey }: Props) => {
             defaultCityName={cityData.name || userLocationCityName}
           />
           <MainContentsWrapperDiv>
-            {isLoading && !isError && <SyncLoader color={color} />}
+            {isLoading && !isError && <SyncLoader color={color} data-testid='loading' />}
             {
               !isLoading && !isError && (
                 <>
                   <ClothesIcon scale={scale} svgProps={{ fill: color, height: 150, width: 150 }} />
-                  <ClothingGuidelineScaleChart scale={scale} colorTheme={currentColorTheme} />
+                  <ClothingGuidelineScaleChart scale={scale} colorTheme={currentColorTheme} data-testid='clothing-guideline-scale-chart' />
                   <SubTextAreaDiv>
                     <SubTextP>{advise}</SubTextP>
                   </SubTextAreaDiv>

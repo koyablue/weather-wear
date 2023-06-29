@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Dispatch, SetStateAction } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { FiSearch } from 'react-icons/fi'
 
@@ -11,7 +11,6 @@ import { useGeocoding } from '../../hooks/data/useGeocoding'
 import { useValidateBooleanArray } from '../../hooks/useValidateBooleanArray'
 
 // types
-import { Coordinate } from '../pages/main'
 import { GeocodingApiResponseItem } from '../../types/geocoding'
 
 // redux
@@ -123,6 +122,7 @@ const SearchInput = ({ defaultCityName }: Props) => {
   const { toggleState: showDropdown, setToggleState: setShowDropdown } = useToggle(Boolean(geocodingResult))
 
   const isLoading = hasTrueValue([isGeocodingLoading, isGeocodingValidating])
+
   const isError = hasTrueValue(castAllValuesBoolean([geocodingError]))
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -139,7 +139,8 @@ const SearchInput = ({ defaultCityName }: Props) => {
     }
 
     const trimmedCityName = cityName.replace(/\s/g, "")
-    setCityNameToSearch(trimmedCityName)
+    setCityNameToSearch(trimmedCityName) // triggers data fetching
+
     setShowDropdown(true)
   }
 
@@ -156,6 +157,12 @@ const SearchInput = ({ defaultCityName }: Props) => {
   const formatOptionLabel = (city: GeocodingApiResponseItem) => (
     `${city.name}, ${city.country} ${city.state || ''}`
   )
+
+  useEffect(() => {
+    if (isLoading) {
+      setShowDropdown(false)
+    }
+  }, [isLoading])
 
   useEffect(() => {
     if (geocodingResult) {
@@ -183,14 +190,18 @@ const SearchInput = ({ defaultCityName }: Props) => {
         />
         <SearchIconContainerDiv>
           <SearchButton type='submit'>
-            {isLoading ? <BeatLoader size={5} /> : <FiSearch />}
+            {isLoading ? <BeatLoader size={5} data-testid='beat-loader' /> : <FiSearch data-testid='search-input-search-icon' />}
           </SearchButton>
         </SearchIconContainerDiv>
       </form>
       {showDropdown && cities &&(
-        <DropdownUl>
-          {cities.map(city => (
-            <OptionLi key={formatOptionKey(city)} onClick={() => handleOptionClick(city)}>
+        <DropdownUl data-testid='search-input-city-dropdown'>
+          {cities.map((city, idx) => (
+            <OptionLi
+              key={formatOptionKey(city)}
+              onClick={() => handleOptionClick(city)}
+              data-testid={`search-input-city-dropdown-item-${idx}`}
+            >
               {formatOptionLabel(city)}
             </OptionLi>
           ))}

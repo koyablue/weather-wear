@@ -7,9 +7,10 @@ import { Unit } from '../../types/weatherApi'
  *
  * @param {number} lat
  * @param {number} lon
- * @param {Unit} unit
+ * @param {Unit} [unit]
+ * @param {SWRConfiguration<any, any>} [options]
  * @return {*} {
-    currentWeather: CurrentWeatherApiResponse;
+    currentTemp: CurrentTemperature;
     error: any;
     isLoading: boolean;
     isValidating: boolean;
@@ -26,7 +27,7 @@ export const useGetCurrentWeather = (lat: number, lon: number, unit?: Unit, opti
   )
 
   return {
-    currentWeather: data,
+    currentTemperature: data,
     error,
     isLoading,
     isValidating,
