@@ -57,49 +57,47 @@ const customRender = (
   options?: Omit<RenderOptions, 'wrapper'>,
 ) => render(ui, {wrapper: AllTheProviders, ...options})
 
-describe('Rendering', () => {
-  describe('Main page', () => {
-    it('Loading component should be in the document when the data is loading', () => {
-      useGetUserLocationMockData.isLoading = false
-      useGetUserLocationMockData.isValidating = false
-      useGetCurrentWeatherMockData.isLoading = true
-      useGetCurrentWeatherMockData.isValidating = false
+describe('Main page', () => {
+  it('Loading component should be in the document when the data is loading', () => {
+    useGetUserLocationMockData.isLoading = false
+    useGetUserLocationMockData.isValidating = false
+    useGetCurrentWeatherMockData.isLoading = true
+    useGetCurrentWeatherMockData.isValidating = false
 
-      customRender(<Main geolocationApiKey='abc' />)
+    customRender(<Main geolocationApiKey='abc' />)
 
-      expect(screen.getByTestId('loading')).toBeInTheDocument()
-    })
+    expect(screen.getByTestId('loading')).toBeInTheDocument()
+  })
 
-    it('Loading component should not be in the document when the data is loaded', () => {
-      useGetUserLocationMockData.isLoading = false
-      useGetUserLocationMockData.isValidating = false
-      useGetCurrentWeatherMockData.isLoading = false
-      useGetCurrentWeatherMockData.isValidating = false
+  it('Loading component should not be in the document when the data is loaded', () => {
+    useGetUserLocationMockData.isLoading = false
+    useGetUserLocationMockData.isValidating = false
+    useGetCurrentWeatherMockData.isLoading = false
+    useGetCurrentWeatherMockData.isValidating = false
 
-      customRender(<Main geolocationApiKey='abc' />)
+    customRender(<Main geolocationApiKey='abc' />)
 
-      expect(screen.queryByTestId('loading')).not.toBeInTheDocument()
-    })
+    expect(screen.queryByTestId('loading')).not.toBeInTheDocument()
+  })
 
-    it ('The clothes icon and scale chart are in the document', () => {
-      useGetUserLocationMockData.userLocation = {
-        cityName: 'Tokyo',
-        lat: 35.652832,
-        lon: 139.839478,
-      }
+  it ('The clothes icon and scale chart are in the document', () => {
+    useGetUserLocationMockData.userLocation = {
+      cityName: 'Tokyo',
+      lat: 35.652832,
+      lon: 139.839478,
+    }
 
-      useGetCurrentWeatherMockData.currentTemperature = {
-        temp: 25
-      }
+    useGetCurrentWeatherMockData.currentTemperature = {
+      temp: 25
+    }
 
-      const scale = celsiusToClothingGuidelineScale(25)
-      const message = getClothingAdviceByClothingGuidelineScale(scale)
+    const scale = celsiusToClothingGuidelineScale(25)
+    const message = getClothingAdviceByClothingGuidelineScale(scale)
 
-      customRender(<Main geolocationApiKey='abc' />)
+    customRender(<Main geolocationApiKey='abc' />)
 
-      expect(screen.getByText(message)).toBeInTheDocument()
-      expect(screen.getByTestId('tank-top-svg')).toBeInTheDocument();
-      expect(screen.getByTestId('clothing-guideline-scale-chart')).toBeInTheDocument()
-    })
+    expect(screen.getByText(message)).toBeInTheDocument()
+    expect(screen.getByTestId('tank-top-svg')).toBeInTheDocument();
+    expect(screen.getByTestId('clothing-guideline-scale-chart')).toBeInTheDocument()
   })
 })

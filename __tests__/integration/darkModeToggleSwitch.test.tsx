@@ -1,19 +1,16 @@
 import React, { ReactElement, ReactNode } from 'react'
 
 import { render, screen , RenderOptions, fireEvent} from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 
 import DarkModeToggleSwitch from '../../components/layouts/header/darkModeToggleSwitch'
 
-import { celsiusToClothingGuidelineScale, getClothingAdviceByClothingGuidelineScale } from '../../services/clothingGuidelineScale'
-
 import { Provider } from 'react-redux'
 import { store } from '../../stores/store'
-import { useColorTheme } from '../../hooks/useColorTheme'
-import { ColorTheme } from '../../types/colorTheme'
-import { getByTestId } from '@storybook/testing-library'
 
+import { ColorTheme } from '../../types/colorTheme'
+
+// mock color theme state
 let currentColorTheme: ColorTheme = 'light'
 
 const mockUseColorThemeReturnValue = {
@@ -44,7 +41,7 @@ const customRender = (
 ) => render(ui, {wrapper: AllTheProviders, ...options})
 
 describe('DarkModeToggleSwitch', () => {
-  it('DarkModeToggleSwitch can toggle color theme', () => {
+  it('can toggle color theme', () => {
     customRender(<DarkModeToggleSwitch />)
 
     const toggleSwitch = screen.getByTestId('darkMode-checkbox')
