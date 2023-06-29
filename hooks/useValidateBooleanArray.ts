@@ -3,7 +3,7 @@ export const useValidateBooleanArray = () => {
     list.map(v => Boolean(v))
   )
 
-  const areAllValuesTrue = (list: boolean[]): boolean => {
+  const allValuesTrue = (list: boolean[]): boolean => {
     if (!list.length) return false
 
     for (let i = 0; i < list.length; i++) {
@@ -25,7 +25,7 @@ export const useValidateBooleanArray = () => {
 
   return {
     castAllValuesBoolean,
-    areAllValuesTrue,
+    allValuesTrue,
     hasTrueValue
   } as const
 }
