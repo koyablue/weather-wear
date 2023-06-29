@@ -1,6 +1,21 @@
+// import { clothingGuidelineScaleColors } from '../styles/clothingGuidelineScale'
 import { colorThemes } from '../constants/colorTheme'
 import { ClothingGuidelineScale } from '../types/clothingGuidelineScale'
 import { ColorTheme } from '../types/colorTheme'
+
+// colors
+import {
+  clrVeryHotLight,
+  clrVeryHotDark,
+  clrHotLight,
+  clrHotDark,
+  clrWarmLight,
+  clrWarmDark,
+  clrColdLight,
+  clrColdDark,
+  clrVeryColdLight,
+  clrVeryColdDark,
+} from '../styles/clothingGuidelineScale'
 
 /**
  * Convert celsius degree to clothing guideline scale
@@ -78,6 +93,27 @@ export const getClothingAdviceByClothingGuidelineScale = (scale: ClothingGuideli
   }
 }
 
+const returnColor = (colors: {lightThemeColor: string; darkThemeColor: string}) => {
+  return (colorTheme: ColorTheme) => {
+    switch (colorTheme) {
+      case 'dark':
+        return colors.darkThemeColor
+      default:
+        return colors.lightThemeColor
+    }
+  }
+}
+
+const clothingGuidelineScaleColors = (colorTheme: ColorTheme) => {
+  return {
+    veryHot: returnColor({lightThemeColor: clrVeryHotLight, darkThemeColor: clrVeryHotDark})(colorTheme),
+    hot: returnColor({lightThemeColor: clrHotLight, darkThemeColor: clrHotDark})(colorTheme),
+    warm: returnColor({lightThemeColor: clrWarmLight, darkThemeColor: clrWarmDark})(colorTheme),
+    cold: returnColor({lightThemeColor: clrColdLight, darkThemeColor: clrColdDark})(colorTheme),
+    veryCold: returnColor({lightThemeColor: clrVeryColdLight, darkThemeColor: clrVeryColdDark})(colorTheme),
+  }
+}
+
 /**
  * Returns color code based on the scale and color theme
  *
@@ -86,36 +122,20 @@ export const getClothingAdviceByClothingGuidelineScale = (scale: ClothingGuideli
  * @return {*} string
  */
 export const getColorByClothingGuidelineScale = (scale: ClothingGuidelineScale, colorTheme: ColorTheme): string => {
-  if (colorTheme === 'dark') {
-    switch (scale) {
-      case 5:
-        return '#ff8982'
-      case 4:
-        return '#ff8962'
-      case 3:
-        return '#00ac7c'
-      case 2:
-        return '#36b2c3'
-      case 1:
-        return '#9e9dff'
-      default:
-        colorThemes[colorTheme].colors.text
-    }
-  }
+  const colors = clothingGuidelineScaleColors(colorTheme)
 
-  // light theme　as the default
   switch (scale) {
     case 5:
-      return '#ff8982'
+      return colors.veryHot
     case 4:
-      return '#ff8962'
+      return colors.hot
     case 3:
-      return '#7fd1ae'
+      return colors.warm
     case 2:
-      return '#a1dedb'
+      return colors.cold
     case 1:
-      return '#9e9dff'
+      return colors.veryCold
     default:
-      colorThemes[colorTheme].colors.text
+      return colorThemes[colorTheme].colors.text
   }
 }
