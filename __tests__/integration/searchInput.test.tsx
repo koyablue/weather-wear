@@ -1,12 +1,9 @@
-import React, { ReactElement, ReactNode } from 'react'
+import React, { ReactElement } from 'react'
 
-import { render, screen , RenderOptions, fireEvent} from '@testing-library/react'
+import { render, screen, fireEvent} from '@testing-library/react'
 import '@testing-library/jest-dom'
 
-import Main from '../../components/pages/main'
 import SearchInput from '../../components/common/searchInput'
-
-import { celsiusToClothingGuidelineScale, getClothingAdviceByClothingGuidelineScale } from '../../services/clothingGuidelineScale'
 
 import { Provider } from 'react-redux'
 import { store } from '../../stores/store'

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Dispatch, SetStateAction } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { FiSearch } from 'react-icons/fi'
 
@@ -122,6 +122,7 @@ const SearchInput = ({ defaultCityName }: Props) => {
   const { toggleState: showDropdown, setToggleState: setShowDropdown } = useToggle(Boolean(geocodingResult))
 
   const isLoading = hasTrueValue([isGeocodingLoading, isGeocodingValidating])
+
   const isError = hasTrueValue(castAllValuesBoolean([geocodingError]))
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -138,7 +139,8 @@ const SearchInput = ({ defaultCityName }: Props) => {
     }
 
     const trimmedCityName = cityName.replace(/\s/g, "")
-    setCityNameToSearch(trimmedCityName)
+    setCityNameToSearch(trimmedCityName) // triggers data fetching
+
     setShowDropdown(true)
   }
 
@@ -155,6 +157,12 @@ const SearchInput = ({ defaultCityName }: Props) => {
   const formatOptionLabel = (city: GeocodingApiResponseItem) => (
     `${city.name}, ${city.country} ${city.state || ''}`
   )
+
+  useEffect(() => {
+    if (isLoading) {
+      setShowDropdown(false)
+    }
+  }, [isLoading])
 
   useEffect(() => {
     if (geocodingResult) {
