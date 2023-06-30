@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios'
 
 /**
- * axiosで通信する際のベースとなるaxios instance
+ * axios instance
  *
  * @param {string} token
  * @return {*}  {AxiosInstance}

@@ -151,6 +151,10 @@ const Main = ({ geolocationApiKey }: Props) => {
 
   const [userLocationCityName, setUserLocationCityName] = useState('')
 
+  // TODO: Google Geolocation API -> get lat, lon
+  // TODO: Google Geocoding API (reverse geocoding) to get place name
+
+
   // get current location of a user
   const {
     userLocation,
