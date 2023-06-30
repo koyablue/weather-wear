@@ -17,13 +17,14 @@ import SyncLoader from '../../common/loaders/syncLoader'
 
 // services
 import { celsiusToClothingGuidelineScale, getClothingAdviceByClothingGuidelineScale, getColorByClothingGuidelineScale } from '../../../services/clothingGuidelineScale'
+import { getUserLocationCoordinate } from '../../../services/queries/client/getUserLocationCoordinate'
 
 // hooks
 import { useColorTheme } from '../../../hooks/useColorTheme'
 import { useValidateBooleanArray } from '../../../hooks/useValidateBooleanArray'
 import { useCalculateHeight } from '../../../hooks/useCalculateHeight'
 import { useGetCurrentWeather } from '../../../hooks/data/useGetCurrentWeather'
-import { useGetUserLocation } from '../../../hooks/data/useGetUserLocation'
+import { useReverseGeocoding } from '../../../hooks/data/useReverseGeocoding'
 
 // redux
 import { useAppDispatch, useAppSelector } from '../../../stores/hooks'
@@ -135,6 +136,7 @@ export type Coordinate = {
 
 type Props = {
   geolocationApiKey: string
+  reverseGeocodingApiKey: string
 }
 
 /**
@@ -143,25 +145,33 @@ type Props = {
  *
  * @return {*} JSX.Element
  */
-const Main = ({ geolocationApiKey }: Props) => {
+const Main = ({ geolocationApiKey, reverseGeocodingApiKey }: Props) => {
   useCalculateHeight('--vh')
 
   const dispatch = useAppDispatch()
   const cityData = useAppSelector(selectCityData)
+
+  // coordinate of current user location
+  const [coord, setCoord] = useState<{lat: number; lon: number}>({lat: 0, lon: 0})
+  const [coordError, setCoordError] = useState(null)
 
   const [userLocationCityName, setUserLocationCityName] = useState('')
 
   // TODO: Google Geolocation API -> get lat, lon
   // TODO: Google Geocoding API (reverse geocoding) to get place name
 
-
-  // get current location of a user
+  // reverse geocoding to get the name of user location
   const {
     userLocation,
-    error: userLocationError,
-    isLoading: isUserLocationLoading,
-    isValidating: isUserLocationValidating,
-  } = useGetUserLocation(geolocationApiKey, { revalidateOnFocus: false })
+    error: reverseGeocodingError,
+    isLoading: isReverseGeocodingLoading,
+    isValidating: isReverseGeocodingValidating
+  } = useReverseGeocoding(
+    reverseGeocodingApiKey,
+    coord.lat,
+    coord.lon,
+    { revalidateOnFocus: false }
+  )
 
   // get current weather data based on the coordinate
   const {
@@ -181,14 +191,14 @@ const Main = ({ geolocationApiKey }: Props) => {
   const { castAllValuesBoolean, hasTrueValue } = useValidateBooleanArray()
 
   const isLoading = hasTrueValue([
-    isUserLocationLoading,
-    isUserLocationValidating,
+    isReverseGeocodingLoading,
+    isReverseGeocodingValidating,
     isCurrentWeatherLoading,
     isCurrentWeatherValidating,
   ])
 
   const isError = hasTrueValue(castAllValuesBoolean([
-    userLocationError,
+    reverseGeocodingError,
     currentWeatherError,
   ]))
 
@@ -202,10 +212,26 @@ const Main = ({ geolocationApiKey }: Props) => {
 
   // TODO: message: Stay prepared for temperature changes (15 °C - 25 °C). Wear adjustable clothing.
 
+  // TODO: Google Geolocation API -> get lat, lon
+  useEffect(() => {
+    const getCoord = async () => {
+      try {
+        const res = await getUserLocationCoordinate(geolocationApiKey)
+        setCoord({
+          lat: res.location.lat,
+          lon: res.location.lng,
+        })
+      } catch (error) {
+        setCoordError(error)
+      }
+    }
+    getCoord()
+  }, [])
+
   useEffect(() => {
     if (userLocation) {
       setUserLocationCityName(userLocation.cityName)
-      dispatch(updateCityData({name: userLocation.cityName, lat: userLocation.lat, lon: userLocation.lon}))
+      dispatch(updateCityData({name: userLocation.cityName, lat: coord.lat, lon: coord.lon}))
     }
   }, [userLocation])
 
