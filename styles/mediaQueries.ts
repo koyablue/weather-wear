@@ -1,0 +1,1 @@
+export const mediaLandscape = 'screen and (orientation: landscape)'

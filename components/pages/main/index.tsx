@@ -6,6 +6,7 @@ import { BiErrorCircle } from 'react-icons/bi'
 
 // styles
 import { breakPoint } from '../../../styles/breakPoint'
+import { mediaLandscape } from '../../../styles/mediaQueries'
 
 // components
 import Header from '../../layouts/header'
@@ -20,6 +21,7 @@ import { celsiusToClothingGuidelineScale, getClothingAdviceByClothingGuidelineSc
 // hooks
 import { useColorTheme } from '../../../hooks/useColorTheme'
 import { useValidateBooleanArray } from '../../../hooks/useValidateBooleanArray'
+import { useCalculateHeight } from '../../../hooks/useCalculateHeight'
 import { useGetCurrentWeather } from '../../../hooks/data/useGetCurrentWeather'
 import { useGetUserLocation } from '../../../hooks/data/useGetUserLocation'
 
@@ -28,7 +30,8 @@ import { useAppDispatch, useAppSelector } from '../../../stores/hooks'
 import { selectCityData, updateCityData } from '../../../stores/slices/cityNameSearchInputSlice'
 
 const ContainerDiv = styled.div`
-  min-height: 100vh;
+  min-height: 100vh; // fallback
+  min-height: calc(var(--vh, 1vh) * 100);
   width: 100%;
   max-width: 1400px;
   padding: 0 16px;
@@ -52,11 +55,13 @@ const ContentsMain = styled.main`
 
   @media ${breakPoint.mobileS} {
     height: calc(100vh - 60px);
+    height: calc(calc(var(--vh, 1vh) * 100) - 60px);
     padding: 16px 0;
   }
 
   @media ${breakPoint.mobileM} {
     height: calc(100vh - 80px);
+    height: calc(calc(var(--vh, 1vh) * 100) - 80px);
     padding: 40px 0;
   }
 `
@@ -71,16 +76,27 @@ const MainContentsContainerDiv = styled.div`
 
   // TODO: Is min-height necessary?
   @media ${breakPoint.mobileS} {
-    min-height: calc(100vh - 60px);
+    /* min-height: calc(100vh - 60px); // fallback
+    min-height: calc(calc(var(--vh, 1vh) * 100) - 60px); */
+
+    height: calc(100vh - 60px); // fallback
+    height: calc(calc(var(--vh, 1vh) * 100) - 60px);
   }
 
   @media ${breakPoint.mobileM} {
-    min-height: calc(100vh - 80px);
+    /* min-height: calc(100vh - 80px); // fallback
+    min-height: calc(calc(var(--vh, 1vh) * 100) - 80px); */
+
+    height: calc(100vh - 80px); // fallback
+    height: calc(calc(var(--vh, 1vh) * 100) - 80px);
     padding: 40px 0;
+  }
+
+  @media ${mediaLandscape} {
+   gap: 20px;
   }
 `
 
-// TODO: need to fix. this is just first aid
 const MainContentsWrapperDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -88,8 +104,11 @@ const MainContentsWrapperDiv = styled.div`
   justify-content: center;
   gap: 40px;
   width: 100%;
-  height: 300px;
-  width: 300px;
+  height: 100%;
+
+  @media ${mediaLandscape} {
+    gap: 15px;
+  }
 `
 
 const SubTextAreaDiv = styled.div`
@@ -100,7 +119,8 @@ const SubTextAreaDiv = styled.div`
 const SubTextP = styled.p`
   font-weight: 500;
   letter-spacing: 0.5px;
-  white-space: nowrap;
+  /* white-space: nowrap; */
+  word-break: keep-all;
 `
 
 const ErrorIcon = styled(BiErrorCircle)<{color: string}>`
@@ -124,6 +144,8 @@ type Props = {
  * @return {*} JSX.Element
  */
 const Main = ({ geolocationApiKey }: Props) => {
+  useCalculateHeight('--vh')
+
   const dispatch = useAppDispatch()
   const cityData = useAppSelector(selectCityData)
 
@@ -166,8 +188,6 @@ const Main = ({ geolocationApiKey }: Props) => {
     currentWeatherError,
   ]))
 
-  // TODO: if (max - min) >= 5 -> two options or notes()
-
   // TODO: message is like this: "Big temperature swing today. Dress in adjustable clothing."
   // TODO: or like this: "Stay prepared for temperature changes. Wear adjustable clothing." <- better?
   const currentColorTheme = getCurrentColorThemeState()
@@ -175,10 +195,7 @@ const Main = ({ geolocationApiKey }: Props) => {
   const color = getColorByClothingGuidelineScale(scale, currentColorTheme)
   const advise = getClothingAdviceByClothingGuidelineScale(scale)
 
-  // TODO: 2. celsius<->fahrenheit
 
-  // TODO: message: 15 °F - 25 °F (15 °C - 25 °C)
-  // TODO: if fahrenheit country(see country code) use fahrenheit
   // TODO: message: Stay prepared for temperature changes (15 °C - 25 °C). Wear adjustable clothing.
 
   useEffect(() => {
