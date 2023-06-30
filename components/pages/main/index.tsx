@@ -74,13 +74,13 @@ const MainContentsContainerDiv = styled.div`
 
   // TODO: Is min-height necessary?
   @media ${breakPoint.mobileS} {
-    min-height: calc(100vh - 60px); // fallback
-    min-height: calc(calc(var(--vh, 1vh) * 100) - 60px);
+    /* min-height: calc(100vh - 60px); // fallback
+    min-height: calc(calc(var(--vh, 1vh) * 100) - 60px); */
   }
 
   @media ${breakPoint.mobileM} {
-    min-height: calc(100vh - 80px); // fallback
-    min-height: calc(calc(var(--vh, 1vh) * 100) - 80px);
+    /* min-height: calc(100vh - 80px); // fallback
+    min-height: calc(calc(var(--vh, 1vh) * 100) - 80px); */
     padding: 40px 0;
   }
 `
