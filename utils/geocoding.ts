@@ -1,4 +1,4 @@
-import { GEOAPIFY_API_KEY, GEOCODING_API_ENDPOINT, OPEN_WEATHER_API_KEY, REVERSE_GEOCODING_API_BASE_ENDPOINT } from '../constants/api'
+import { GEOCODING_API_ENDPOINT, OPEN_WEATHER_API_KEY, REVERSE_GEOCODING_API_BASE_ENDPOINT } from '../constants/api'
 
 // types
 import { GeocodingApiQuery } from '../types/geocoding'
@@ -23,11 +23,11 @@ export const getGeocodingApiEndpoint = (
  * https://www.geoapify.com/
  * https://api.geoapify.com/v1/geocode/reverse?lat=51.21709661403662&lon=6.7782883744862374&apiKey=yourApiKey
  *
+ * @param {string} apiKey
  * @param {number} lat
  * @param {number} lon
- * @param {string} [lang='en-us']
  * @return {*} string
  */
-export const getReverseGeocodingApiEndpoint = (lat: number, lon: number) => {
-  return `${REVERSE_GEOCODING_API_BASE_ENDPOINT}?lat=${lat}&lon=${lon}&apiKey=${GEOAPIFY_API_KEY}`
+export const getReverseGeocodingApiEndpoint = (apiKey: string, lat: number, lon: number) => {
+  return `${REVERSE_GEOCODING_API_BASE_ENDPOINT}?lat=${lat}&lon=${lon}&apiKey=${apiKey}`
 }
