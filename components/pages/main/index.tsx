@@ -6,6 +6,7 @@ import { BiErrorCircle } from 'react-icons/bi'
 
 // styles
 import { breakPoint } from '../../../styles/breakPoint'
+import { mediaLandscape } from '../../../styles/mediaQueries'
 
 // components
 import Header from '../../layouts/header'
@@ -90,6 +91,10 @@ const MainContentsContainerDiv = styled.div`
     height: calc(calc(var(--vh, 1vh) * 100) - 80px);
     padding: 40px 0;
   }
+
+  @media ${mediaLandscape} {
+   gap: 20px;
+  }
 `
 
 const MainContentsWrapperDiv = styled.div`
@@ -100,6 +105,10 @@ const MainContentsWrapperDiv = styled.div`
   gap: 40px;
   width: 100%;
   height: 100%;
+
+  @media ${mediaLandscape} {
+    gap: 15px;
+  }
 `
 
 const SubTextAreaDiv = styled.div`
