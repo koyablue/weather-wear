@@ -76,16 +76,21 @@ const MainContentsContainerDiv = styled.div`
   @media ${breakPoint.mobileS} {
     /* min-height: calc(100vh - 60px); // fallback
     min-height: calc(calc(var(--vh, 1vh) * 100) - 60px); */
+
+    height: calc(100vh - 60px); // fallback
+    height: calc(calc(var(--vh, 1vh) * 100) - 60px);
   }
 
   @media ${breakPoint.mobileM} {
     /* min-height: calc(100vh - 80px); // fallback
     min-height: calc(calc(var(--vh, 1vh) * 100) - 80px); */
+
+    height: calc(100vh - 80px); // fallback
+    height: calc(calc(var(--vh, 1vh) * 100) - 80px);
     padding: 40px 0;
   }
 `
 
-// TODO: need to fix. this is just first aid
 const MainContentsWrapperDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -93,8 +98,7 @@ const MainContentsWrapperDiv = styled.div`
   justify-content: center;
   gap: 40px;
   width: 100%;
-  height: 300px;
-  width: 300px;
+  height: 100%;
 `
 
 const SubTextAreaDiv = styled.div`
@@ -105,7 +109,8 @@ const SubTextAreaDiv = styled.div`
 const SubTextP = styled.p`
   font-weight: 500;
   letter-spacing: 0.5px;
-  white-space: nowrap;
+  /* white-space: nowrap; */
+  word-break: keep-all;
 `
 
 const ErrorIcon = styled(BiErrorCircle)<{color: string}>`
@@ -171,8 +176,6 @@ const Main = ({ geolocationApiKey }: Props) => {
     currentWeatherError,
   ]))
 
-  // TODO: if (max - min) >= 5 -> two options or notes()
-
   // TODO: message is like this: "Big temperature swing today. Dress in adjustable clothing."
   // TODO: or like this: "Stay prepared for temperature changes. Wear adjustable clothing." <- better?
   const currentColorTheme = getCurrentColorThemeState()
@@ -180,27 +183,37 @@ const Main = ({ geolocationApiKey }: Props) => {
   const color = getColorByClothingGuidelineScale(scale, currentColorTheme)
   const advise = getClothingAdviceByClothingGuidelineScale(scale)
 
-  // TODO: 2. celsius<->fahrenheit
 
-  // TODO: message: 15 °F - 25 °F (15 °C - 25 °C)
-  // TODO: if fahrenheit country(see country code) use fahrenheit
   // TODO: message: Stay prepared for temperature changes (15 °C - 25 °C). Wear adjustable clothing.
 
+  // useEffect to calculate height
+  // reference: https://zenn.dev/tak_dcxi/articles/2ac77656aa94c2cd40bf
   useEffect(() => {
+    /**
+     * Assign height to CSS variable --vh
+     *
+     */
     const setFillHeight = () => {
       const vh = window.innerHeight * 0.01
       document.documentElement.style.setProperty('--vh', `${vh}px`)
     }
 
-    // Add event listener for window resize
-    window.addEventListener('resize', setFillHeight)
+    let vw = window.innerWidth;
 
-    // Call the function initially to set the initial height
+    const handleResize = () => {
+      if (vw === window.innerWidth) return
+
+      vw = window.innerWidth
+      setFillHeight()
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    // init
     setFillHeight()
 
-    // Clean up the event listener on component unmount
     return () => {
-      window.removeEventListener('resize', setFillHeight)
+      window.removeEventListener('resize', handleResize)
     }
   }, [])
 
