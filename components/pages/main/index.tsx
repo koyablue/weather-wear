@@ -20,6 +20,7 @@ import { celsiusToClothingGuidelineScale, getClothingAdviceByClothingGuidelineSc
 // hooks
 import { useColorTheme } from '../../../hooks/useColorTheme'
 import { useValidateBooleanArray } from '../../../hooks/useValidateBooleanArray'
+import { useCalculateHeight } from '../../../hooks/useCalculateHeight'
 import { useGetCurrentWeather } from '../../../hooks/data/useGetCurrentWeather'
 import { useGetUserLocation } from '../../../hooks/data/useGetUserLocation'
 
@@ -134,6 +135,8 @@ type Props = {
  * @return {*} JSX.Element
  */
 const Main = ({ geolocationApiKey }: Props) => {
+  useCalculateHeight('--vh')
+
   const dispatch = useAppDispatch()
   const cityData = useAppSelector(selectCityData)
 
@@ -185,37 +188,6 @@ const Main = ({ geolocationApiKey }: Props) => {
 
 
   // TODO: message: Stay prepared for temperature changes (15 °C - 25 °C). Wear adjustable clothing.
-
-  // useEffect to calculate height
-  // reference: https://zenn.dev/tak_dcxi/articles/2ac77656aa94c2cd40bf
-  useEffect(() => {
-    /**
-     * Assign height to CSS variable --vh
-     *
-     */
-    const setFillHeight = () => {
-      const vh = window.innerHeight * 0.01
-      document.documentElement.style.setProperty('--vh', `${vh}px`)
-    }
-
-    let vw = window.innerWidth;
-
-    const handleResize = () => {
-      if (vw === window.innerWidth) return
-
-      vw = window.innerWidth
-      setFillHeight()
-    }
-
-    window.addEventListener('resize', handleResize)
-
-    // init
-    setFillHeight()
-
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [])
 
   useEffect(() => {
     if (userLocation) {
