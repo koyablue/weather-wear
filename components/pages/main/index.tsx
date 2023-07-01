@@ -29,6 +29,7 @@ import { useReverseGeocoding } from '../../../hooks/data/useReverseGeocoding'
 // redux
 import { useAppDispatch, useAppSelector } from '../../../stores/hooks'
 import { selectCityData, updateCityData } from '../../../stores/slices/cityNameSearchInputSlice'
+import { useGeolocation } from '../../../hooks/data/useGeolocation'
 
 const ContainerDiv = styled.div`
   min-height: 100vh; // fallback
@@ -151,14 +152,11 @@ const Main = ({ geolocationApiKey, reverseGeocodingApiKey }: Props) => {
   const dispatch = useAppDispatch()
   const cityData = useAppSelector(selectCityData)
 
-  // coordinate of current user location
-  const [coord, setCoord] = useState<{lat: number; lon: number}>({lat: 0, lon: 0})
-  const [coordError, setCoordError] = useState(null)
-
+  // search input value
   const [userLocationCityName, setUserLocationCityName] = useState('')
 
-  // TODO: Google Geolocation API -> get lat, lon
-  // TODO: Google Geocoding API (reverse geocoding) to get place name
+  // get coordinate of user location
+  const { coord, error: geolocationError } = useGeolocation(geolocationApiKey)
 
   // reverse geocoding to get the name of user location
   const {
@@ -200,6 +198,7 @@ const Main = ({ geolocationApiKey, reverseGeocodingApiKey }: Props) => {
   const isError = hasTrueValue(castAllValuesBoolean([
     reverseGeocodingError,
     currentWeatherError,
+    geolocationError,
   ]))
 
   // TODO: message is like this: "Big temperature swing today. Dress in adjustable clothing."
@@ -211,22 +210,6 @@ const Main = ({ geolocationApiKey, reverseGeocodingApiKey }: Props) => {
 
 
   // TODO: message: Stay prepared for temperature changes (15 °C - 25 °C). Wear adjustable clothing.
-
-  // TODO: Google Geolocation API -> get lat, lon
-  useEffect(() => {
-    const getCoord = async () => {
-      try {
-        const res = await getUserLocationCoordinate(geolocationApiKey)
-        setCoord({
-          lat: res.location.lat,
-          lon: res.location.lng,
-        })
-      } catch (error) {
-        setCoordError(error)
-      }
-    }
-    getCoord()
-  }, [])
 
   useEffect(() => {
     if (userLocation) {
