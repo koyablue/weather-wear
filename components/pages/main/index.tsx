@@ -189,11 +189,13 @@ const Main = ({ geolocationApiKey, reverseGeocodingApiKey }: Props) => {
   const { castAllValuesBoolean, hasTrueValue } = useValidateBooleanArray()
 
   const isLoading = hasTrueValue([
+    (coord.lat === 0 && coord.lon === 0),
     isReverseGeocodingLoading,
     isReverseGeocodingValidating,
     isCurrentWeatherLoading,
     isCurrentWeatherValidating,
   ])
+  console.log('isLoading:', isLoading)
 
   const isError = hasTrueValue(castAllValuesBoolean([
     reverseGeocodingError,
