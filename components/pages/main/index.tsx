@@ -195,7 +195,6 @@ const Main = ({ geolocationApiKey, reverseGeocodingApiKey }: Props) => {
     isCurrentWeatherLoading,
     isCurrentWeatherValidating,
   ])
-  console.log('isLoading:', isLoading)
 
   const isError = hasTrueValue(castAllValuesBoolean([
     reverseGeocodingError,

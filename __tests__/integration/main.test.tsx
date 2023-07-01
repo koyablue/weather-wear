@@ -16,14 +16,6 @@ jest.mock('../public/images/svgs/tank-top.svg', () => () => <svg data-testid="ta
 // If this mock exists, the test always get t-shirt svg.
 // jest.mock('../public/images/svgs/t-shirt.svg', () => () => <svg data-testid="t-shirt-svg" />)
 
-// TODO: fix
-// const useGetUserLocationMockData = {
-//   userLocation: {},
-//   error: null,
-//   isLoading: false,
-//   isValidating: false,
-// }
-
 const useGeolocationMockData = {
   coord: { lat: 0, lon: 0, },
   error: null,
@@ -35,14 +27,18 @@ jest.mock('../../hooks/data/useGeolocation.ts', () => ({
   }
 }))
 
-// TODO: mock reverse geocoding hook
+const useReverseGeocodingMockData = {
+  userLocation: { cityName: '' },
+  error: null,
+  isLoading: false,
+  isValidating: false,
+}
 
-// TODO: fix
-// jest.mock('../../hooks/data/useGetUserLocation.ts', () => ({
-//   useGetUserLocation: () => {
-//     return useGetUserLocationMockData
-//   },
-// }))
+jest.mock('../../hooks/data/useReverseGeocoding.ts', () => ({
+  useReverseGeocoding: () => {
+    return useReverseGeocodingMockData
+  }
+}))
 
 const useGetCurrentWeatherMockData = {
   currentTemperature: {},
@@ -93,14 +89,12 @@ describe('Main page', () => {
   })
 
   it('Loading component should not be in the document when the data is loaded', () => {
-    // -    useGetUserLocationMockData.userLocation = {
-    //   -      cityName: 'Tokyo',
-    //   -      lat: 35.652832,
-    //   -      lon: 139.839478,
-    //   -    }
-
     useGeolocationMockData.coord.lat = 35.652832
     useGeolocationMockData.coord.lon = 139.839478
+
+    useReverseGeocodingMockData.isLoading = false
+    useReverseGeocodingMockData.isValidating = false
+
     useGetCurrentWeatherMockData.isLoading = false
     useGetCurrentWeatherMockData.isValidating = false
 
